@@ -1,7 +1,8 @@
+from datetime import datetime
 from uuid import UUID
 
 from geoalchemy2 import Geography, Geometry
-from sqlalchemy import JSON, ForeignKey, String, Text
+from sqlalchemy import JSON, DateTime, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -33,6 +34,8 @@ class Tour(TimestampedUuidMixin, Base):
     slug: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
     title: Mapped[str] = mapped_column(String(240), nullable=False)
     summary: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    editorial_status: Mapped[str] = mapped_column(String(32), nullable=False, default="draft")
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     route_geometry: Mapped[object | None] = mapped_column(
         Geometry("LINESTRING", srid=4326), nullable=True
     )

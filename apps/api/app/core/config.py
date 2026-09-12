@@ -11,6 +11,7 @@ class Settings(BaseSettings):
         default="postgresql+psycopg://postgres:postgres@localhost:55432/space_coast_explorer",
         alias="DATABASE_URL",
     )
+    cms_admin_token: str = Field(default="", alias="CMS_ADMIN_TOKEN")
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

@@ -29,6 +29,8 @@ Acceptance: Cocoa Village Historic Explorer renders on a real map, can show visi
 
 ## M3 Admin CMS
 Goal: internal content administration.
+Scope: editorial state migration, protected tour list/update API, publish timestamp, and local admin workflow foundation. Non-scope: public auth, media, AI, merchants, billing, or automatic publishing.
+Acceptance: an authorized editor can list tours, edit title/summary, move a tour through draft/review/published/archived states, and publishing records UTC time; unauthorized requests are rejected; migration has one head.
 
 ## M4 Audio and Media
 Goal: narrated and media-rich experiences.
