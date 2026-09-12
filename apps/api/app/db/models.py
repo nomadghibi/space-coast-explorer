@@ -4,6 +4,7 @@ from uuid import UUID
 from geoalchemy2 import Geography, Geometry
 from sqlalchemy import JSON, DateTime, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import UUID as PgUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base, TimestampedUuidMixin
@@ -52,6 +53,19 @@ class TourStop(TimestampedUuidMixin, Base):
     location: Mapped[object] = mapped_column(Geography("POINT", srid=4326), nullable=False)
     trigger_radius_meters: Mapped[int] = mapped_column(nullable=False, default=35)
     exit_radius_meters: Mapped[int] = mapped_column(nullable=False, default=60)
+
+
+class MediaAsset(TimestampedUuidMixin, Base):
+    __tablename__ = "media_assets"
+
+    owner_type: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    owner_id: Mapped[UUID] = mapped_column(PgUUID(as_uuid=True), nullable=False, index=True)
+    storage_key: Mapped[str] = mapped_column(String(500), nullable=False, unique=True)
+    media_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    mime_type: Mapped[str] = mapped_column(String(120), nullable=False)
+    processing_status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
+    duration_seconds: Mapped[int | None] = mapped_column(nullable=True)
+    alt_text: Mapped[str] = mapped_column(Text, nullable=False, default="")
 
 
 class AnalyticsEvent(TimestampedUuidMixin, Base):

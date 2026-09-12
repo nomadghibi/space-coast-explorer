@@ -34,6 +34,8 @@ Acceptance: an authorized editor can list tours, edit title/summary, move a tour
 
 ## M4 Audio and Media
 Goal: narrated and media-rich experiences.
+Scope: provider-neutral media asset registry with R2-compatible storage keys, processing state, MIME metadata, duration, and accessible alt text. Non-scope: AI narration, automatic publishing, or paid media.
+Acceptance: media records can be attached to tour content, track pending/ready/failed processing, retain storage metadata without secrets, and migrate with one Alembic head.
 
 ## M5 AI Guide / RAG
 Goal: grounded destination guide.

@@ -10,6 +10,17 @@ export type RouteGeometry = {
   coordinates: GeoPoint[];
 };
 
+export type MediaAsset = {
+  id: string;
+  ownerType: "tour" | "tour_stop" | "destination";
+  ownerId: string;
+  mediaType: "audio" | "image" | "video";
+  mimeType: string;
+  processingStatus: "pending" | "ready" | "failed";
+  durationSeconds?: number;
+  altText: string;
+};
+
 export type DestinationSlug = "space-coast" | "cocoa-village" | "cocoa-beach" | "port-canaveral";
 
 export type TourSlug =
