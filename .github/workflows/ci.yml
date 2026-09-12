@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+  api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: raulodev/postgres-postgis-pgvector:v17-3.5-0.8.2
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: space_coast_explorer
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d space_coast_explorer"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - working-directory: apps/api
+        run: uv sync --dev
+      - working-directory: apps/api
+        run: uv run ruff check .
+      - working-directory: apps/api
+        run: uv run mypy .
+      - working-directory: apps/api
+        run: uv run pytest
+      - working-directory: apps/api
+        env:
+          DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:55432/space_coast_explorer
+        run: uv run alembic upgrade head
+      - working-directory: apps/api
+        run: uv run alembic heads

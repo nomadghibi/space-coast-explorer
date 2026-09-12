@@ -1,0 +1,1 @@
+{"name":"@space-coast-explorer/ui","private":true,"type":"module","main":"./src/index.ts","types":"./src/index.ts","scripts":{"typecheck":"tsc --noEmit","build":"tsc --noEmit"},"dependencies":{"react":"^19.0.0"},"devDependencies":{"@types/react":"^19.0.0"}}

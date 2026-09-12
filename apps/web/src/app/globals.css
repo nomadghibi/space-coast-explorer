@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
+
+:root {
+  color-scheme: light;
+  background: #fff8ed;
+  color: #10202a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 248, 237, 0.95) 0%,
+      rgba(238, 249, 250, 0.9) 42%,
+      #fff8ed 100%
+    );
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+.route-preview {
+  background:
+    linear-gradient(
+      120deg,
+      transparent 44%,
+      rgba(14, 116, 144, 0.22) 45%,
+      rgba(14, 116, 144, 0.22) 47%,
+      transparent 48%
+    ),
+    radial-gradient(circle at 20% 35%, rgba(20, 184, 166, 0.24), transparent 18%),
+    radial-gradient(circle at 78% 62%, rgba(249, 115, 22, 0.24), transparent 16%),
+    linear-gradient(135deg, #e4fbfb 0%, #fff8ed 48%, #eff7db 100%);
+}
+
+.coastal-hero {
+  background:
+    linear-gradient(90deg, rgba(9, 30, 43, 0.9), rgba(9, 30, 43, 0.54), rgba(9, 30, 43, 0.1)),
+    url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80");
+  background-position: center;
+  background-size: cover;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(14px);
+}
