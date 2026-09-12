@@ -49,6 +49,8 @@ Acceptance: a plan never exceeds its available time after the return buffer, pre
 
 ## M7 Merchant Platform
 Goal: merchant accounts and claimed businesses.
+Scope: tenant-scoped merchant, business, and claim-review schema. Non-scope: billing, payments, automated verification, or merchant messaging.
+Acceptance: businesses belong to destinations, merchants belong to organizations, claims preserve review state and notes, and migration has one head.
 
 ## M8 Billing
 Goal: premium tours and merchant billing.

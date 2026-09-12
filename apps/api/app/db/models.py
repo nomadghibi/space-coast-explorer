@@ -68,6 +68,32 @@ class MediaAsset(TimestampedUuidMixin, Base):
     alt_text: Mapped[str] = mapped_column(Text, nullable=False, default="")
 
 
+class Merchant(TimestampedUuidMixin, Base):
+    __tablename__ = "merchants"
+
+    organization_id: Mapped[UUID] = mapped_column(ForeignKey("organizations.id"), index=True)
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
+
+
+class Business(TimestampedUuidMixin, Base):
+    __tablename__ = "businesses"
+
+    destination_id: Mapped[UUID] = mapped_column(ForeignKey("destinations.id"), index=True)
+    name: Mapped[str] = mapped_column(String(240), nullable=False)
+    slug: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="unclaimed")
+
+
+class BusinessClaim(TimestampedUuidMixin, Base):
+    __tablename__ = "business_claims"
+
+    business_id: Mapped[UUID] = mapped_column(ForeignKey("businesses.id"), index=True)
+    merchant_id: Mapped[UUID] = mapped_column(ForeignKey("merchants.id"), index=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="submitted")
+    review_note: Mapped[str] = mapped_column(Text, nullable=False, default="")
+
+
 class AnalyticsEvent(TimestampedUuidMixin, Base):
     __tablename__ = "analytics_events"
 

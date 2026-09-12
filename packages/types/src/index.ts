@@ -23,6 +23,8 @@ export type MediaAsset = {
   altText: string;
 };
 
+export type BusinessClaimStatus = "submitted" | "approved" | "rejected" | "withdrawn";
+
 export type DestinationSlug = "space-coast" | "cocoa-village" | "cocoa-beach" | "port-canaveral";
 
 export type TourSlug =

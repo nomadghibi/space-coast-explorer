@@ -4,4 +4,4 @@ from alembic.script import ScriptDirectory
 
 def test_single_alembic_head() -> None:
     script = ScriptDirectory.from_config(Config("alembic.ini"))
-    assert script.get_heads() == ["0004_m4_media_assets"]
+    assert script.get_heads() == ["0005_m7_merchants"]
