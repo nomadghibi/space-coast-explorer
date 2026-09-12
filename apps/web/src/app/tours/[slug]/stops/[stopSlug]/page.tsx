@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { StopCompletionControls } from "../../../../../components/stop-completion-controls";
 import { getTour, tours } from "../../../../../lib/content";
 
 type PageProps = {
@@ -39,6 +40,8 @@ export default async function TourStopPage({ params }: PageProps) {
   const stopIndex = tour.stops.findIndex((candidate) => candidate.slug === stop.slug);
   const previousStop = stopIndex > 0 ? tour.stops[stopIndex - 1] : undefined;
   const nextStop = stopIndex < tour.stops.length - 1 ? tour.stops[stopIndex + 1] : undefined;
+  const orderedStopSlugs = tour.stops.map((candidate) => candidate.slug);
+  const firstStopSlug = orderedStopSlugs[0] ?? stop.slug;
 
   return (
     <main className="bg-[#f7fbfb]">
@@ -56,6 +59,10 @@ export default async function TourStopPage({ params }: PageProps) {
               {stop.title}
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-700">{stop.summary}</p>
+            <p className="mt-4 text-sm leading-6 text-slate-600">
+              Stay on public sidewalks and crossings, follow posted rules, and choose the safest
+              route for current conditions.
+            </p>
           </div>
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl">
             <Image
@@ -88,6 +95,14 @@ export default async function TourStopPage({ params }: PageProps) {
           <p className="mt-4 text-lg leading-8 text-slate-700">
             {stop.visitorStory ?? stop.summary}
           </p>
+          <div className="mt-6">
+            <StopCompletionControls
+              firstStopSlug={firstStopSlug}
+              orderedStopSlugs={orderedStopSlugs}
+              stopSlug={stop.slug}
+              tourSlug={tour.slug}
+            />
+          </div>
         </article>
 
         <aside className="grid gap-4">

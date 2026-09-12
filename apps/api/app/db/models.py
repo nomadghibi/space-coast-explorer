@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from geoalchemy2 import Geography, Geometry
 from sqlalchemy import JSON, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -23,6 +24,31 @@ class Destination(TimestampedUuidMixin, Base):
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     slug: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
     summary: Mapped[str] = mapped_column(Text, nullable=False, default="")
+
+
+class Tour(TimestampedUuidMixin, Base):
+    __tablename__ = "tours"
+
+    destination_id: Mapped[UUID] = mapped_column(ForeignKey("destinations.id"), index=True)
+    slug: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String(240), nullable=False)
+    summary: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    route_geometry: Mapped[object | None] = mapped_column(
+        Geometry("LINESTRING", srid=4326), nullable=True
+    )
+
+
+class TourStop(TimestampedUuidMixin, Base):
+    __tablename__ = "tour_stops"
+
+    tour_id: Mapped[UUID] = mapped_column(ForeignKey("tours.id"), index=True)
+    slug: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    sequence: Mapped[int] = mapped_column(nullable=False)
+    title: Mapped[str] = mapped_column(String(240), nullable=False)
+    summary: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    location: Mapped[object] = mapped_column(Geography("POINT", srid=4326), nullable=False)
+    trigger_radius_meters: Mapped[int] = mapped_column(nullable=False, default=35)
+    exit_radius_meters: Mapped[int] = mapped_column(nullable=False, default=60)
 
 
 class AnalyticsEvent(TimestampedUuidMixin, Base):

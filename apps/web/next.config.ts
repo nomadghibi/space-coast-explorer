@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }]
   },
   outputFileTracingRoot: repoRoot,
-  transpilePackages: ["@space-coast-explorer/ui"]
+  transpilePackages: ["@space-coast-explorer/maps", "@space-coast-explorer/ui"]
 };
 
 export default nextConfig;

@@ -1,5 +1,15 @@
 export type HealthStatus = { status: "ok"; service: string; requestId: string };
 
+export type GeoPoint = {
+  latitude: number;
+  longitude: number;
+};
+
+export type RouteGeometry = {
+  type: "LineString";
+  coordinates: GeoPoint[];
+};
+
 export type DestinationSlug = "space-coast" | "cocoa-village" | "cocoa-beach" | "port-canaveral";
 
 export type TourSlug =
@@ -47,6 +57,9 @@ export type TourStop = {
   visitorStory?: string;
   imageAlt?: string;
   internalEditorialState?: "needs_fact_check" | "ready";
+  location?: GeoPoint;
+  triggerRadiusMeters?: number;
+  exitRadiusMeters?: number;
 };
 
 export type TourDetail = TourSummary & {
@@ -54,6 +67,7 @@ export type TourDetail = TourSummary & {
   safetyNotes: string[];
   stops: TourStop[];
   staticRouteSummary: string;
+  routeGeometry?: RouteGeometry;
 };
 
 export type Destination = {

@@ -1,6 +1,7 @@
-from pathlib import Path
+from alembic.config import Config
+from alembic.script import ScriptDirectory
 
 
 def test_single_alembic_head() -> None:
-    versions = list(Path("alembic/versions").glob("*.py"))
-    assert [version.name for version in versions] == ["0001_m0_foundation.py"]
+    script = ScriptDirectory.from_config(Config("alembic.ini"))
+    assert script.get_heads() == ["0002_m2_geospatial_tours"]

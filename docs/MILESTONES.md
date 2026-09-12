@@ -4,7 +4,7 @@
 
 Goal: production monorepo foundation. Scope: docs, web/api/worker shells, shared packages, health endpoints, logging, request IDs, config, Docker Compose, CI, Alembic, migration, tests. Non-scope: tours, maps, GPS, AI, merchants, billing, destination UI. Acceptance: all gates pass, empty DB migration works, one Alembic head, no secrets, README commands.
 
-## M1 Public Destination Experience
+## M1 Public Destination Experience - COMPLETE
 
 Goal: public destination and tour discovery UX.
 
@@ -20,6 +20,12 @@ Exit criteria: public experience is polished, responsive, crawlable, documented,
 
 ## M2 Map + GPS + Tour Engine
 Goal: active tour engine with map and foreground geolocation.
+
+Scope: MapLibre map rendering, configurable map style URL, curated static route geometry, numbered stop markers, foreground-only browser geolocation, local proximity detection, trigger/exit hysteresis, poor-accuracy handling, active tour session persistence, resume prompt, manual completion fallback, and development GPS simulator.
+
+Non-scope: background geofencing, native apps, AI/RAG, audio narration, merchant portal, billing, cruise itinerary engine, live launch integration, push notifications, social features, and turn-by-turn routing.
+
+Acceptance: Cocoa Village Historic Explorer renders on a real map, can show visitor position when permission is granted, detects arrivals locally, persists progress across reload, can be completed manually without GPS, degrades when map/style loading fails, and has unit plus browser journey coverage.
 
 ## M3 Admin CMS
 Goal: internal content administration.
