@@ -57,5 +57,15 @@ Goal: premium tours and merchant billing.
 Scope: provider-neutral plans, organization subscriptions, and invoice records using integer cents and explicit states. Non-scope: payment capture, refunds, tax calculation, or provider webhooks.
 Acceptance: billing records preserve currency and integer amounts, provider references are optional and non-secret, and migration has one head.
 
-## M9 Pilot Analytics
+## M9 Pilot Analytics - COMPLETE
 Goal: pilot measurement and operational dashboards.
+
+Scope: tenant-aware analytics event records, typed analytics package contracts, pilot summary
+calculation, daily metric table foundation, and docs for Completed Visitor Experiences.
+
+Non-scope: third-party analytics SDKs, ad attribution, public dashboards, merchant reporting,
+or personally identifying location trails.
+
+Acceptance: events are destination-scoped, Completed Visitor Experiences can be counted by
+tour/destination, completion method distinguishes GPS from manual completion, migration has
+one head, and focused tests cover primary metric calculations.

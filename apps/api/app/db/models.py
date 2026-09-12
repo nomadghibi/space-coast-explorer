@@ -1,8 +1,8 @@
-from datetime import datetime
+from datetime import date, datetime
 from uuid import UUID
 
 from geoalchemy2 import Geography, Geometry
-from sqlalchemy import JSON, DateTime, ForeignKey, String, Text
+from sqlalchemy import JSON, Date, DateTime, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PgUUID
 from sqlalchemy.orm import Mapped, mapped_column
@@ -126,8 +126,27 @@ class Invoice(TimestampedUuidMixin, Base):
 class AnalyticsEvent(TimestampedUuidMixin, Base):
     __tablename__ = "analytics_events"
 
+    destination_id: Mapped[UUID] = mapped_column(ForeignKey("destinations.id"), index=True)
+    tour_id: Mapped[UUID | None] = mapped_column(ForeignKey("tours.id"), nullable=True, index=True)
+    visitor_session_id: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
     event_name: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
+    occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     payload: Mapped[dict[str, object]] = mapped_column(json_payload, nullable=False)
+
+
+class PilotDailyMetric(TimestampedUuidMixin, Base):
+    __tablename__ = "pilot_daily_metrics"
+    __table_args__ = (
+        UniqueConstraint("destination_id", "tour_id", "metric_date", name="uq_pilot_daily_metric"),
+    )
+
+    destination_id: Mapped[UUID] = mapped_column(ForeignKey("destinations.id"), index=True)
+    tour_id: Mapped[UUID | None] = mapped_column(ForeignKey("tours.id"), nullable=True, index=True)
+    metric_date: Mapped[date] = mapped_column(Date(), nullable=False, index=True)
+    completed_visitor_experiences: Mapped[int] = mapped_column(nullable=False, default=0)
+    started_visitor_experiences: Mapped[int] = mapped_column(nullable=False, default=0)
+    manual_completions: Mapped[int] = mapped_column(nullable=False, default=0)
+    gps_completions: Mapped[int] = mapped_column(nullable=False, default=0)
 
 
 class Job(TimestampedUuidMixin, Base):

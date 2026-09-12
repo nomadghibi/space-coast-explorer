@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.api.analytics import router as analytics_router
 from app.api.cms import router as cms_router
 from app.api.health import router as health_router
 from app.api.public import router as public_router
@@ -12,6 +13,7 @@ def create_app() -> FastAPI:
     app = FastAPI(title="Space Coast Explorer API", version="0.1.0")
     app.add_middleware(RequestIdMiddleware)
     app.include_router(health_router)
+    app.include_router(analytics_router)
     app.include_router(public_router)
     app.include_router(cms_router)
     return app
