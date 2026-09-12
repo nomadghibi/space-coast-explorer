@@ -39,6 +39,8 @@ Acceptance: media records can be attached to tour content, track pending/ready/f
 
 ## M5 AI Guide / RAG
 Goal: grounded destination guide.
+Scope: typed evidence and answer contracts, provider abstraction, prompt-injection screening, and citation-ready retrieval boundary. Non-scope: autonomous agents, uncited answers, automatic content publishing, or customer outreach.
+Acceptance: guide responses require evidence IDs, provider calls are behind an interface, injection fixtures are tested, and no provider secret is committed.
 
 ## M6 Itinerary + Cruise Companion
 Goal: deterministic itinerary generation and cruise-aware timing.
