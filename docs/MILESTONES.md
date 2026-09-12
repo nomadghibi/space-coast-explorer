@@ -54,6 +54,8 @@ Acceptance: businesses belong to destinations, merchants belong to organizations
 
 ## M8 Billing
 Goal: premium tours and merchant billing.
+Scope: provider-neutral plans, organization subscriptions, and invoice records using integer cents and explicit states. Non-scope: payment capture, refunds, tax calculation, or provider webhooks.
+Acceptance: billing records preserve currency and integer amounts, provider references are optional and non-secret, and migration has one head.
 
 ## M9 Pilot Analytics
 Goal: pilot measurement and operational dashboards.

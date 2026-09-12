@@ -94,6 +94,35 @@ class BusinessClaim(TimestampedUuidMixin, Base):
     review_note: Mapped[str] = mapped_column(Text, nullable=False, default="")
 
 
+class BillingPlan(TimestampedUuidMixin, Base):
+    __tablename__ = "billing_plans"
+
+    code: Mapped[str] = mapped_column(String(80), nullable=False, unique=True)
+    name: Mapped[str] = mapped_column(String(160), nullable=False)
+    currency: Mapped[str] = mapped_column(String(3), nullable=False, default="USD")
+    unit_amount_cents: Mapped[int] = mapped_column(nullable=False)
+    active: Mapped[bool] = mapped_column(nullable=False, default=True)
+
+
+class Subscription(TimestampedUuidMixin, Base):
+    __tablename__ = "subscriptions"
+
+    organization_id: Mapped[UUID] = mapped_column(ForeignKey("organizations.id"), index=True)
+    plan_id: Mapped[UUID] = mapped_column(ForeignKey("billing_plans.id"), index=True)
+    provider: Mapped[str] = mapped_column(String(40), nullable=False, default="not_configured")
+    provider_reference: Mapped[str | None] = mapped_column(String(240), nullable=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
+
+
+class Invoice(TimestampedUuidMixin, Base):
+    __tablename__ = "invoices"
+
+    subscription_id: Mapped[UUID] = mapped_column(ForeignKey("subscriptions.id"), index=True)
+    amount_cents: Mapped[int] = mapped_column(nullable=False)
+    currency: Mapped[str] = mapped_column(String(3), nullable=False, default="USD")
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="draft")
+
+
 class AnalyticsEvent(TimestampedUuidMixin, Base):
     __tablename__ = "analytics_events"
 
