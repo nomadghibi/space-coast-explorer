@@ -44,6 +44,8 @@ Acceptance: guide responses require evidence IDs, provider calls are behind an i
 
 ## M6 Itinerary + Cruise Companion
 Goal: deterministic itinerary generation and cruise-aware timing.
+Scope: typed time-budgeted itinerary planning with explicit return buffers and conservative fit checks. Non-scope: booking, payments, live ship data, navigation, or guaranteed port timing.
+Acceptance: a plan never exceeds its available time after the return buffer, preserves editorial activity order, and reports unused time transparently.
 
 ## M7 Merchant Platform
 Goal: merchant accounts and claimed businesses.

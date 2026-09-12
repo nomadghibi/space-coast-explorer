@@ -1,5 +1,7 @@
 export type HealthStatus = { status: "ok"; service: string; requestId: string };
 
+export * from "./itinerary";
+
 export type GeoPoint = {
   latitude: number;
   longitude: number;

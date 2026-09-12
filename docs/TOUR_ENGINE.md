@@ -9,3 +9,5 @@ The proximity algorithm lives in `packages/maps` and uses Haversine distance. A 
 Stop states are `not_started`, `approaching`, `arrived`, and `completed`. Visitor-facing messaging is intentionally low frequency: distance, getting close, arrived, or completed.
 
 M2 does not implement turn-by-turn routing. Route geometry is curated and static. The app must never suggest crossing restricted areas, private property, unsafe roads, or cruise terminal restricted zones.
+
+M6 itinerary planning is deterministic and advisory. Cruise return buffers are subtracted before selecting activities; the planner does not claim live ship, traffic, or venue availability.
