@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { filterTours, getDestination, getTour } from "./content";
+import { destinations, filterTours, getDestination, getTour, tours } from "./content";
 
 describe("public content", () => {
   it("finds the initial destination areas", () => {
@@ -10,6 +10,38 @@ describe("public content", () => {
 
   it("finds the pilot tour", () => {
     expect(getTour("cocoa-village-historic-explorer")?.stopCount).toBe(10);
+  });
+
+  it("uses stable slugs for every manual tour stop", () => {
+    for (const tour of tours) {
+      expect(tour.stops).toHaveLength(tour.stopCount);
+      expect(new Set(tour.stops.map((stop) => stop.slug)).size).toBe(tour.stops.length);
+      expect(tour.stops.every((stop) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(stop.slug))).toBe(true);
+    }
+  });
+
+  it("keeps internal editorial markers out of visitor-facing content", () => {
+    const publicText = [
+      ...destinations.flatMap((destination) => [
+        destination.eyebrow,
+        destination.summary,
+        ...destination.introduction,
+        ...destination.highlights,
+        ...Object.values(destination.quickInfo)
+      ]),
+      ...tours.flatMap((tour) => [
+        tour.title,
+        tour.summary,
+        tour.description,
+        tour.accessibilitySummary,
+        tour.staticRouteSummary,
+        ...tour.highlights,
+        ...tour.safetyNotes,
+        ...tour.stops.flatMap((stop) => [stop.title, stop.summary, stop.visitorStory ?? ""])
+      ])
+    ].join(" ");
+
+    expect(publicText).not.toMatch(/M0|M1|M2|M6|future milestone|future milestones|public discovery|preview only|FACT_CHECK_REQUIRED|editorial review/i);
   });
 
   it("filters tours by destination and category", () => {

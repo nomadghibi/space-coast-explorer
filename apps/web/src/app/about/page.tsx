@@ -13,9 +13,8 @@ export default function AboutPage() {
         more destinations over time.
       </p>
       <p className="mt-4 leading-7 text-slate-700">
-        This public release focuses on discovery, tour previews, and clear visitor information.
-        GPS-guided tours, audio, AI guidance, itinerary planning, merchants, and billing are planned
-        for later milestones.
+        This public release focuses on clear visitor information, simple self-guided routes, and
+        mobile-friendly pages that help people choose what fits their day.
       </p>
     </main>
   );

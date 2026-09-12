@@ -46,7 +46,7 @@ export const destinations: Destination[] = [
     summary: "Walk a compact downtown district with architecture, shops, restaurants, riverfront moments, and layered local stories.",
     introduction: [
       "Cocoa Village is the pilot district for Space Coast Explorer because it is compact, walkable, and story-rich.",
-      "M1 presents the public discovery layer. Historical notes that need editorial review remain clearly marked before production publication."
+      "Start with a relaxed downtown route, then leave room for a meal, a shop visit, or a riverfront pause."
     ],
     highlights: ["Historic architecture", "Shopping", "Restaurants", "Riverfront", "Local culture"],
     quickInfo: {
@@ -66,7 +66,7 @@ export const destinations: Destination[] = [
     summary: "Explore beach culture, surf history, food stops, family attractions, and the coastal side of the Space Coast.",
     introduction: [
       "Cocoa Beach anchors the classic Space Coast beach day with surf culture, casual dining, and easy access to coastal views.",
-      "M1 keeps this as discovery content only; live beach conditions and time-sensitive details require later verified integrations."
+      "Use these pages to compare areas and plan a simple day; always check current beach conditions and posted guidance locally."
     ],
     highlights: ["Beach", "Surfing", "Food", "Space culture", "Family attractions"],
     quickInfo: {
@@ -86,7 +86,7 @@ export const destinations: Destination[] = [
     summary: "Find waterfront restaurants, launch-view energy, cruise-day stops, and nearby coastal experiences.",
     introduction: [
       "Port Canaveral is built for visitors with a clock in mind: cruise travelers, launch watchers, and waterfront explorers.",
-      "M1 introduces curated discovery without automatic itinerary timing. Cruise travelers should always verify boarding requirements directly with their cruise line."
+      "Cruise travelers can browse nearby ideas, then verify boarding requirements and timing directly with their cruise line."
     ],
     highlights: ["Cruise travel", "Waterfront", "Restaurants", "Launch viewpoints", "Nearby beaches"],
     quickInfo: {
@@ -108,7 +108,7 @@ export const tours: TourDetail[] = [
     destinationSlug: "cocoa-village",
     destinationName: "Cocoa Village",
     summary: "A compact walking introduction to Cocoa Village's streets, storefronts, civic spaces, and riverfront edges.",
-    description: "Follow a self-guided downtown route built for the first Space Coast Explorer pilot. Several story notes are intentionally marked for editorial review before production launch.",
+    description: "Follow a self-guided downtown route with easy pacing, scenic pauses, and flexible time for shops, food, and the riverfront.",
     categories: ["History", "Food", "Arts & Culture", "Family"],
     transportMode: "Walking",
     durationMinutes: 60,
@@ -121,19 +121,19 @@ export const tours: TourDetail[] = [
     imageUrl: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80",
     imageAlt: "Historic street with warm storefront lighting",
     highlights: ["Pilot experience", "Historic downtown", "Local shops", "Short walking loop"],
-    safetyNotes: ["Verify crossings and sidewalk conditions before starting.", "FACT_CHECK_REQUIRED: final stop narratives need source review."],
-    staticRouteSummary: "Static preview of a downtown walking loop. Live GPS guidance begins in M2.",
+    safetyNotes: ["Use marked crossings where available.", "Check sidewalk, curb, weather, and traffic conditions before starting."],
+    staticRouteSummary: "A downtown walking loop preview with compact stops and flexible pacing.",
     stops: [
-      { sequence: 1, title: "Village Welcome", summary: "Start with the downtown layout and how to move through the route." },
-      { sequence: 2, title: "Historic Storefront Row", summary: "Observe architectural details and storefront rhythm.", note: "FACT_CHECK_REQUIRED" },
-      { sequence: 3, title: "Civic Corner", summary: "A stop for public-space context and orientation.", note: "FACT_CHECK_REQUIRED" },
-      { sequence: 4, title: "Dining Lane", summary: "A food-and-local-business discovery moment." },
-      { sequence: 5, title: "Arts Block", summary: "A short look at the district's creative side.", note: "FACT_CHECK_REQUIRED" },
-      { sequence: 6, title: "River Approach", summary: "Move toward the waterfront edge and pause for context." },
-      { sequence: 7, title: "Riverfront View", summary: "A scenic stop with space for reflection and photos." },
-      { sequence: 8, title: "Neighborhood Connector", summary: "Connect the waterfront back to the downtown core." },
-      { sequence: 9, title: "Local Stories Stop", summary: "A placeholder for sourced resident and archival stories.", note: "FACT_CHECK_REQUIRED" },
-      { sequence: 10, title: "Finish in the Village", summary: "End near dining, shopping, and optional next stops." }
+      { sequence: 1, slug: "village-welcome", title: "Village Welcome", summary: "Start with the downtown layout and how to move through the route.", visitorStory: "Take a minute to get oriented before you walk. This route is designed for a comfortable pace with short blocks, visible storefronts, and easy places to pause." },
+      { sequence: 2, slug: "storefront-row", title: "Storefront Row", summary: "Notice the street rhythm, window details, and small-business energy.", visitorStory: "Look across the block before moving on. The storefronts give the village much of its texture: signs, awnings, shaded entries, and the steady mix of visitors and locals.", internalEditorialState: "needs_fact_check" },
+      { sequence: 3, slug: "civic-corner", title: "Civic Corner", summary: "Pause for a practical downtown orientation point.", visitorStory: "Use this stop to reset your sense of direction and decide how quickly you want to move. The best self-guided walks leave space for detours.", internalEditorialState: "needs_fact_check" },
+      { sequence: 4, slug: "dining-lane", title: "Dining Lane", summary: "Spot options for a snack, meal, or post-tour return.", visitorStory: "If a menu or patio catches your eye, mark it for later. The route is short enough that you can finish first and circle back without losing the thread of the walk." },
+      { sequence: 5, slug: "arts-block", title: "Arts Block", summary: "Look for the district's creative side in galleries, windows, and event spaces.", visitorStory: "This stop is about atmosphere more than a single landmark. Watch for color, posted events, handmade details, and the places where local culture shows up at street level.", internalEditorialState: "needs_fact_check" },
+      { sequence: 6, slug: "river-approach", title: "River Approach", summary: "Move toward the waterfront edge and slow the pace.", visitorStory: "As the route opens toward the water, listen for the change in the street. Traffic, shade, breeze, and views all shift as downtown gives way to the riverfront." },
+      { sequence: 7, slug: "riverfront-view", title: "Riverfront View", summary: "A scenic stop with space for reflection and photos.", visitorStory: "Pause here longer than you think you need to. The riverfront is the natural breathing room of the walk and a good place to check in with your group." },
+      { sequence: 8, slug: "neighborhood-connector", title: "Neighborhood Connector", summary: "Connect the waterfront back to the downtown core.", visitorStory: "This leg brings you back from open water toward the tighter village streets. Keep an eye on crossings and choose the most comfortable sidewalk path." },
+      { sequence: 9, slug: "local-stories", title: "Local Stories", summary: "Make room for the people, routines, and everyday details that shape the village.", visitorStory: "Instead of rushing through, notice what feels lived-in: regulars greeting each other, event flyers, benches, and the small cues that make a downtown feel personal.", internalEditorialState: "needs_fact_check" },
+      { sequence: 10, slug: "finish-in-the-village", title: "Finish in the Village", summary: "End near dining, shopping, and optional next stops.", visitorStory: "You are back in easy reach of the places you may have bookmarked along the way. Finish here, or turn the walk into a meal, dessert stop, or slow browse." }
     ]
   },
   {
@@ -142,7 +142,7 @@ export const tours: TourDetail[] = [
     destinationSlug: "cocoa-beach",
     destinationName: "Cocoa Beach",
     summary: "A beach-town discovery route connecting surf culture, casual food, coastal views, and Space Coast atmosphere.",
-    description: "A mixed-mode public preview for visitors planning a Cocoa Beach day. Live conditions and route navigation are deferred to later milestones.",
+    description: "A mixed-mode beach-town route for visitors planning a Cocoa Beach day with flexible stops for food, views, and family pacing.",
     categories: ["Beach", "Space", "Food", "Family"],
     transportMode: "Mixed",
     durationMinutes: 95,
@@ -156,14 +156,14 @@ export const tours: TourDetail[] = [
     imageAlt: "People walking near a sunny beach shoreline",
     highlights: ["Surf culture", "Beach views", "Food stops", "Family-friendly pacing"],
     safetyNotes: ["Check beach warnings and weather locally.", "Do not rely on this preview for live parking or access conditions."],
-    staticRouteSummary: "Static preview of beach-area discovery stops. Live routing begins in M2.",
+    staticRouteSummary: "A beach-area route preview designed for short walks and simple drives between stops.",
     stops: [
-      { sequence: 1, title: "Beach Day Start", summary: "Orient around the central beach area." },
-      { sequence: 2, title: "Surf Culture Stop", summary: "A public-facing surf culture introduction.", note: "FACT_CHECK_REQUIRED" },
-      { sequence: 3, title: "Coastal Food Break", summary: "Plan an optional local food pause." },
-      { sequence: 4, title: "Space Coast Viewpoint", summary: "Connect beach atmosphere to the wider Space Coast story." },
-      { sequence: 5, title: "Family Stop", summary: "A slower-paced stop for groups with kids." },
-      { sequence: 6, title: "Sunset Option", summary: "A flexible finish depending on time of day." }
+      { sequence: 1, slug: "beach-day-start", title: "Beach Day Start", summary: "Orient around the central beach area.", visitorStory: "Start by checking posted beach guidance, parking rules, and the comfort level of your group before you spread out for the day." },
+      { sequence: 2, slug: "surf-culture", title: "Surf Culture Stop", summary: "A friendly introduction to Cocoa Beach's surf-town feel.", visitorStory: "Look for the shops, boards, beachwear, and easygoing rhythm that make Cocoa Beach feel different from a generic shoreline stop.", internalEditorialState: "needs_fact_check" },
+      { sequence: 3, slug: "coastal-food-break", title: "Coastal Food Break", summary: "Plan an optional local food pause.", visitorStory: "Use this as a natural break point. A beach day is better when the route leaves time for shade, water, snacks, and unhurried choices." },
+      { sequence: 4, slug: "space-coast-viewpoint", title: "Space Coast Viewpoint", summary: "Connect beach atmosphere to the wider Space Coast story.", visitorStory: "This stop is a reminder that the coast carries more than beach energy. Keep the wider region in mind as you look toward the horizon." },
+      { sequence: 5, slug: "family-stop", title: "Family Stop", summary: "A slower-paced stop for groups with kids.", visitorStory: "Slow the route down here. Check shade, restrooms, water, and whether everyone is still enjoying the plan before continuing." },
+      { sequence: 6, slug: "sunset-option", title: "Sunset Option", summary: "A flexible finish depending on time of day.", visitorStory: "End with the option that fits your day: one more beach view, a meal, or an easy return before everyone gets tired." }
     ]
   },
   {
@@ -186,13 +186,13 @@ export const tours: TourDetail[] = [
     imageAlt: "Large ship near a coastal harbor",
     highlights: ["Cruise day option", "Waterfront dining", "Launch-view planning", "Short time window"],
     safetyNotes: ["Verify boarding requirements directly with your cruise line.", "Do not use this preview as a guarantee of return timing."],
-    staticRouteSummary: "Static preview of port-area points of interest. Deadline-safe itinerary logic begins in M6.",
+    staticRouteSummary: "A port-area route preview for visitors comparing nearby waterfront stops.",
     stops: [
-      { sequence: 1, title: "Port Orientation", summary: "Start with the waterfront area and time constraints." },
-      { sequence: 2, title: "Restaurant Row", summary: "Browse casual waterfront dining options." },
-      { sequence: 3, title: "Launch View Context", summary: "Understand where launch watching may fit.", note: "FACT_CHECK_REQUIRED" },
-      { sequence: 4, title: "Nearby Beach Link", summary: "Consider a nearby coastal extension if time allows." },
-      { sequence: 5, title: "Return Buffer Reminder", summary: "End with a clear reminder to protect boarding time." }
+      { sequence: 1, slug: "port-orientation", title: "Port Orientation", summary: "Start with the waterfront area and your available time.", visitorStory: "Before you choose a stop, be honest about your schedule. Port days work best when you protect return time and keep the plan simple." },
+      { sequence: 2, slug: "restaurant-row", title: "Restaurant Row", summary: "Browse casual waterfront dining options.", visitorStory: "Look for the kind of stop your group actually wants: quick snack, sit-down meal, waterfront view, or a place to linger." },
+      { sequence: 3, slug: "launch-view-context", title: "Launch View Context", summary: "Consider how launch watching may fit into the day.", visitorStory: "If a launch is part of your visit, confirm current launch information from official sources and leave extra time for crowds and traffic.", internalEditorialState: "needs_fact_check" },
+      { sequence: 4, slug: "nearby-beach-link", title: "Nearby Beach Link", summary: "Consider a nearby coastal extension if time allows.", visitorStory: "A short beach detour can be a good add-on when your schedule is loose. Keep the plan conservative if you have a ship, reservation, or timed pickup." },
+      { sequence: 5, slug: "return-buffer", title: "Return Buffer Reminder", summary: "End with a clear reminder to protect boarding or pickup time.", visitorStory: "Finish with more buffer than you think you need. Traffic, parking, payment, and group logistics can all take longer near the port." }
     ]
   }
 ];
@@ -203,6 +203,16 @@ export function getDestination(slug: string) {
 
 export function getTour(slug: string) {
   return tours.find((tour) => tour.slug === slug);
+}
+
+export function getTourStop(tourSlug: string, stopSlug: string) {
+  const tour = getTour(tourSlug);
+
+  if (!tour) {
+    return undefined;
+  }
+
+  return tour.stops.find((stop) => stop.slug === stopSlug);
 }
 
 export function destinationTours(slug: string): TourDetail[] {

@@ -41,9 +41,12 @@ export type TourSummary = {
 
 export type TourStop = {
   sequence: number;
+  slug: string;
   title: string;
   summary: string;
-  note?: string;
+  visitorStory?: string;
+  imageAlt?: string;
+  internalEditorialState?: "needs_fact_check" | "ready";
 };
 
 export type TourDetail = TourSummary & {

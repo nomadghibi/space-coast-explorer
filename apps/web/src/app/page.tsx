@@ -40,8 +40,8 @@ export default function HomePage() {
               <p className="text-sm font-semibold text-slate-600">preview stops</p>
             </div>
             <div>
-              <p className="text-2xl font-black">M1</p>
-              <p className="text-sm font-semibold text-slate-600">public discovery</p>
+              <p className="text-2xl font-black">Free</p>
+              <p className="text-sm font-semibold text-slate-600">starter routes</p>
             </div>
           </div>
         </div>
@@ -119,7 +119,8 @@ export default function HomePage() {
           <div className="rounded-lg border border-white/80 bg-white p-6 shadow-xl">
             <p className="text-sm font-black uppercase text-orange-700">Cruise reminder</p>
             <p className="mt-3 text-slate-700">
-              M1 shows discovery previews only. Deadline-safe itinerary planning begins in M6.
+              Keep your plan flexible and confirm ship boarding times, parking, and traffic before
+              leaving the port area.
             </p>
           </div>
         </div>
@@ -129,9 +130,9 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5">
           <h2 className="text-3xl font-bold text-slate-950">Local Discovery</h2>
           <p className="mt-4 max-w-2xl text-slate-700">
-            Future milestones will connect nearby businesses and attractions to each experience.
-            For M1, the public site introduces the discovery model without sponsored placement or
-            merchant tools.
+            Find approachable routes, local stops, and destination context without clutter. Each
+            experience is designed to help visitors choose a place, understand the pace, and start
+            exploring with confidence.
           </p>
         </div>
       </section>

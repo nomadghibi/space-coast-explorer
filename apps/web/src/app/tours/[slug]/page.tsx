@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { RoutePreview } from "../../../components/route-preview";
 import { getTour, tours } from "../../../lib/content";
@@ -55,6 +56,12 @@ export default async function TourDetailPage({ params }: PageProps) {
                 <span className="rounded-md bg-amber-100 px-3 py-2" key={badge}>{badge}</span>
               ))}
             </div>
+            <Link
+              className="mt-8 inline-flex rounded-md bg-teal-700 px-5 py-3 text-sm font-black text-white hover:bg-teal-800"
+              href={`/tours/${tour.slug}/start`}
+            >
+              Start This Tour
+            </Link>
           </div>
           <Image
             alt={tour.imageAlt}
@@ -82,7 +89,6 @@ export default async function TourDetailPage({ params }: PageProps) {
                   <p className="text-sm font-bold text-teal-700">Stop {stop.sequence}</p>
                   <h3 className="mt-1 text-lg font-bold text-slate-950">{stop.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-700">{stop.summary}</p>
-                  {stop.note ? <p className="mt-2 text-xs font-bold text-amber-700">{stop.note}</p> : null}
                 </li>
               ))}
             </ol>
@@ -92,9 +98,15 @@ export default async function TourDetailPage({ params }: PageProps) {
             <div className="rounded-lg bg-slate-950 p-5 text-white">
               <p className="text-lg font-bold">Ready to Start?</p>
               <p className="mt-2 text-sm text-slate-300">
-                Active route following and GPS arrival detection begin in M2. For now, use this
-                preview to decide whether the experience fits your day.
+                Review the route and stops before beginning your experience. You can move through
+                each stop manually at your own pace.
               </p>
+              <Link
+                className="mt-5 inline-flex rounded-md bg-amber-300 px-4 py-2 text-sm font-black text-slate-950 hover:bg-amber-200"
+                href={`/tours/${tour.slug}/start`}
+              >
+                Start This Tour
+              </Link>
             </div>
           </div>
         </div>
