@@ -145,6 +145,8 @@ export const destinationPois: DestinationPoi[] = [
       "Sur Le Parc works as a small architectural pause in the historic walking-tour cluster. It is less about a single dramatic monument and more about reading the village as a collection of preserved buildings.",
       "This kind of stop helps the experience slow down: look for materials, proportions, entries, and the way historic structures frame the walking streets around them."
     ],
+    imageUrl: "/images/cocoa-village/landmarks/sur-le-parc.jpg",
+    imageAlt: "Historic black-and-white view of the Sur Le Parc building in Cocoa Village",
     priority: "standard"
   },
   {

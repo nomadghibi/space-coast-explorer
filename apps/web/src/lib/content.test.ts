@@ -49,6 +49,7 @@ describe("public content", () => {
     const requestedPhotoSlugs = [
       "porcher-house",
       "parrish-grove-inn",
+      "sur-le-parc",
       "historic-cocoa-village-playhouse",
       "derby-street-chapel",
       "village-tower-masonic-temple",
