@@ -129,6 +129,8 @@ export const destinationPois: DestinationPoi[] = [
       "The Parrish Grove Inn helps visitors see Cocoa Village at a more residential scale. It sits close to the shops, restaurants, and riverfront, but its restored lodging character gives the route a quieter historic rhythm.",
       "Use this stop to notice porches, rooflines, garden edges, and how older homes near downtown can become part of the visitor economy without losing their sense of place."
     ],
+    imageUrl: "/images/cocoa-village/landmarks/parrish-grove-inn.jpg",
+    imageAlt: "Parrish Grove Inn and historic Pette House with wraparound porch and palm trees",
     priority: "featured",
     address: "536 Delannoy Avenue, Cocoa, FL 32922",
     sourceUrl: "https://www.theparrishgroveinn.com/our-story/"

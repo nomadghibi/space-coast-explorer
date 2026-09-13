@@ -48,6 +48,7 @@ describe("public content", () => {
   it("attaches local visitor photos to supplied Cocoa Village landmarks", () => {
     const requestedPhotoSlugs = [
       "porcher-house",
+      "parrish-grove-inn",
       "historic-cocoa-village-playhouse",
       "derby-street-chapel",
       "village-tower-masonic-temple",
