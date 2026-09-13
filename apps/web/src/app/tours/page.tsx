@@ -27,6 +27,10 @@ function filterHref(key: string, value: string) {
   return query ? `/tours?${query}` : "/tours";
 }
 
+function isActiveFilter(activeValue: string | undefined, value: string) {
+  return (activeValue ?? "all") === value;
+}
+
 export const metadata = {
   title: "Tours | Space Coast Explorer",
   description: "Browse self-guided Space Coast experiences."
@@ -45,29 +49,64 @@ export default async function ToursPage({ searchParams }: PageProps) {
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-12">
-      <h1 className="text-4xl font-bold text-slate-950">Explore Tours</h1>
-      <p className="mt-4 max-w-2xl text-lg text-slate-700">
-        Browse public self-guided experience previews for the first Space Coast Explorer areas.
-      </p>
-      <div className="mt-8 grid gap-5">
+      <section className="grid gap-6 lg:grid-cols-[1fr_340px] lg:items-end">
+        <div>
+          <p className="text-sm font-black uppercase text-teal-800">Self-guided routes</p>
+          <h1 className="mt-2 text-4xl font-black text-slate-950">Explore Tours</h1>
+          <p className="mt-4 max-w-2xl text-lg text-slate-700">
+            Pick a route by place, time, pace, and interest. Every tour supports manual progress,
+            so weak location signal never blocks the experience.
+          </p>
+        </div>
+        <div className="rounded-lg border border-teal-100 bg-white p-5 shadow-sm">
+          <p className="text-sm font-black uppercase text-orange-700">Before you start</p>
+          <div className="mt-3 grid gap-2 text-sm font-semibold text-slate-700">
+            <p>Check weather and daylight.</p>
+            <p>Confirm parking and restricted areas.</p>
+            <p>Use manual completion anytime GPS is weak.</p>
+          </div>
+        </div>
+      </section>
+      <div className="mt-8 grid gap-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         {Object.entries(filters).map(([key, values]) => (
           <div key={key}>
             <p className="text-sm font-bold capitalize text-slate-900">{key}</p>
             <div className="mt-2 flex flex-wrap gap-2">
-              {values.map((value) => (
-                <Link className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800" href={filterHref(key, value)} key={value}>
-                  {value.replaceAll("-", " ")}
-                </Link>
-              ))}
+              {values.map((value) => {
+                const active = isActiveFilter(activeFilters[key as keyof typeof activeFilters], value);
+                return (
+                  <Link
+                    className={`rounded-md border px-3 py-2 text-sm font-semibold capitalize ${
+                      active
+                        ? "border-teal-700 bg-teal-700 text-white"
+                        : "border-slate-300 bg-white text-slate-800 hover:border-teal-700 hover:text-teal-800"
+                    }`}
+                    href={filterHref(key, value)}
+                    key={value}
+                  >
+                    {value.replaceAll("-", " ")}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-10 grid gap-6 lg:grid-cols-3">
-        {visibleTours.map((tour) => (
-          <TourCard key={tour.slug} tour={tour} />
-        ))}
-      </div>
+      {visibleTours.length > 0 ? (
+        <div className="mt-10 grid gap-6 lg:grid-cols-3">
+          {visibleTours.map((tour) => (
+            <TourCard key={tour.slug} tour={tour} />
+          ))}
+        </div>
+      ) : (
+        <div className="mt-10 rounded-lg border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <h2 className="text-2xl font-black text-slate-950">No tours match those filters</h2>
+          <p className="mt-2 text-slate-600">Try another destination, category, or visit length.</p>
+          <Link className="mt-5 inline-flex rounded-md bg-teal-700 px-4 py-2 text-sm font-bold text-white" href="/tours">
+            Reset filters
+          </Link>
+        </div>
+      )}
     </main>
   );
 }

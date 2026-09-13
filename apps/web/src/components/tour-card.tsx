@@ -27,12 +27,20 @@ export function TourCard({ tour }: { tour: TourSummary }) {
           <span className="rounded-md bg-cyan-50 px-2.5 py-1">{tour.distanceMiles} mi</span>
           <span className="rounded-md bg-cyan-50 px-2.5 py-1">{tour.stopCount} stops</span>
         </div>
-        <Link
-          className="mt-2 inline-flex w-fit rounded-md bg-teal-700 px-4 py-2 text-sm font-bold text-white hover:bg-teal-800"
-          href={`/tours/${tour.slug}`}
-        >
-          View Tour
-        </Link>
+        <div className="mt-2 flex flex-wrap gap-2">
+          <Link
+            className="inline-flex rounded-md bg-teal-700 px-4 py-2 text-sm font-bold text-white hover:bg-teal-800"
+            href={`/tours/${tour.slug}/start`}
+          >
+            Start
+          </Link>
+          <Link
+            className="inline-flex rounded-md border border-slate-300 px-4 py-2 text-sm font-bold text-slate-800 hover:border-teal-700 hover:text-teal-800"
+            href={`/tours/${tour.slug}`}
+          >
+            Details
+          </Link>
+        </div>
       </div>
     </article>
   );

@@ -47,6 +47,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-b border-slate-200 bg-white py-8">
+        <div className="mx-auto grid max-w-6xl gap-4 px-5 md:grid-cols-4">
+          {[
+            ["Mobile first", "Designed for one-handed browsing on the route."],
+            ["GPS optional", "Use location help or complete stops manually."],
+            ["Cruise aware", "Keep port-day timing and return buffers in mind."],
+            ["Pilot ready", "Measure completed visitor experiences."]
+          ].map(([label, detail]) => (
+            <div className="rounded-lg bg-slate-50 p-4" key={label}>
+              <p className="font-black text-slate-950">{label}</p>
+              <p className="mt-1 text-sm leading-6 text-slate-600">{detail}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="bg-[#fff8ed] py-16">
         <div className="mx-auto max-w-6xl px-5">
           <h2 className="max-w-2xl text-4xl font-black text-slate-950">What Do You Want to Experience?</h2>
