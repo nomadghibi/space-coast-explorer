@@ -174,7 +174,7 @@ export default async function TourStopPage({ params }: PageProps) {
               </Link>
             ) : (
               <Link
-                className="inline-flex min-h-14 items-center rounded-lg bg-slate-950 p-4 text-sm font-black text-white hover:bg-slate-800"
+                className="inline-flex min-h-14 items-center rounded-lg bg-teal-700 p-4 text-sm font-black text-white hover:bg-teal-800"
                 href={`/tours/${tour.slug}`}
               >
                 Finish Tour

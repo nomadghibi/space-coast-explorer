@@ -341,7 +341,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
           <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
             <p className="font-black text-slate-950">Resume your {tour.title}?</p>
             <p className="mt-1 text-sm text-slate-700">Your completed stops and current progress are saved on this device.</p>
-            <button className="mt-3 rounded-md bg-slate-950 px-4 py-2 text-sm font-black text-white" onClick={() => setShowResume(false)}>
+            <button className="mt-3 rounded-md bg-teal-700 px-4 py-2 text-sm font-black text-white hover:bg-teal-800" onClick={() => setShowResume(false)}>
               Resume Tour
             </button>
           </div>
@@ -533,7 +533,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
               {accuracyWeak ? <p className="mt-3 rounded-md bg-amber-50 p-3 text-sm font-bold text-amber-900">Your location signal is currently too weak for automatic stop detection. You can continue manually.</p> : null}
               {location.status === "denied" ? <p className="mt-3 rounded-md bg-slate-100 p-3 text-sm font-bold text-slate-700">Location access was denied. You can continue manually.</p> : null}
               <div className="mt-5 flex flex-wrap gap-3">
-                <Link className="inline-flex min-h-11 items-center rounded-md bg-slate-950 px-4 text-sm font-black text-white" href={`/tours/${tour.slug}/stops/${currentStop.slug}`}>
+                <Link className="inline-flex min-h-11 items-center rounded-md bg-teal-700 px-4 text-sm font-black text-white hover:bg-teal-800" href={`/tours/${tour.slug}/stops/${currentStop.slug}`}>
                   Open Stop
                 </Link>
                 <a

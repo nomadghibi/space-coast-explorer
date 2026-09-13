@@ -29,13 +29,13 @@ export function TourCard({ tour }: { tour: TourSummary }) {
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
           <Link
-            className="inline-flex rounded-md bg-teal-700 px-4 py-2 text-sm font-bold text-white hover:bg-teal-800"
+            className="inline-flex min-h-11 items-center rounded-md bg-teal-700 px-4 text-sm font-bold text-white hover:bg-teal-800"
             href={`/tours/${tour.slug}/start`}
           >
             Start
           </Link>
           <Link
-            className="inline-flex rounded-md border border-slate-300 px-4 py-2 text-sm font-bold text-slate-800 hover:border-teal-700 hover:text-teal-800"
+            className="inline-flex min-h-11 items-center rounded-md border border-slate-300 px-4 text-sm font-bold text-slate-800 hover:border-teal-700 hover:text-teal-800"
             href={`/tours/${tour.slug}`}
           >
             Details
