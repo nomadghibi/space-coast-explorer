@@ -17,6 +17,7 @@ import type { TourDetail } from "@space-coast-explorer/types";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { canUseDevLocationSimulator, simulatedReadingForScenario, type SimulatedLocationScenario } from "../lib/dev-location-simulator";
+import { googleMapsDirectionsUrl } from "../lib/map-links";
 import { arriveAtStop, clearTourSession, completeStop, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
 import { useForegroundLocation } from "../lib/use-foreground-location";
 import { recordVisitorAnalyticsEvent } from "../lib/visitor-analytics";
@@ -63,6 +64,9 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const mappableStops = useMemo(() => tour.stops.map(stopToProximity).filter((stop): stop is ProximityStop => Boolean(stop)), [tour.stops]);
   const stopDetailsBySlug = useMemo(() => new Map(tour.stops.map((stop) => [stop.slug, stop])), [tour.stops]);
   const currentStop = tour.stops.find((stop) => stop.slug === session.currentStopSlug) ?? tour.stops[0];
+  const currentStopIndex = currentStop ? tour.stops.findIndex((stop) => stop.slug === currentStop.slug) : -1;
+  const previousStop = currentStopIndex > 0 ? tour.stops[currentStopIndex - 1] : undefined;
+  const nextStop = currentStopIndex >= 0 && currentStopIndex < tour.stops.length - 1 ? tour.stops[currentStopIndex + 1] : undefined;
   const activeReading = simulatedReading ?? location.reading;
   const currentDistance = currentStop?.location && activeReading ? formatDistance(evaluateStopProximity(stopToProximity(currentStop)!, activeReading).distanceMeters) : undefined;
   const completedCount = session.completedStopSlugs.length;
@@ -70,6 +74,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const accuracyWeak = activeReading ? activeReading.accuracy > defaultProximityOptions.maximumUsefulAccuracyMeters : false;
   const mapReady = Boolean(tour.routeGeometry && mappableStops.length && !mapError);
   const currentStopArrived = currentStop ? session.arrivedStopSlugs.includes(currentStop.slug) : false;
+  const currentDirectionsUrl = googleMapsDirectionsUrl(currentStop?.location ?? tour.startPoint?.address ?? tour.startLocation);
 
   useEffect(() => {
     const existing = loadTourSession(tour.slug);
@@ -264,6 +269,13 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
     }
   }
 
+  function openMap() {
+    setActiveTab("map");
+    window.requestAnimationFrame(() => {
+      document.getElementById("tour-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
   if (session.tourCompleted) {
     return (
       <main className="mx-auto max-w-4xl px-5 py-12">
@@ -292,15 +304,33 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   }
 
   return (
-    <main className="bg-[#f7fbfb]">
+    <main className="bg-[#f7fbfb] pb-28 md:pb-0">
       <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-6xl px-5 py-6">
-          <p className="text-sm font-black uppercase text-teal-700">{tour.destinationName}</p>
-          <h1 className="mt-2 text-3xl font-black text-slate-950">{tour.title}</h1>
-          <p className="mt-3 text-sm font-bold text-slate-700">
-            {completedCount} of {tour.stopCount} stops · {percent}% complete
-          </p>
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
+        <div className="mx-auto grid max-w-6xl gap-4 px-5 py-5 sm:py-6 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <p className="text-sm font-black uppercase text-teal-700">{tour.destinationName}</p>
+            <h1 className="mt-2 text-2xl font-black leading-tight text-slate-950 sm:text-3xl">{tour.title}</h1>
+            {currentStop ? (
+              <div className="mt-4 flex items-center gap-3">
+                <span className="grid size-14 shrink-0 place-items-center rounded-full bg-teal-700 text-xl font-black text-white">
+                  {currentStop.sequence}
+                </span>
+                <div>
+                  <p className="text-sm font-black text-slate-950">
+                    Stop {currentStop.sequence} of {tour.stopCount}
+                  </p>
+                  <p className="text-sm font-bold text-slate-700">{currentStop.title}</p>
+                </div>
+              </div>
+            ) : null}
+          </div>
+          <div className="grid gap-2 text-sm font-bold text-slate-700">
+            <p>
+              {completedCount} of {tour.stopCount} stops complete
+            </p>
+            <p>{percent}% complete</p>
+          </div>
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200 md:col-span-2">
             <div className="h-full rounded-full bg-teal-700" style={{ width: `${percent}%` }} />
           </div>
         </div>
@@ -365,10 +395,10 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
               Allow location access while this tour is open to see where you are and automatically detect when you reach each stop.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <button className="rounded-md bg-teal-700 px-5 py-3 text-sm font-black text-white" onClick={enableLocation}>
+              <button className="min-h-12 rounded-md bg-teal-700 px-5 py-3 text-sm font-black text-white" onClick={enableLocation}>
                 Enable Location
               </button>
-              <button className="rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-black text-slate-900" onClick={continueWithoutLocation}>
+              <button className="min-h-12 rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-black text-slate-900" onClick={continueWithoutLocation}>
                 Continue Without Location
               </button>
             </div>
@@ -402,7 +432,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
           </div>
 
           <div className={activeTab === "map" ? "block" : "hidden lg:block"}>
-            {mapReady ? <div className="h-[440px] overflow-hidden rounded-lg border border-slate-200 bg-slate-100" ref={mapRef} /> : null}
+            {mapReady ? <div className="h-[440px] scroll-mt-4 overflow-hidden rounded-lg border border-slate-200 bg-slate-100" id="tour-map" ref={mapRef} /> : null}
             {mapError || !tour.routeGeometry ? (
               <div className="rounded-lg border border-slate-200 bg-white p-6">
                 <h2 className="text-2xl font-black text-slate-950">Map Unavailable</h2>
@@ -444,7 +474,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
             </div>
           </div>
 
-          <div className={activeTab === "stops" ? "mt-4 block" : "mt-4 hidden lg:block"}>
+          <div className={activeTab === "stops" ? "mt-4 block" : "mt-4 hidden lg:block"} id="tour-stops">
             <h2 className="text-2xl font-black text-slate-950">Stops</h2>
             <ol className="mt-4 grid gap-3">
               {tour.stops.map((stop) => {
@@ -452,15 +482,22 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
                 const arrived = session.arrivedStopSlugs.includes(stop.slug);
                 return (
                   <li className="rounded-lg border border-slate-200 bg-white p-4" key={stop.slug}>
-                    <p className="text-sm font-black text-teal-700">Stop {stop.sequence}</p>
-                    <h3 className="mt-1 font-black text-slate-950">{stop.title}</h3>
-                    <p className="mt-1 text-sm text-slate-700">{completed ? "Stop completed." : arrived ? `You've arrived at Stop ${stop.sequence}.` : stop.summary}</p>
+                    <div className="flex items-start gap-3">
+                      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-teal-700 text-base font-black text-white">
+                        {stop.sequence}
+                      </span>
+                      <div>
+                        <p className="text-sm font-black text-teal-700">Stop {stop.sequence} of {tour.stopCount}</p>
+                        <h3 className="mt-1 font-black text-slate-950">{stop.title}</h3>
+                        <p className="mt-1 text-sm text-slate-700">{completed ? "Stop completed." : arrived ? `You've arrived at Stop ${stop.sequence}.` : stop.summary}</p>
+                      </div>
+                    </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <Link className="rounded-md border border-slate-300 px-3 py-2 text-sm font-bold text-slate-800" href={`/tours/${tour.slug}/stops/${stop.slug}`}>
+                      <Link className="inline-flex min-h-11 items-center rounded-md border border-slate-300 px-4 text-sm font-bold text-slate-800" href={`/tours/${tour.slug}/stops/${stop.slug}`}>
                         Open Stop
                       </Link>
                       {!completed ? (
-                        <button className="rounded-md bg-teal-700 px-3 py-2 text-sm font-bold text-white" onClick={() => markCurrentStopCompleted(stop.slug)}>
+                        <button className="min-h-11 rounded-md bg-teal-700 px-4 text-sm font-bold text-white" onClick={() => markCurrentStopCompleted(stop.slug)}>
                           Mark Completed
                         </button>
                       ) : null}
@@ -476,19 +513,38 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
           {currentStop ? (
             <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
               <p className="text-sm font-black uppercase text-orange-700">Current Stop</p>
-              <h2 className="mt-2 text-2xl font-black text-slate-950">
-                Stop {currentStop.sequence}: {currentStop.title}
-              </h2>
+              <div className="mt-2 flex items-start gap-3">
+                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-teal-700 text-lg font-black text-white">
+                  {currentStop.sequence}
+                </span>
+                <div>
+                  <p className="text-sm font-black text-slate-600">Stop {currentStop.sequence} of {tour.stopCount}</p>
+                  <h2 className="mt-1 text-2xl font-black text-slate-950">{currentStop.title}</h2>
+                </div>
+              </div>
               <p className="mt-3 text-sm leading-6 text-slate-700">{currentStop.summary}</p>
+              {nextStop ? (
+                <p className="mt-3 rounded-md bg-cyan-50 p-3 text-sm font-bold text-cyan-950">
+                  Next Stop: {nextStop.title}
+                </p>
+              ) : null}
               {currentDistance ? <p className="mt-3 text-sm font-black text-teal-800">{currentDistance} to Stop {currentStop.sequence}</p> : null}
               {currentStopArrived ? <p className="mt-3 rounded-md bg-teal-50 p-3 text-sm font-black text-teal-900">You have arrived.</p> : null}
               {accuracyWeak ? <p className="mt-3 rounded-md bg-amber-50 p-3 text-sm font-bold text-amber-900">Your location signal is currently too weak for automatic stop detection. You can continue manually.</p> : null}
               {location.status === "denied" ? <p className="mt-3 rounded-md bg-slate-100 p-3 text-sm font-bold text-slate-700">Location access was denied. You can continue manually.</p> : null}
               <div className="mt-5 flex flex-wrap gap-3">
-                <Link className="rounded-md bg-slate-950 px-4 py-2 text-sm font-black text-white" href={`/tours/${tour.slug}/stops/${currentStop.slug}`}>
+                <Link className="inline-flex min-h-11 items-center rounded-md bg-slate-950 px-4 text-sm font-black text-white" href={`/tours/${tour.slug}/stops/${currentStop.slug}`}>
                   Open Stop
                 </Link>
-                <button className="rounded-md bg-teal-700 px-4 py-2 text-sm font-black text-white" onClick={() => markCurrentStopCompleted(currentStop.slug)}>
+                <a
+                  className="inline-flex min-h-11 items-center rounded-md border border-slate-300 bg-white px-4 text-sm font-black text-slate-900"
+                  href={currentDirectionsUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  Directions
+                </a>
+                <button className="min-h-11 rounded-md bg-teal-700 px-4 text-sm font-black text-white" onClick={() => markCurrentStopCompleted(currentStop.slug)}>
                   Mark Completed
                 </button>
               </div>
@@ -503,6 +559,66 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
           </div>
         </aside>
       </section>
+      {currentStop ? (
+        <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-12px_34px_rgba(15,23,42,0.16)] backdrop-blur md:hidden">
+          <div className="mx-auto grid max-w-lg gap-3">
+            <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3">
+              <span className="grid size-11 place-items-center rounded-full bg-teal-700 text-base font-black text-white">
+                {currentStop.sequence}
+              </span>
+              <div className="min-w-0">
+                <p className="text-xs font-black uppercase text-teal-800">
+                  Stop {currentStop.sequence} of {tour.stopCount}
+                </p>
+                <p className="truncate text-sm font-black text-slate-950">{currentStop.title}</p>
+              </div>
+              {nextStop ? (
+                <Link
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-teal-700 px-4 text-sm font-black text-white"
+                  href={`/tours/${tour.slug}/stops/${nextStop.slug}`}
+                >
+                  Next Stop
+                </Link>
+              ) : (
+                <button className="min-h-11 rounded-md bg-teal-700 px-4 text-sm font-black text-white" onClick={() => markCurrentStopCompleted(currentStop.slug)}>
+                  Finish
+                </button>
+              )}
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {previousStop ? (
+                <Link
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-3 text-sm font-black text-slate-900"
+                  href={`/tours/${tour.slug}/stops/${previousStop.slug}`}
+                >
+                  Back
+                </Link>
+              ) : (
+                <Link
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-3 text-sm font-black text-slate-900"
+                  href={`/space-coast/${tour.destinationSlug}`}
+                >
+                  Back
+                </Link>
+              )}
+              <button
+                className="min-h-11 rounded-md border border-slate-300 bg-white px-3 text-sm font-black text-slate-900"
+                onClick={openMap}
+              >
+                Open Map
+              </button>
+              <a
+                className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-3 text-sm font-black text-slate-900"
+                href={currentDirectionsUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Directions
+              </a>
+            </div>
+          </div>
+        </nav>
+      ) : null}
     </main>
   );
 }

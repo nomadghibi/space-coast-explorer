@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PersistentTourCta } from "../../../components/persistent-tour-cta";
 import { RoutePreview } from "../../../components/route-preview";
 import { getTour, tours } from "../../../lib/content";
+import { googleMapsDirectionsUrl } from "../../../lib/map-links";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -30,8 +32,11 @@ export default async function TourDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  const firstStop = tour.stops[0];
+  const directionsUrl = googleMapsDirectionsUrl(firstStop?.location ?? tour.startPoint?.address ?? tour.startLocation);
+
   return (
-    <main>
+    <main className="pb-24 md:pb-0">
       <script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -46,22 +51,38 @@ export default async function TourDetailPage({ params }: PageProps) {
         type="application/ld+json"
       />
       <section className="bg-white">
-        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-12 lg:grid-cols-[1fr_1fr]">
+        <div className="mx-auto grid max-w-6xl gap-6 px-5 py-8 sm:py-12 lg:grid-cols-[1fr_1fr]">
           <div>
             <p className="text-sm font-bold uppercase text-teal-700">{tour.destinationName}</p>
-            <h1 className="mt-3 text-5xl font-bold text-slate-950">{tour.title}</h1>
-            <p className="mt-5 text-lg leading-8 text-slate-700">{tour.description}</p>
+            <h1 className="mt-3 text-4xl font-bold leading-tight text-slate-950 sm:text-5xl">{tour.title}</h1>
+            <p className="mt-4 text-base leading-7 text-slate-700 sm:text-lg sm:leading-8">{tour.description}</p>
             <div className="mt-6 flex flex-wrap gap-2 text-sm font-bold text-slate-800">
               {[tour.transportMode, `${tour.durationMinutes} Minutes`, `${tour.distanceMiles} Miles`, `${tour.stopCount} Stops`, tour.priceLabel].map((badge) => (
                 <span className="rounded-md bg-amber-100 px-3 py-2" key={badge}>{badge}</span>
               ))}
             </div>
-            <Link
-              className="mt-8 inline-flex rounded-md bg-teal-700 px-5 py-3 text-sm font-black text-white hover:bg-teal-800"
-              href={`/tours/${tour.slug}/start`}
-            >
-              Start This Tour
-            </Link>
+            <div className="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+              <Link
+                className="inline-flex min-h-12 items-center justify-center rounded-md bg-teal-700 px-5 text-sm font-black text-white hover:bg-teal-800"
+                href={`/tours/${tour.slug}/start`}
+              >
+                Start Tour
+              </Link>
+              <Link
+                className="inline-flex min-h-12 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-black text-slate-900 hover:border-teal-700 hover:text-teal-800"
+                href={`/tours/${tour.slug}/start#tour-map`}
+              >
+                Open Map
+              </Link>
+              <a
+                className="inline-flex min-h-12 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-black text-slate-900 hover:border-teal-700 hover:text-teal-800"
+                href={directionsUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Directions
+              </a>
+            </div>
           </div>
           <Image
             alt={tour.imageAlt}
@@ -120,15 +141,16 @@ export default async function TourDetailPage({ params }: PageProps) {
                 each stop manually at your own pace.
               </p>
               <Link
-                className="mt-5 inline-flex rounded-md bg-amber-300 px-4 py-2 text-sm font-black text-slate-950 hover:bg-amber-200"
+                className="mt-5 inline-flex min-h-12 items-center justify-center rounded-md bg-amber-300 px-5 text-sm font-black text-slate-950 hover:bg-amber-200"
                 href={`/tours/${tour.slug}/start`}
               >
-                Start This Tour
+                Start Tour
               </Link>
             </div>
           </div>
         </div>
       </section>
+      <PersistentTourCta tour={tour} />
     </main>
   );
 }

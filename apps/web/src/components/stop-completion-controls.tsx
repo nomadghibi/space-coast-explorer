@@ -26,7 +26,7 @@ export function StopCompletionControls({
 
   return (
     <button
-      className="rounded-md bg-teal-700 px-4 py-2 text-sm font-black text-white hover:bg-teal-800 disabled:bg-slate-400"
+      className="min-h-12 rounded-md bg-teal-700 px-5 text-sm font-black text-white hover:bg-teal-800 disabled:bg-slate-400"
       disabled={completed}
       onClick={() => {
         const activeSession = session ?? startTourSession(tourSlug, firstStopSlug);

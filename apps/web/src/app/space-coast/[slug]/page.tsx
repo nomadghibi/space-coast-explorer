@@ -1,6 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { DestinationPoi } from "@space-coast-explorer/types";
+import { PersistentTourCta } from "../../../components/persistent-tour-cta";
 import { RoutePreview } from "../../../components/route-preview";
 import { TourCard } from "../../../components/tour-card";
 import {
@@ -89,14 +91,30 @@ export default async function DestinationPage({ params }: PageProps) {
   const poiCategories = Array.from(new Set(pois.map((poi) => poi.category)));
 
   return (
-    <main>
+    <main className={previewTour ? "pb-24 md:pb-0" : undefined}>
       <section className="bg-white">
-        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-12 lg:grid-cols-[1fr_1fr]">
+        <div className="mx-auto grid max-w-6xl gap-6 px-5 py-8 sm:py-12 lg:grid-cols-[1fr_1fr]">
           <div>
             <p className="text-sm font-bold uppercase text-teal-700">{destination.eyebrow}</p>
-            <h1 className="mt-3 text-5xl font-bold text-slate-950">{destination.name}</h1>
-            <p className="mt-5 text-lg leading-8 text-slate-700">{destination.summary}</p>
-            <div className="mt-6 grid gap-3 text-sm text-slate-700">
+            <h1 className="mt-3 text-4xl font-bold leading-tight text-slate-950 sm:text-5xl">{destination.name}</h1>
+            <p className="mt-4 text-base leading-7 text-slate-700 sm:text-lg sm:leading-8">{destination.summary}</p>
+            {previewTour ? (
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link
+                  className="inline-flex min-h-12 items-center justify-center rounded-md bg-teal-700 px-5 text-sm font-black text-white hover:bg-teal-800"
+                  href={`/tours/${previewTour.slug}/start`}
+                >
+                  Start Tour
+                </Link>
+                <Link
+                  className="inline-flex min-h-12 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-black text-slate-900 hover:border-teal-700 hover:text-teal-800"
+                  href={`/tours/${previewTour.slug}/start#tour-map`}
+                >
+                  Open Map
+                </Link>
+              </div>
+            ) : null}
+            <div className="mt-6 hidden gap-3 text-sm text-slate-700 sm:grid">
               {destination.introduction.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
@@ -259,6 +277,7 @@ export default async function DestinationPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+      {previewTour ? <PersistentTourCta tour={previewTour} /> : null}
     </main>
   );
 }
