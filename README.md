@@ -42,3 +42,8 @@ pnpm test
 pnpm build
 cd apps/api && .venv/bin/ruff check . && .venv/bin/mypy . && .venv/bin/pytest
 ```
+
+## Pilot Readiness
+
+All documented milestones M0 through M9 are implemented. See `docs/PILOT_READINESS.md`
+for the current launch recommendation, no-go items, and next production API deployment track.
