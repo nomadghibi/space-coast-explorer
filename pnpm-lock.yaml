@@ -20,6 +20,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@space-coast-explorer/analytics':
+        specifier: workspace:*
+        version: link:../../packages/analytics
       '@space-coast-explorer/maps':
         specifier: workspace:*
         version: link:../../packages/maps
