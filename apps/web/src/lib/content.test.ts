@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { destinations, filterTours, getDestination, getTour, tours } from "./content";
+import {
+  destinationPoiCluster,
+  destinations,
+  filterTours,
+  getDestination,
+  getTour,
+  tours
+} from "./content";
 
 describe("public content", () => {
   it("finds the initial destination areas", () => {
@@ -15,9 +22,22 @@ describe("public content", () => {
   it("gives the pilot tour a concrete start point", () => {
     const pilot = getTour("cocoa-village-historic-explorer");
 
-    expect(pilot?.startPoint?.title).toBe("Historic Cocoa Village Playhouse");
-    expect(pilot?.startPoint?.address).toContain("300 Brevard Avenue");
+    expect(pilot?.startPoint?.title).toBe("Porcher House");
+    expect(pilot?.startPoint?.address).toContain("434 Delannoy Avenue");
     expect(pilot?.startPoint?.parkingNotes.length).toBeGreaterThan(0);
+  });
+
+  it("models Cocoa Village as a destination cluster", () => {
+    const pois = destinationPoiCluster("cocoa-village");
+    const categories = new Set(pois.map((poi) => poi.category));
+
+    expect(pois).toHaveLength(30);
+    expect(pois.find((poi) => poi.slug === "historic-walking-tour-route")?.priority).toBe(
+      "featured"
+    );
+    expect(Array.from(categories)).toEqual(
+      expect.arrayContaining(["Historic Landmark", "Waterfront", "Food", "Events"])
+    );
   });
 
   it("uses stable slugs for every manual tour stop", () => {

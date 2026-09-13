@@ -110,3 +110,26 @@ export type Destination = {
   imageUrl: string;
   imageAlt: string;
 };
+
+export type DestinationPoiCategory =
+  | "Historic Landmark"
+  | "Waterfront"
+  | "Food"
+  | "Shopping"
+  | "Arts & Culture"
+  | "Entertainment"
+  | "Events"
+  | "Family"
+  | "Nightlife"
+  | "Nearby Extension";
+
+export type DestinationPoi = {
+  slug: string;
+  destinationSlug: Exclude<DestinationSlug, "space-coast">;
+  name: string;
+  category: DestinationPoiCategory;
+  summary: string;
+  priority: "featured" | "standard" | "dynamic";
+  address?: string;
+  sourceUrl?: string;
+};

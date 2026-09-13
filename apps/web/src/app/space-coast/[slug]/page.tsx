@@ -2,7 +2,13 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { RoutePreview } from "../../../components/route-preview";
 import { TourCard } from "../../../components/tour-card";
-import { destinationTours, destinations, getDestination } from "../../../lib/content";
+import {
+  destinationPoiCluster,
+  destinationTours,
+  destinations,
+  featuredDestinationPois,
+  getDestination
+} from "../../../lib/content";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -34,6 +40,9 @@ export default async function DestinationPage({ params }: PageProps) {
 
   const tours = destinationTours(destination.slug);
   const previewTour = tours[0];
+  const pois = destinationPoiCluster(destination.slug);
+  const featuredPois = featuredDestinationPois(destination.slug);
+  const poiCategories = Array.from(new Set(pois.map((poi) => poi.category)));
 
   return (
     <main>
@@ -82,6 +91,48 @@ export default async function DestinationPage({ params }: PageProps) {
           {previewTour ? <RoutePreview tour={previewTour} /> : null}
         </div>
       </section>
+      {featuredPois.length > 0 ? (
+        <section className="border-y border-slate-200 bg-white py-12">
+          <div className="mx-auto max-w-6xl px-5">
+            <p className="text-sm font-black uppercase text-teal-800">Destination cluster</p>
+            <div className="mt-2 grid gap-4 lg:grid-cols-[0.8fr_1fr]">
+              <div>
+                <h2 className="text-3xl font-black text-slate-950">
+                  Historic Cocoa Village Is More Than One Pin
+                </h2>
+                <p className="mt-3 text-slate-700">
+                  The pilot model treats Cocoa Village as a layered cluster of historic landmarks,
+                  waterfront spaces, shops, food, art, entertainment, events, and nearby extensions.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {poiCategories.map((category) => (
+                  <span
+                    className="rounded-md bg-slate-100 px-3 py-2 text-sm font-black text-slate-800"
+                    key={category}
+                  >
+                    {category}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {featuredPois.slice(0, 9).map((poi) => (
+                <article className="rounded-lg border border-slate-200 bg-slate-50 p-5" key={poi.slug}>
+                  <p className="text-xs font-black uppercase text-orange-700">{poi.category}</p>
+                  <h3 className="mt-2 text-xl font-black text-slate-950">{poi.name}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-700">{poi.summary}</p>
+                  {poi.address ? <p className="mt-3 text-sm font-bold text-slate-800">{poi.address}</p> : null}
+                </article>
+              ))}
+            </div>
+            <p className="mt-5 text-sm font-semibold text-slate-600">
+              {pois.length} Cocoa Village points are modeled. Restaurants, shops, events, and nightlife
+              are flagged as dynamic data for future directory/calendar ingestion.
+            </p>
+          </div>
+        </section>
+      ) : null}
       <section className="bg-sky-50 py-12">
         <div className="mx-auto max-w-6xl px-5">
           <h2 className="text-3xl font-bold text-slate-950">Related Experiences</h2>
