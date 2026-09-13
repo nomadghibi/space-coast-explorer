@@ -32,6 +32,17 @@ is explicit:
 Pilot summaries report starts, completions, GPS completions, manual completions, and completion
 rate. Completion rate is `completed / started` and is zero when no starts are present.
 
+## Web Collection
+
+The web app records `visitor_experience.started` and `visitor_experience.completed` events from
+the active tour flow. Events are stored locally on the visitor device first. API submission is
+enabled only when `NEXT_PUBLIC_ANALYTICS_API_ENABLED=true` and the deployed environment supplies
+the required analytics destination and tour UUIDs.
+
+Local events include destination slug, tour slug, visitor session ID, event time, completion
+method, and stop counts. They do not include raw latitude, longitude, accuracy, or continuous
+movement history.
+
 ## Privacy Rules
 
 Analytics must not store passwords, authentication tokens, full payment data, or unnecessary

@@ -19,6 +19,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { canUseDevLocationSimulator, simulatedReadingForScenario, type SimulatedLocationScenario } from "../lib/dev-location-simulator";
 import { arriveAtStop, completeStop, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
 import { useForegroundLocation } from "../lib/use-foreground-location";
+import { recordVisitorAnalyticsEvent } from "../lib/visitor-analytics";
 
 const defaultMapStyleUrl = "https://demotiles.maplibre.org/style.json";
 
@@ -56,6 +57,8 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<import("maplibre-gl").Map | undefined>(undefined);
   const userMarkerRef = useRef<import("maplibre-gl").Marker | undefined>(undefined);
+  const startTrackedRef = useRef(false);
+  const completionTrackedRef = useRef(false);
   const styleUrl = process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? defaultMapStyleUrl;
   const mappableStops = useMemo(() => tour.stops.map(stopToProximity).filter((stop): stop is ProximityStop => Boolean(stop)), [tour.stops]);
   const currentStop = tour.stops.find((stop) => stop.slug === session.currentStopSlug) ?? tour.stops[0];
@@ -78,8 +81,14 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
     }
 
     const started = startTourSession(tour.slug, firstStopSlug);
+    if (!startTrackedRef.current) {
+      startTrackedRef.current = true;
+      void recordVisitorAnalyticsEvent(tour, "visitor_experience.started", {
+        totalStops: tour.stopCount
+      });
+    }
     queueMicrotask(() => setSession(started));
-  }, [firstStopSlug, tour.slug]);
+  }, [firstStopSlug, tour, tour.slug]);
 
   useEffect(() => {
     if (!activeReading || !currentStop) {
@@ -217,6 +226,14 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   function markCurrentStopCompleted(stopSlug: string) {
     const next = completeStop(session, orderedStopSlugs, stopSlug);
     setSession(next);
+    if (next.tourCompleted && !completionTrackedRef.current) {
+      completionTrackedRef.current = true;
+      void recordVisitorAnalyticsEvent(tour, "visitor_experience.completed", {
+        completionMethod: "manual",
+        completedStops: next.completedStopSlugs.length,
+        totalStops: tour.stopCount
+      });
+    }
   }
 
   function simulate(scenario: SimulatedLocationScenario) {
@@ -233,6 +250,10 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
         <h1 className="mt-3 text-4xl font-black text-slate-950">You Completed the {tour.title}</h1>
         <p className="mt-4 text-lg leading-8 text-slate-700">
           You completed {tour.stopCount} stops across an approximately {tour.durationMinutes}-minute experience.
+        </p>
+        <p className="mt-3 rounded-lg bg-teal-50 p-4 text-sm font-bold text-teal-900">
+          This completion is saved on this device and will sync to pilot analytics when the
+          production API is connected.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link className="rounded-md bg-teal-700 px-5 py-3 text-sm font-black text-white" href={`/space-coast/${tour.destinationSlug}`}>
