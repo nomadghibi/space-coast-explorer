@@ -82,6 +82,14 @@ export default async function TourDetailPage({ params }: PageProps) {
               <div><dt className="font-bold">Difficulty</dt><dd className="text-slate-700">{tour.difficulty}</dd></div>
               <div><dt className="font-bold">Accessibility</dt><dd className="text-slate-700">{tour.accessibilitySummary}</dd></div>
             </dl>
+            {tour.startPoint ? (
+              <div className="mt-8 rounded-lg border border-teal-100 bg-teal-50 p-5">
+                <p className="text-sm font-black uppercase text-teal-800">Where to begin</p>
+                <h2 className="mt-2 text-2xl font-black text-slate-950">{tour.startPoint.title}</h2>
+                <p className="mt-1 font-bold text-slate-800">{tour.startPoint.address}</p>
+                <p className="mt-3 text-sm leading-6 text-slate-700">{tour.startPoint.landmark}</p>
+              </div>
+            ) : null}
             <h2 className="mt-10 text-3xl font-bold text-slate-950">Stops</h2>
             <ol className="mt-6 grid gap-4">
               {tour.stops.map((stop) => (
@@ -95,6 +103,16 @@ export default async function TourDetailPage({ params }: PageProps) {
           </div>
           <div className="grid gap-6">
             <RoutePreview tour={tour} />
+            {tour.startPoint ? (
+              <div className="rounded-lg border border-slate-200 bg-white p-5">
+                <h2 className="text-xl font-black text-slate-950">Arrival Checklist</h2>
+                <ul className="mt-3 grid gap-2 text-sm leading-6 text-slate-700">
+                  {tour.startPoint.arrivalTips.map((tip) => (
+                    <li key={tip}>{tip}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
             <div className="rounded-lg bg-slate-950 p-5 text-white">
               <p className="text-lg font-bold">Ready to Start?</p>
               <p className="mt-2 text-sm text-slate-300">

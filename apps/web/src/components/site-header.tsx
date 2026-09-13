@@ -4,8 +4,6 @@ const links = [
   { href: "/space-coast", label: "Destinations" },
   { href: "/tours", label: "Tours" },
   { href: "/analytics", label: "Analytics" },
-  { href: "/admin", label: "Admin" },
-  { href: "/merchants", label: "Merchants" },
   { href: "/about", label: "About" },
   { href: "/privacy", label: "Privacy" }
 ];

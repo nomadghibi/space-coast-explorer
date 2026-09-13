@@ -121,24 +121,24 @@ export default function HomePage() {
 
       <section className="bg-white py-16">
         <div className="mx-auto max-w-6xl px-5">
-          <p className="text-sm font-black uppercase text-teal-800">Pilot operations</p>
+          <p className="text-sm font-black uppercase text-teal-800">Pilot confidence</p>
           <div className="mt-3 grid gap-6 lg:grid-cols-[0.8fr_1fr]">
             <div>
-              <h2 className="text-4xl font-black text-slate-950">Built for the Visitor and the Team</h2>
+              <h2 className="text-4xl font-black text-slate-950">Built for Real Visitor Conditions</h2>
               <p className="mt-4 text-slate-700">
-                Space Coast Explorer now has visible pilot tools for content review, local business
-                readiness, and Completed Visitor Experiences.
+                Start with a clear route, keep location optional, and finish manually if signal,
+                weather, or accessibility conditions change.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
-              <Link className="rounded-lg border border-slate-200 bg-slate-50 p-5 font-black text-slate-950 hover:border-teal-700 hover:bg-teal-50" href="/admin">
-                CMS Queue
+              <Link className="rounded-lg border border-slate-200 bg-slate-50 p-5 font-black text-slate-950 hover:border-teal-700 hover:bg-teal-50" href="/tours/cocoa-village-historic-explorer/start">
+                Start Pilot Tour
               </Link>
               <Link className="rounded-lg border border-slate-200 bg-slate-50 p-5 font-black text-slate-950 hover:border-teal-700 hover:bg-teal-50" href="/analytics">
-                Analytics
+                Pilot Metrics
               </Link>
-              <Link className="rounded-lg border border-slate-200 bg-slate-50 p-5 font-black text-slate-950 hover:border-teal-700 hover:bg-teal-50" href="/merchants">
-                Merchants
+              <Link className="rounded-lg border border-slate-200 bg-slate-50 p-5 font-black text-slate-950 hover:border-teal-700 hover:bg-teal-50" href="/privacy">
+                Privacy
               </Link>
             </div>
           </div>

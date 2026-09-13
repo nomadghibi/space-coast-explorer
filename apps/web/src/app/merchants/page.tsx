@@ -1,5 +1,13 @@
 import { merchantPipeline, statusLabel } from "../../lib/operations";
 
+export const metadata = {
+  title: "Merchant Portal | Space Coast Explorer",
+  robots: {
+    index: false,
+    follow: false
+  }
+};
+
 const claimTone: Record<string, string> = {
   claim_ready: "bg-emerald-100 text-emerald-900",
   unclaimed: "bg-slate-100 text-slate-800",
@@ -16,6 +24,9 @@ export default function MerchantsPage() {
           <p className="mt-3 max-w-2xl text-slate-700">
             Prepare business listings, claim review, and billing readiness for destination partners
             before merchant accounts are opened to the public.
+          </p>
+          <p className="mt-4 w-fit rounded-md bg-amber-100 px-3 py-2 text-sm font-black text-amber-950">
+            Internal preview only. Production access requires merchant login and organization roles.
           </p>
         </div>
       </section>

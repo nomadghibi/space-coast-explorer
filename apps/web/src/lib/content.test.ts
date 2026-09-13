@@ -12,6 +12,14 @@ describe("public content", () => {
     expect(getTour("cocoa-village-historic-explorer")?.stopCount).toBe(10);
   });
 
+  it("gives the pilot tour a concrete start point", () => {
+    const pilot = getTour("cocoa-village-historic-explorer");
+
+    expect(pilot?.startPoint?.title).toBe("Historic Cocoa Village Playhouse");
+    expect(pilot?.startPoint?.address).toContain("300 Brevard Avenue");
+    expect(pilot?.startPoint?.parkingNotes.length).toBeGreaterThan(0);
+  });
+
   it("uses stable slugs for every manual tour stop", () => {
     for (const tour of tours) {
       expect(tour.stops).toHaveLength(tour.stopCount);

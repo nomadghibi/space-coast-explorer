@@ -302,6 +302,37 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
         </div>
       ) : null}
 
+      {tour.startPoint && session.completedStopSlugs.length === 0 ? (
+        <section className="mx-auto max-w-6xl px-5 pt-6">
+          <div className="grid gap-4 rounded-lg border border-teal-100 bg-white p-5 shadow-sm lg:grid-cols-[0.8fr_1fr]">
+            <div>
+              <p className="text-sm font-black uppercase text-teal-800">Start point</p>
+              <h2 className="mt-2 text-2xl font-black text-slate-950">{tour.startPoint.title}</h2>
+              <p className="mt-1 font-bold text-slate-800">{tour.startPoint.address}</p>
+              <p className="mt-3 text-sm leading-6 text-slate-700">{tour.startPoint.landmark}</p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-lg bg-teal-50 p-4">
+                <p className="text-sm font-black uppercase text-teal-900">Arrival</p>
+                <ul className="mt-2 grid gap-2 text-sm leading-6 text-slate-700">
+                  {tour.startPoint.arrivalTips.map((tip) => (
+                    <li key={tip}>{tip}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-lg bg-amber-50 p-4">
+                <p className="text-sm font-black uppercase text-amber-950">Parking</p>
+                <ul className="mt-2 grid gap-2 text-sm leading-6 text-slate-700">
+                  {tour.startPoint.parkingNotes.map((note) => (
+                    <li key={note}>{note}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {!permissionChoiceMade && session.completedStopSlugs.length === 0 ? (
         <section className="mx-auto max-w-6xl px-5 pt-6">
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">

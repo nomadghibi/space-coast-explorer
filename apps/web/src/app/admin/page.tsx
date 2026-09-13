@@ -1,5 +1,13 @@
 import { editorialTours, statusLabel } from "../../lib/operations";
 
+export const metadata = {
+  title: "Admin CMS | Space Coast Explorer",
+  robots: {
+    index: false,
+    follow: false
+  }
+};
+
 const statusTone: Record<string, string> = {
   draft: "bg-slate-100 text-slate-800",
   in_review: "bg-amber-100 text-amber-950",
@@ -20,6 +28,9 @@ export default function AdminPage() {
           <p className="mt-3 max-w-2xl text-slate-700">
             Manage destination content readiness, publication state, and pilot fact-check work
             before tours move into a production CMS workflow.
+          </p>
+          <p className="mt-4 w-fit rounded-md bg-amber-100 px-3 py-2 text-sm font-black text-amber-950">
+            Internal preview only. Production access requires auth and RBAC.
           </p>
         </div>
       </section>

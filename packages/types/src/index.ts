@@ -80,6 +80,14 @@ export type TourStop = {
 export type TourDetail = TourSummary & {
   highlights: string[];
   safetyNotes: string[];
+  startPoint?: {
+    title: string;
+    address: string;
+    landmark: string;
+    arrivalTips: string[];
+    parkingNotes: string[];
+    accessibilityNotes: string[];
+  };
   stops: TourStop[];
   staticRouteSummary: string;
   routeGeometry?: RouteGeometry;

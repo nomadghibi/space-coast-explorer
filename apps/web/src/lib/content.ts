@@ -122,6 +122,25 @@ export const tours: TourDetail[] = [
     imageAlt: "Historic street with warm storefront lighting",
     highlights: ["Pilot experience", "Historic downtown", "Local shops", "Short walking loop"],
     safetyNotes: ["Use marked crossings where available.", "Check sidewalk, curb, weather, and traffic conditions before starting."],
+    startPoint: {
+      title: "Historic Cocoa Village Playhouse",
+      address: "300 Brevard Avenue, Cocoa, FL 32922",
+      landmark: "Begin outside the Playhouse near Brevard Avenue before walking the downtown loop.",
+      arrivalTips: [
+        "Arrive with a charged phone and check weather before leaving your vehicle.",
+        "Use the Playhouse as the visual anchor, then follow each stop in order.",
+        "If downtown streets are closed for an event, start from the nearest open public sidewalk and continue manually."
+      ],
+      parkingNotes: [
+        "Public parking is available around downtown Cocoa Village.",
+        "Street parking is available throughout the village, and a municipal lot is listed near the Playhouse off Florida Avenue.",
+        "Allow extra time on event days because streets near the theatre may be blocked."
+      ],
+      accessibilityNotes: [
+        "This is a sidewalk-focused walking route with curb cuts and surfaces that still need field verification.",
+        "Manual stop completion is always available if GPS signal is weak or the route needs an accessibility detour."
+      ]
+    },
     staticRouteSummary: "A downtown walking loop preview with compact stops and flexible pacing.",
     routeGeometry: {
       type: "LineString",
