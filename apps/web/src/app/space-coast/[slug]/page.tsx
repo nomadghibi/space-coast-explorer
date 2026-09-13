@@ -42,12 +42,7 @@ export default async function DestinationPage({ params }: PageProps) {
   const previewTour = tours[0];
   const pois = destinationPoiCluster(destination.slug);
   const featuredPois = featuredDestinationPois(destination.slug);
-  const historicLandmarkPois = pois.filter(
-    (poi) =>
-      poi.category === "Historic Landmark" ||
-      poi.slug === "historic-cocoa-village-playhouse" ||
-      poi.slug === "myrt-tharpe-square"
-  );
+  const contextualPois = pois.filter((poi) => poi.description?.length);
   const poiCategories = Array.from(new Set(pois.map((poi) => poi.category)));
 
   return (
@@ -167,21 +162,21 @@ export default async function DestinationPage({ params }: PageProps) {
           </div>
         </section>
       ) : null}
-      {historicLandmarkPois.length > 0 ? (
+      {contextualPois.length > 0 ? (
         <section className="bg-[#f7fbfb] py-12">
           <div className="mx-auto max-w-6xl px-5">
             <div className="max-w-3xl">
-              <p className="text-sm font-black uppercase text-teal-800">Historic landmarks</p>
+              <p className="text-sm font-black uppercase text-teal-800">Places with context</p>
               <h2 className="mt-2 text-3xl font-black text-slate-950">
-                Read More About Each {destination.name} Landmark
+                Read More About {destination.name}
               </h2>
               <p className="mt-3 text-slate-700">
-                These landmark notes turn the destination from a list of pins into a walk with context:
-                what to notice, why the place belongs on the route, and how it connects to the district.
+                These notes turn the destination from a list of pins into a walk with context:
+                what to notice, why each place belongs on the route, and how it connects to the district.
               </p>
             </div>
             <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {historicLandmarkPois.map((poi) => (
+              {contextualPois.map((poi) => (
                 <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm" key={poi.slug}>
                   {poi.imageUrl ? (
                     <Image

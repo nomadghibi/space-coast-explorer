@@ -54,7 +54,13 @@ describe("public content", () => {
       "sf-travis-company",
       "st-marks-episcopal-church",
       "library-of-florida-history",
-      "myrt-tharpe-square"
+      "myrt-tharpe-square",
+      "cocoa-riverfront-park",
+      "cocoa-village-marina",
+      "taylor-park",
+      "cocoa-civic-center",
+      "historic-lawndale-museum",
+      "brevard-county-state-bank"
     ];
 
     const poisBySlug = new Map(destinationPoiCluster("cocoa-village").map((poi) => [poi.slug, poi]));

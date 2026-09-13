@@ -240,6 +240,8 @@ export const destinationPois: DestinationPoi[] = [
       "The Brevard County State Bank Building marks a major early finance story for Cocoa. Completed in 1893, the building housed a bank that helped fund growth across the young community.",
       "Even after banking activity ended, the structure stayed part of downtown life through shops, restaurants, and other uses. Visitors can still use the corner to understand how money, trade, and architecture clustered near the village core."
     ],
+    imageUrl: "/images/cocoa-village/landmarks/brevard-county-state-bank.jpg",
+    imageAlt: "Historic Brevard County State Bank entrance with columns and early automobiles",
     priority: "featured",
     sourceUrl: "https://visitcocoavillage.com/discover/brevard-county-state-bank"
   },
@@ -265,6 +267,12 @@ export const destinationPois: DestinationPoi[] = [
     name: "Cocoa Riverfront Park",
     category: "Waterfront",
     summary: "Riverfront park with views, playground, pavilions, amphitheater, and walking areas.",
+    description: [
+      "Cocoa Riverfront Park opens the village walk toward the Indian River. After the compact downtown blocks, the promenade gives visitors water views, benches, open lawn, and a more relaxed pace.",
+      "This is a useful pause point for families and first-time visitors because it connects the historic district to the waterfront setting that shaped Cocoa's early growth."
+    ],
+    imageUrl: "/images/cocoa-village/landmarks/cocoa-riverfront-park.jpg",
+    imageAlt: "Cocoa Riverfront Park promenade beside the Indian River",
     priority: "featured",
     address: "401 Riveredge Boulevard, Cocoa, FL 32922",
     sourceUrl: "https://cocoafl.gov/Facilities/Facility/Details/4"
@@ -275,6 +283,12 @@ export const destinationPois: DestinationPoi[] = [
     name: "Taylor Park",
     category: "Family",
     summary: "Shaded downtown park that works as a family-friendly rest point.",
+    description: [
+      "Taylor Park is the kind of stop that makes a walking route easier to enjoy with kids or a mixed-age group. It gives the village route shade, benches, open space, and a natural place to slow down.",
+      "For the visitor experience, this park matters because not every useful stop is a museum or historic facade. Rest points help people complete the walk comfortably."
+    ],
+    imageUrl: "/images/cocoa-village/landmarks/taylor-park.jpg",
+    imageAlt: "Taylor Park entrance sign with benches, trees, and a walkway",
     priority: "standard"
   },
   {
@@ -322,6 +336,12 @@ export const destinationPois: DestinationPoi[] = [
     name: "Cocoa Civic Center",
     category: "Events",
     summary: "Civic and event venue facing the riverfront park system.",
+    description: [
+      "The Cocoa Civic Center helps explain the village as a civic gathering place. Its location near the riverfront park system makes it part of the same public-space cluster as the promenade, amphitheater, and downtown events.",
+      "Use this stop to understand how Cocoa Village hosts everyday community life: meetings, performances, markets, and seasonal programming all sit close to the historic commercial core."
+    ],
+    imageUrl: "/images/cocoa-village/landmarks/cocoa-civic-center.jpg",
+    imageAlt: "City of Cocoa Civic Center entrance from the street",
     priority: "standard",
     address: "430 Delannoy Avenue, Cocoa, FL 32922"
   },
@@ -422,6 +442,12 @@ export const destinationPois: DestinationPoi[] = [
     name: "Cocoa Village Marina",
     category: "Waterfront",
     summary: "Boating and Indian River access connected to the village visit.",
+    description: [
+      "The Cocoa Village Marina gives the route a working waterfront edge. The docks make the Indian River feel close and practical, with boating activity sitting just a short walk from shops, parks, and historic streets.",
+      "This is a strong photo and orientation stop because it shows why the village belongs on the river, not just near it."
+    ],
+    imageUrl: "/images/cocoa-village/landmarks/cocoa-village-marina.jpg",
+    imageAlt: "Cocoa waterfront docks extending into the Indian River",
     priority: "dynamic"
   },
   {
@@ -430,6 +456,12 @@ export const destinationPois: DestinationPoi[] = [
     name: "Historic Lawndale Museum - H.S. Williams Home",
     category: "Nearby Extension",
     summary: "Nearby historic home museum recommended as an extension south of the village.",
+    description: [
+      "Historic Lawndale Museum works best as a nearby extension rather than a core village stop. The H.S. Williams Home adds a preserved house-museum layer for visitors who want more local history after the downtown walk.",
+      "Because it sits outside the compact village loop, the app should treat it as an optional add-on with clear distance, timing, and transportation guidance before it becomes a formal route stop."
+    ],
+    imageUrl: "/images/cocoa-village/landmarks/historic-lawndale-museum.jpg",
+    imageAlt: "Historic Lawndale Museum front porch and tower",
     priority: "standard",
     address: "1219 Rockledge Drive, Rockledge, FL 32955"
   },
