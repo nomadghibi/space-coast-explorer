@@ -642,6 +642,27 @@ export function getTourStop(tourSlug: string, stopSlug: string) {
   return tour.stops.find((stop) => stop.slug === stopSlug);
 }
 
+const tourStopImagePoiSlugs: Record<string, string> = {
+  "brevard-avenue-storefronts": "delannoy-avenue",
+  "historic-bank-corner": "brevard-county-state-bank",
+  "indian-river-finish": "cocoa-village-marina",
+  "playhouse-and-street-art": "historic-cocoa-village-playhouse",
+  "riverfront-park-and-boardwalk": "cocoa-riverfront-park",
+  "village-tower": "village-tower-masonic-temple"
+};
+
+export function getTourStopImage(tour: TourDetail, stop: TourDetail["stops"][number]) {
+  const poiSlug = tourStopImagePoiSlugs[stop.slug] ?? stop.slug;
+  const poi = destinationPois.find(
+    (candidate) => candidate.destinationSlug === tour.destinationSlug && candidate.slug === poiSlug
+  );
+
+  return {
+    imageAlt: stop.imageAlt ?? poi?.imageAlt ?? tour.imageAlt,
+    imageUrl: poi?.imageUrl ?? tour.imageUrl
+  };
+}
+
 export function destinationPoiCluster(slug: string): DestinationPoi[] {
   return destinationPois.filter((poi) => poi.destinationSlug === slug);
 }

@@ -5,6 +5,7 @@ import {
   filterTours,
   getDestination,
   getTour,
+  getTourStopImage,
   tours
 } from "./content";
 
@@ -104,6 +105,25 @@ describe("public content", () => {
       expect(new Set(tour.stops.map((stop) => stop.slug)).size).toBe(tour.stops.length);
       expect(tour.stops.every((stop) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(stop.slug))).toBe(true);
     }
+  });
+
+  it("resolves landmark-specific images for Cocoa Village tour stops", () => {
+    const tour = getTour("cocoa-village-historic-explorer");
+
+    expect(tour).toBeDefined();
+
+    const images = new Map(
+      tour!.stops.map((stop) => [stop.slug, getTourStopImage(tour!, stop).imageUrl])
+    );
+
+    expect(images.get("porcher-house")).toBe("/images/cocoa-village/landmarks/porcher-house.jpg");
+    expect(images.get("sf-travis-company")).toBe(
+      "/images/cocoa-village/landmarks/sf-travis-company.jpg"
+    );
+    expect(images.get("historic-bank-corner")).toBe(
+      "/images/cocoa-village/landmarks/brevard-county-state-bank.jpg"
+    );
+    expect(new Set(images.values()).size).toBeGreaterThan(6);
   });
 
   it("keeps internal editorial markers out of visitor-facing content", () => {

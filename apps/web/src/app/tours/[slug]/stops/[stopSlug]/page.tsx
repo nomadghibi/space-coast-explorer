@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { StopCompletionControls } from "../../../../../components/stop-completion-controls";
-import { getTour, tours } from "../../../../../lib/content";
+import { getTour, getTourStopImage, tours } from "../../../../../lib/content";
 import { googleMapsDirectionsUrl } from "../../../../../lib/map-links";
 
 type PageProps = {
@@ -44,6 +44,7 @@ export default async function TourStopPage({ params }: PageProps) {
   const orderedStopSlugs = tour.stops.map((candidate) => candidate.slug);
   const firstStopSlug = orderedStopSlugs[0] ?? stop.slug;
   const directionsUrl = googleMapsDirectionsUrl(stop.location ?? `${stop.title}, ${tour.destinationName}`);
+  const stopImage = getTourStopImage(tour, stop);
 
   return (
     <main className="bg-[#f7fbfb] pb-28 md:pb-0">
@@ -99,11 +100,11 @@ export default async function TourStopPage({ params }: PageProps) {
           </div>
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl">
             <Image
-              alt={stop.imageAlt ?? tour.imageAlt}
+              alt={stopImage.imageAlt}
               className="h-72 w-full object-cover"
               height={520}
               priority
-              src={tour.imageUrl}
+              src={stopImage.imageUrl}
               width={860}
             />
             <div className="grid grid-cols-2 divide-x divide-slate-200">
