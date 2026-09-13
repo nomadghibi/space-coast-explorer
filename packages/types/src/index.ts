@@ -113,6 +113,7 @@ export type Destination = {
 
 export type DestinationPoiCategory =
   | "Historic Landmark"
+  | "Walking Tour / Historic District"
   | "Waterfront"
   | "Food"
   | "Shopping"
@@ -132,6 +133,8 @@ export type DestinationPoi = {
   description?: string[];
   imageUrl?: string;
   imageAlt?: string;
+  secondaryImageUrl?: string;
+  secondaryImageAlt?: string;
   priority: "featured" | "standard" | "dynamic";
   address?: string;
   sourceUrl?: string;

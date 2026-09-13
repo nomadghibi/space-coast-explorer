@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import type { DestinationPoi } from "@space-coast-explorer/types";
 import { RoutePreview } from "../../../components/route-preview";
 import { TourCard } from "../../../components/tour-card";
 import {
@@ -13,6 +14,48 @@ import {
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+function PoiImages({ poi, size }: { poi: DestinationPoi; size: "compact" | "large" }) {
+  if (!poi.imageUrl) {
+    return null;
+  }
+
+  const primaryHeightClass = size === "large" ? "h-56" : "h-44";
+  const secondaryHeightClass = size === "large" ? "h-56" : "h-44";
+  const width = size === "large" ? 760 : 640;
+  const height = size === "large" ? 480 : 420;
+
+  if (poi.secondaryImageUrl) {
+    return (
+      <div className="grid grid-cols-2">
+        <Image
+          alt={poi.imageAlt ?? poi.name}
+          className={`${primaryHeightClass} w-full object-cover`}
+          height={height}
+          src={poi.imageUrl}
+          width={width}
+        />
+        <Image
+          alt={poi.secondaryImageAlt ?? poi.name}
+          className={`${secondaryHeightClass} w-full object-cover`}
+          height={height}
+          src={poi.secondaryImageUrl}
+          width={width}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      alt={poi.imageAlt ?? poi.name}
+      className={`${primaryHeightClass} w-full object-cover`}
+      height={height}
+      src={poi.imageUrl}
+      width={width}
+    />
+  );
+}
 
 export function generateStaticParams() {
   return destinations
@@ -120,15 +163,7 @@ export default async function DestinationPage({ params }: PageProps) {
             <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {featuredPois.slice(0, 9).map((poi) => (
                 <article className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50" key={poi.slug}>
-                  {poi.imageUrl ? (
-                    <Image
-                      alt={poi.imageAlt ?? poi.name}
-                      className="h-44 w-full object-cover"
-                      height={420}
-                      src={poi.imageUrl}
-                      width={640}
-                    />
-                  ) : null}
+                  <PoiImages poi={poi} size="compact" />
                   <div className="p-5">
                     <p className="text-xs font-black uppercase text-orange-700">{poi.category}</p>
                     <h3 className="mt-2 text-xl font-black text-slate-950">{poi.name}</h3>
@@ -178,15 +213,7 @@ export default async function DestinationPage({ params }: PageProps) {
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               {contextualPois.map((poi) => (
                 <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm" key={poi.slug}>
-                  {poi.imageUrl ? (
-                    <Image
-                      alt={poi.imageAlt ?? poi.name}
-                      className="h-56 w-full object-cover"
-                      height={480}
-                      src={poi.imageUrl}
-                      width={760}
-                    />
-                  ) : null}
+                  <PoiImages poi={poi} size="large" />
                   <div className="p-5">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>

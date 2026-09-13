@@ -397,13 +397,19 @@ export const destinationPois: DestinationPoi[] = [
     slug: "historic-walking-tour-route",
     destinationSlug: "cocoa-village",
     name: "Historic Walking Tour Route",
-    category: "Historic Landmark",
-    summary: "Official 11-landmark route, less than one mile, starting at Porcher House.",
+    category: "Walking Tour / Historic District",
+    summary: "Official 11-landmark route under one mile through Delannoy Avenue and central Cocoa Village.",
     description: [
-      "The official Historic Cocoa Village walking tour ties the landmark cluster together. It is designed as a self-guided route of 11 historic buildings within walking distance and begins at Porcher House.",
+      "The official Historic Cocoa Village walking tour ties the landmark cluster together. It starts at Porcher House, 434 Delannoy Avenue, and keeps visitors within a compact central village route of less than one mile.",
+      "Delannoy Avenue is especially important because several key landmarks sit directly on or very close to it, including Porcher House, S.F. Travis Company, Brevard County State Bank, and Parrish Grove Inn.",
       "For Space Coast Explorer, this route is the pilot spine: a compact path that can combine map guidance, story cards, QR-style context, completion tracking, and later audio without forcing visitors into a rigid schedule."
     ],
+    imageUrl: "/images/cocoa-village/landmarks/historic-walking-tour-route.jpg",
+    imageAlt: "Cocoa Village Historic Walking Tour route map",
+    secondaryImageUrl: "/images/cocoa-village/landmarks/historic-walking-tour-route-secondary.jpg",
+    secondaryImageAlt: "Shaded historic Cocoa Village street scene with shops and palm trees",
     priority: "featured",
+    address: "Delannoy Avenue / central Cocoa Village",
     sourceUrl: "https://visitcocoavillage.com/discover/historic-walking-tour"
   },
   {
@@ -422,8 +428,11 @@ export const destinationPois: DestinationPoi[] = [
     summary: "Historic street connecting Porcher House, civic spaces, and restored architecture.",
     description: [
       "Delannoy Avenue is best understood as a connector landmark. It links Porcher House, civic spaces, lodging, commercial corners, and the route toward the heart of the village.",
+      "Several of the route's most important stops sit directly on or close to Delannoy Avenue, including Porcher House, S.F. Travis Company, Brevard County State Bank, and Parrish Grove Inn.",
       "Walking this street helps visitors feel how close the historic district really is: homes, public buildings, businesses, and riverfront access sit within a short downtown grid."
     ],
+    imageUrl: "/images/cocoa-village/landmarks/delannoy-avenue.jpg",
+    imageAlt: "Shaded Delannoy Avenue street scene in historic Cocoa Village",
     priority: "featured"
   },
   {

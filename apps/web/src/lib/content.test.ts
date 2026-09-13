@@ -63,7 +63,9 @@ describe("public content", () => {
       "taylor-park",
       "cocoa-civic-center",
       "historic-lawndale-museum",
-      "brevard-county-state-bank"
+      "brevard-county-state-bank",
+      "historic-walking-tour-route",
+      "delannoy-avenue"
     ];
 
     const poisBySlug = new Map(destinationPoiCluster("cocoa-village").map((poi) => [poi.slug, poi]));
@@ -75,6 +77,25 @@ describe("public content", () => {
       expect(poi?.imageUrl).toBe(`/images/cocoa-village/landmarks/${slug}.jpg`);
       expect(poi?.imageAlt).toBeTruthy();
     }
+  });
+
+  it("models the Historic Walking Tour Route with map and street-scene media", () => {
+    const route = destinationPoiCluster("cocoa-village").find(
+      (poi) => poi.slug === "historic-walking-tour-route"
+    );
+    const description = route?.description?.join(" ") ?? "";
+
+    expect(route?.category).toBe("Walking Tour / Historic District");
+    expect(route?.address).toBe("Delannoy Avenue / central Cocoa Village");
+    expect(route?.imageUrl).toBe("/images/cocoa-village/landmarks/historic-walking-tour-route.jpg");
+    expect(route?.secondaryImageUrl).toBe(
+      "/images/cocoa-village/landmarks/historic-walking-tour-route-secondary.jpg"
+    );
+    expect(description).toContain("Porcher House, 434 Delannoy Avenue");
+    expect(description).toContain("less than one mile");
+    expect(description).toContain("S.F. Travis Company");
+    expect(description).toContain("Brevard County State Bank");
+    expect(description).toContain("Parrish Grove Inn");
   });
 
   it("uses stable slugs for every manual tour stop", () => {
