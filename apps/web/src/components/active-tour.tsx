@@ -17,7 +17,7 @@ import type { TourDetail } from "@space-coast-explorer/types";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { canUseDevLocationSimulator, simulatedReadingForScenario, type SimulatedLocationScenario } from "../lib/dev-location-simulator";
-import { arriveAtStop, completeStop, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
+import { arriveAtStop, clearTourSession, completeStop, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
 import { useForegroundLocation } from "../lib/use-foreground-location";
 import { recordVisitorAnalyticsEvent } from "../lib/visitor-analytics";
 
@@ -61,6 +61,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const completionTrackedRef = useRef(false);
   const styleUrl = process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? defaultMapStyleUrl;
   const mappableStops = useMemo(() => tour.stops.map(stopToProximity).filter((stop): stop is ProximityStop => Boolean(stop)), [tour.stops]);
+  const stopDetailsBySlug = useMemo(() => new Map(tour.stops.map((stop) => [stop.slug, stop])), [tour.stops]);
   const currentStop = tour.stops.find((stop) => stop.slug === session.currentStopSlug) ?? tour.stops[0];
   const activeReading = simulatedReading ?? location.reading;
   const currentDistance = currentStop?.location && activeReading ? formatDistance(evaluateStopProximity(stopToProximity(currentStop)!, activeReading).distanceMeters) : undefined;
@@ -115,7 +116,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   }, [activeReading, currentStop, session, stopStates]);
 
   useEffect(() => {
-    if (!mapRef.current || !tour.routeGeometry || mapInstanceRef.current || !styleUrl) {
+    if (session.tourCompleted || !mapRef.current || !tour.routeGeometry || mapInstanceRef.current || !styleUrl) {
       return;
     }
 
@@ -163,10 +164,19 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
           });
 
           for (const stop of mappableStops) {
+            const stopDetails = stopDetailsBySlug.get(stop.slug);
             const element = document.createElement("div");
             element.className = "tour-map-marker";
+            element.setAttribute("aria-label", `Stop ${stop.sequence}: ${stopDetails?.title ?? stop.slug}`);
+            element.setAttribute("title", `Stop ${stop.sequence}: ${stopDetails?.title ?? stop.slug}`);
             element.textContent = String(stop.sequence);
-            new maplibregl.Marker({ element }).setLngLat(mapCoordinates(stop.location)).addTo(map);
+            const popup = new maplibregl.Popup({ closeButton: false, offset: 28 }).setText(
+              `Stop ${stop.sequence}: ${stopDetails?.title ?? stop.slug}`
+            );
+            new maplibregl.Marker({ element })
+              .setLngLat(mapCoordinates(stop.location))
+              .setPopup(popup)
+              .addTo(map);
           }
 
           map.fitBounds(bounds, { padding: 56, maxZoom: 17 });
@@ -186,7 +196,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
       mapInstanceRef.current?.remove();
       mapInstanceRef.current = undefined;
     };
-  }, [mappableStops, styleUrl, tour.routeGeometry]);
+  }, [mappableStops, session.tourCompleted, stopDetailsBySlug, styleUrl, tour.routeGeometry]);
 
   useEffect(() => {
     if (!activeReading || !mapInstanceRef.current) {
@@ -236,6 +246,17 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
     }
   }
 
+  function restartTour() {
+    clearTourSession(tour.slug);
+    const restarted = startTourSession(tour.slug, firstStopSlug);
+    setSession(restarted);
+    setShowResume(false);
+    setPermissionChoiceMade(false);
+    setActiveTab("map");
+    setStopStates({});
+    completionTrackedRef.current = false;
+  }
+
   function simulate(scenario: SimulatedLocationScenario) {
     const simulated = simulatedReadingForScenario(tour, scenario);
     if (simulated) {
@@ -256,6 +277,9 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
           production API is connected.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
+          <button className="rounded-md bg-teal-700 px-5 py-3 text-sm font-black text-white" onClick={restartTour}>
+            Start Over
+          </button>
           <Link className="rounded-md bg-teal-700 px-5 py-3 text-sm font-black text-white" href={`/space-coast/${tour.destinationSlug}`}>
             Return to Destination
           </Link>
@@ -385,6 +409,39 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
                 <p className="mt-3 text-slate-700">{mapError ?? "This tour can still be completed with the ordered stop list."}</p>
               </div>
             ) : null}
+            <div className="mt-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <p className="text-xs font-black uppercase text-teal-700">Map locations</p>
+                  <h2 className="mt-1 text-xl font-black text-slate-950">Every Stop on This Route</h2>
+                </div>
+                <p className="text-sm font-bold text-slate-600">{mappableStops.length} mapped locations</p>
+              </div>
+              <ol className="mt-4 grid gap-2 sm:grid-cols-2">
+                {tour.stops.map((stop) => {
+                  const completed = session.completedStopSlugs.includes(stop.slug);
+                  const current = currentStop?.slug === stop.slug;
+                  return (
+                    <li
+                      className={`flex items-start gap-3 rounded-md border p-3 ${
+                        current ? "border-teal-300 bg-teal-50" : completed ? "border-emerald-200 bg-emerald-50" : "border-slate-200 bg-white"
+                      }`}
+                      key={stop.slug}
+                    >
+                      <span className="grid size-7 shrink-0 place-items-center rounded-full bg-teal-700 text-xs font-black text-white">
+                        {stop.sequence}
+                      </span>
+                      <span>
+                        <span className="block text-sm font-black text-slate-950">{stop.title}</span>
+                        <span className="mt-1 block text-xs font-bold text-slate-600">
+                          {current ? "Current stop" : completed ? "Completed" : "Mapped route stop"}
+                        </span>
+                      </span>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
           </div>
 
           <div className={activeTab === "stops" ? "mt-4 block" : "mt-4 hidden lg:block"}>
