@@ -57,6 +57,7 @@ describe("public content", () => {
       "library-of-florida-history",
       "myrt-tharpe-square",
       "cocoa-riverfront-park",
+      "riverfront-amphitheater",
       "cocoa-village-marina",
       "taylor-park",
       "cocoa-civic-center",

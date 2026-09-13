@@ -321,6 +321,12 @@ export const destinationPois: DestinationPoi[] = [
     name: "Cocoa Riverfront Amphitheater",
     category: "Entertainment",
     summary: "Outdoor concert and community event venue facing the Indian River.",
+    description: [
+      "Cocoa Riverfront Amphitheater gives the village route a performance anchor at the edge of the water. It connects the walk to concerts, festivals, civic events, and the wider riverfront park system.",
+      "For visitors, this stop matters because it shows how Cocoa Village uses public space today: historic streets, waterfront views, and live programming all sit close enough to become one easy downtown experience."
+    ],
+    imageUrl: "/images/cocoa-village/landmarks/riverfront-amphitheater.jpg",
+    imageAlt: "Cocoa Riverfront Amphitheater stage with palm trees and Indian River views",
     priority: "featured",
     sourceUrl: "https://cocoafl.gov/Facilities/Facility/Details/4"
   },
