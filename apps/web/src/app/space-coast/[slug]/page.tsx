@@ -43,7 +43,10 @@ export default async function DestinationPage({ params }: PageProps) {
   const pois = destinationPoiCluster(destination.slug);
   const featuredPois = featuredDestinationPois(destination.slug);
   const historicLandmarkPois = pois.filter(
-    (poi) => poi.category === "Historic Landmark" || poi.slug === "historic-cocoa-village-playhouse"
+    (poi) =>
+      poi.category === "Historic Landmark" ||
+      poi.slug === "historic-cocoa-village-playhouse" ||
+      poi.slug === "myrt-tharpe-square"
   );
   const poiCategories = Array.from(new Set(pois.map((poi) => poi.category)));
 
@@ -121,28 +124,39 @@ export default async function DestinationPage({ params }: PageProps) {
             </div>
             <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {featuredPois.slice(0, 9).map((poi) => (
-                <article className="rounded-lg border border-slate-200 bg-slate-50 p-5" key={poi.slug}>
-                  <p className="text-xs font-black uppercase text-orange-700">{poi.category}</p>
-                  <h3 className="mt-2 text-xl font-black text-slate-950">{poi.name}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-700">{poi.summary}</p>
-                  {poi.address ? <p className="mt-3 text-sm font-bold text-slate-800">{poi.address}</p> : null}
-                  {poi.description ? (
-                    <details className="mt-4 rounded-md border border-slate-200 bg-white p-3">
-                      <summary className="cursor-pointer text-sm font-black text-teal-800">
-                        Read more
-                      </summary>
-                      <div className="mt-3 grid gap-3 text-sm leading-6 text-slate-700">
-                        {poi.description.map((paragraph) => (
-                          <p key={paragraph}>{paragraph}</p>
-                        ))}
-                        {poi.sourceUrl ? (
-                          <a className="font-black text-teal-800 underline-offset-4 hover:underline" href={poi.sourceUrl}>
-                            Source
-                          </a>
-                        ) : null}
-                      </div>
-                    </details>
+                <article className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50" key={poi.slug}>
+                  {poi.imageUrl ? (
+                    <Image
+                      alt={poi.imageAlt ?? poi.name}
+                      className="h-44 w-full object-cover"
+                      height={420}
+                      src={poi.imageUrl}
+                      width={640}
+                    />
                   ) : null}
+                  <div className="p-5">
+                    <p className="text-xs font-black uppercase text-orange-700">{poi.category}</p>
+                    <h3 className="mt-2 text-xl font-black text-slate-950">{poi.name}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-700">{poi.summary}</p>
+                    {poi.address ? <p className="mt-3 text-sm font-bold text-slate-800">{poi.address}</p> : null}
+                    {poi.description ? (
+                      <details className="mt-4 rounded-md border border-slate-200 bg-white p-3">
+                        <summary className="cursor-pointer text-sm font-black text-teal-800">
+                          Read more
+                        </summary>
+                        <div className="mt-3 grid gap-3 text-sm leading-6 text-slate-700">
+                          {poi.description.map((paragraph) => (
+                            <p key={paragraph}>{paragraph}</p>
+                          ))}
+                          {poi.sourceUrl ? (
+                            <a className="font-black text-teal-800 underline-offset-4 hover:underline" href={poi.sourceUrl}>
+                              Source
+                            </a>
+                          ) : null}
+                        </div>
+                      </details>
+                    ) : null}
+                  </div>
                 </article>
               ))}
             </div>
@@ -168,34 +182,45 @@ export default async function DestinationPage({ params }: PageProps) {
             </div>
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               {historicLandmarkPois.map((poi) => (
-                <article className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm" key={poi.slug}>
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <p className="text-xs font-black uppercase text-orange-700">{poi.category}</p>
-                      <h3 className="mt-2 text-xl font-black text-slate-950">{poi.name}</h3>
+                <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm" key={poi.slug}>
+                  {poi.imageUrl ? (
+                    <Image
+                      alt={poi.imageAlt ?? poi.name}
+                      className="h-56 w-full object-cover"
+                      height={480}
+                      src={poi.imageUrl}
+                      width={760}
+                    />
+                  ) : null}
+                  <div className="p-5">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-black uppercase text-orange-700">{poi.category}</p>
+                        <h3 className="mt-2 text-xl font-black text-slate-950">{poi.name}</h3>
+                      </div>
+                      {poi.address ? (
+                        <p className="max-w-48 text-right text-xs font-bold leading-5 text-slate-600">{poi.address}</p>
+                      ) : null}
                     </div>
-                    {poi.address ? (
-                      <p className="max-w-48 text-right text-xs font-bold leading-5 text-slate-600">{poi.address}</p>
+                    <p className="mt-3 text-sm leading-6 text-slate-700">{poi.summary}</p>
+                    {poi.description ? (
+                      <details className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-4">
+                        <summary className="cursor-pointer text-sm font-black text-teal-800">
+                          Read more
+                        </summary>
+                        <div className="mt-3 grid gap-3 text-sm leading-6 text-slate-700">
+                          {poi.description.map((paragraph) => (
+                            <p key={paragraph}>{paragraph}</p>
+                          ))}
+                          {poi.sourceUrl ? (
+                            <a className="font-black text-teal-800 underline-offset-4 hover:underline" href={poi.sourceUrl}>
+                              Source
+                            </a>
+                          ) : null}
+                        </div>
+                      </details>
                     ) : null}
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-slate-700">{poi.summary}</p>
-                  {poi.description ? (
-                    <details className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-4">
-                      <summary className="cursor-pointer text-sm font-black text-teal-800">
-                        Read more
-                      </summary>
-                      <div className="mt-3 grid gap-3 text-sm leading-6 text-slate-700">
-                        {poi.description.map((paragraph) => (
-                          <p key={paragraph}>{paragraph}</p>
-                        ))}
-                        {poi.sourceUrl ? (
-                          <a className="font-black text-teal-800 underline-offset-4 hover:underline" href={poi.sourceUrl}>
-                            Source
-                          </a>
-                        ) : null}
-                      </div>
-                    </details>
-                  ) : null}
                 </article>
               ))}
             </div>

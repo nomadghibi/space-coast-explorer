@@ -130,6 +130,8 @@ export type DestinationPoi = {
   category: DestinationPoiCategory;
   summary: string;
   description?: string[];
+  imageUrl?: string;
+  imageAlt?: string;
   priority: "featured" | "standard" | "dynamic";
   address?: string;
   sourceUrl?: string;

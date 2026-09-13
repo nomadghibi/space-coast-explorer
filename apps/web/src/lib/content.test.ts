@@ -45,6 +45,29 @@ describe("public content", () => {
     );
   });
 
+  it("attaches local visitor photos to supplied Cocoa Village landmarks", () => {
+    const requestedPhotoSlugs = [
+      "porcher-house",
+      "historic-cocoa-village-playhouse",
+      "derby-street-chapel",
+      "village-tower-masonic-temple",
+      "sf-travis-company",
+      "st-marks-episcopal-church",
+      "library-of-florida-history",
+      "myrt-tharpe-square"
+    ];
+
+    const poisBySlug = new Map(destinationPoiCluster("cocoa-village").map((poi) => [poi.slug, poi]));
+
+    for (const slug of requestedPhotoSlugs) {
+      const poi = poisBySlug.get(slug);
+
+      expect(poi?.description?.length).toBeGreaterThan(0);
+      expect(poi?.imageUrl).toBe(`/images/cocoa-village/landmarks/${slug}.jpg`);
+      expect(poi?.imageAlt).toBeTruthy();
+    }
+  });
+
   it("uses stable slugs for every manual tour stop", () => {
     for (const tour of tours) {
       expect(tour.stops).toHaveLength(tour.stopCount);
