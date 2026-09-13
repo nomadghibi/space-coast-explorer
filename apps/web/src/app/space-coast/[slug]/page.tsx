@@ -42,6 +42,9 @@ export default async function DestinationPage({ params }: PageProps) {
   const previewTour = tours[0];
   const pois = destinationPoiCluster(destination.slug);
   const featuredPois = featuredDestinationPois(destination.slug);
+  const historicLandmarkPois = pois.filter(
+    (poi) => poi.category === "Historic Landmark" || poi.slug === "historic-cocoa-village-playhouse"
+  );
   const poiCategories = Array.from(new Set(pois.map((poi) => poi.category)));
 
   return (
@@ -123,6 +126,23 @@ export default async function DestinationPage({ params }: PageProps) {
                   <h3 className="mt-2 text-xl font-black text-slate-950">{poi.name}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-700">{poi.summary}</p>
                   {poi.address ? <p className="mt-3 text-sm font-bold text-slate-800">{poi.address}</p> : null}
+                  {poi.description ? (
+                    <details className="mt-4 rounded-md border border-slate-200 bg-white p-3">
+                      <summary className="cursor-pointer text-sm font-black text-teal-800">
+                        Read more
+                      </summary>
+                      <div className="mt-3 grid gap-3 text-sm leading-6 text-slate-700">
+                        {poi.description.map((paragraph) => (
+                          <p key={paragraph}>{paragraph}</p>
+                        ))}
+                        {poi.sourceUrl ? (
+                          <a className="font-black text-teal-800 underline-offset-4 hover:underline" href={poi.sourceUrl}>
+                            Source
+                          </a>
+                        ) : null}
+                      </div>
+                    </details>
+                  ) : null}
                 </article>
               ))}
             </div>
@@ -130,6 +150,55 @@ export default async function DestinationPage({ params }: PageProps) {
               {pois.length} Cocoa Village points are modeled. Restaurants, shops, events, and nightlife
               are flagged as dynamic data for future directory/calendar ingestion.
             </p>
+          </div>
+        </section>
+      ) : null}
+      {historicLandmarkPois.length > 0 ? (
+        <section className="bg-[#f7fbfb] py-12">
+          <div className="mx-auto max-w-6xl px-5">
+            <div className="max-w-3xl">
+              <p className="text-sm font-black uppercase text-teal-800">Historic landmarks</p>
+              <h2 className="mt-2 text-3xl font-black text-slate-950">
+                Read More About Each {destination.name} Landmark
+              </h2>
+              <p className="mt-3 text-slate-700">
+                These landmark notes turn the destination from a list of pins into a walk with context:
+                what to notice, why the place belongs on the route, and how it connects to the district.
+              </p>
+            </div>
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              {historicLandmarkPois.map((poi) => (
+                <article className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm" key={poi.slug}>
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-black uppercase text-orange-700">{poi.category}</p>
+                      <h3 className="mt-2 text-xl font-black text-slate-950">{poi.name}</h3>
+                    </div>
+                    {poi.address ? (
+                      <p className="max-w-48 text-right text-xs font-bold leading-5 text-slate-600">{poi.address}</p>
+                    ) : null}
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-slate-700">{poi.summary}</p>
+                  {poi.description ? (
+                    <details className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-4">
+                      <summary className="cursor-pointer text-sm font-black text-teal-800">
+                        Read more
+                      </summary>
+                      <div className="mt-3 grid gap-3 text-sm leading-6 text-slate-700">
+                        {poi.description.map((paragraph) => (
+                          <p key={paragraph}>{paragraph}</p>
+                        ))}
+                        {poi.sourceUrl ? (
+                          <a className="font-black text-teal-800 underline-offset-4 hover:underline" href={poi.sourceUrl}>
+                            Source
+                          </a>
+                        ) : null}
+                      </div>
+                    </details>
+                  ) : null}
+                </article>
+              ))}
+            </div>
           </div>
         </section>
       ) : null}

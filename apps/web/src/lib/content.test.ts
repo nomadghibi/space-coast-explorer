@@ -30,8 +30,13 @@ describe("public content", () => {
   it("models Cocoa Village as a destination cluster", () => {
     const pois = destinationPoiCluster("cocoa-village");
     const categories = new Set(pois.map((poi) => poi.category));
+    const historicLandmarks = pois.filter(
+      (poi) => poi.category === "Historic Landmark" || poi.slug === "historic-cocoa-village-playhouse"
+    );
 
     expect(pois).toHaveLength(30);
+    expect(historicLandmarks.length).toBeGreaterThan(0);
+    expect(historicLandmarks.every((poi) => poi.description?.length)).toBe(true);
     expect(pois.find((poi) => poi.slug === "historic-walking-tour-route")?.priority).toBe(
       "featured"
     );

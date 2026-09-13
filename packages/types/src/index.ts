@@ -129,6 +129,7 @@ export type DestinationPoi = {
   name: string;
   category: DestinationPoiCategory;
   summary: string;
+  description?: string[];
   priority: "featured" | "standard" | "dynamic";
   address?: string;
   sourceUrl?: string;

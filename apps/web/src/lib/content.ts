@@ -109,9 +109,13 @@ export const destinationPois: DestinationPoi[] = [
     name: "Porcher House",
     category: "Historic Landmark",
     summary: "Official start of Cocoa Village's self-guided historic walking tour.",
+    description: [
+      "Porcher House gives the village route a strong beginning because it connects civic history, local citrus wealth, architecture, and preservation in one place.",
+      "The house was completed in 1916 for Edward and Byrdie Porcher and is known for its coquina construction, classical revival character, and later public uses including City Hall. Today it works as both a landmark and an orientation point for the downtown walking-tour story."
+    ],
     priority: "featured",
     address: "434 Delannoy Avenue, Cocoa, FL 32922",
-    sourceUrl: "https://visitcocoavillage.com/discover/historic-walking-tour"
+    sourceUrl: "https://visitcocoavillage.com/discover/porcher-house"
   },
   {
     slug: "parrish-grove-inn",
@@ -119,8 +123,13 @@ export const destinationPois: DestinationPoi[] = [
     name: "The Parrish Grove Inn",
     category: "Historic Landmark",
     summary: "Historic restored lodging property on Delannoy Avenue.",
+    description: [
+      "The Parrish Grove Inn helps visitors see Cocoa Village at a more residential scale. It sits close to the shops, restaurants, and riverfront, but its restored lodging character gives the route a quieter historic rhythm.",
+      "Use this stop to notice porches, rooflines, garden edges, and how older homes near downtown can become part of the visitor economy without losing their sense of place."
+    ],
     priority: "featured",
-    address: "536 Delannoy Avenue, Cocoa, FL 32922"
+    address: "536 Delannoy Avenue, Cocoa, FL 32922",
+    sourceUrl: "https://www.theparrishgroveinn.com/our-story/"
   },
   {
     slug: "sur-le-parc",
@@ -128,6 +137,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "Sur Le Parc",
     category: "Historic Landmark",
     summary: "One of the historic structures connected to the village walking-tour story.",
+    description: [
+      "Sur Le Parc works as a small architectural pause in the historic walking-tour cluster. It is less about a single dramatic monument and more about reading the village as a collection of preserved buildings.",
+      "This kind of stop helps the experience slow down: look for materials, proportions, entries, and the way historic structures frame the walking streets around them."
+    ],
     priority: "standard"
   },
   {
@@ -136,6 +149,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "St. Mark's Episcopal Church",
     category: "Historic Landmark",
     summary: "Historic church and community landmark within the village district.",
+    description: [
+      "St. Mark's gives the route a community anchor. Churches in historic downtowns often tell a parallel story to storefronts: settlement, gathering, service, education, and continuity.",
+      "As a visitor stop, it is a good place to notice how the village is not only commercial. Its older civic and faith buildings help explain why Cocoa Village still feels layered rather than newly manufactured."
+    ],
     priority: "standard"
   },
   {
@@ -144,7 +161,12 @@ export const destinationPois: DestinationPoi[] = [
     name: "Hindle Building",
     category: "Historic Landmark",
     summary: "Historic downtown commercial architecture along the walking-tour corridor.",
-    priority: "standard"
+    description: [
+      "The Hindle Building adds a useful commercial-history layer to the walk. Its early uses included an ice cream parlor, soda shop, and restaurant, followed by decades of pharmacy use.",
+      "Pause here to read the building like a timeline: upper-story proportions, street-level storefront changes, and durable downtown construction all point to a village built for everyday business."
+    ],
+    priority: "standard",
+    sourceUrl: "https://visitcocoavillage.com/discover/hindle-building"
   },
   {
     slug: "derby-street-chapel",
@@ -152,8 +174,13 @@ export const destinationPois: DestinationPoi[] = [
     name: "Derby Street Chapel",
     category: "Historic Landmark",
     summary: "Preserved Craftsman chapel in the Derby Street historic area.",
+    description: [
+      "Derby Street Chapel brings a quieter neighborhood texture into the visitor route. Built between 1916 and 1920, it moved through several church chapters before becoming a small-event venue.",
+      "The chapel is useful for visitors because it shows preservation at a human scale: modest, walkable, and closely tied to the surrounding street rather than isolated behind a large campus."
+    ],
     priority: "standard",
-    address: "121 Derby Street, Cocoa, FL 32922"
+    address: "121 Derby Street, Cocoa, FL 32922",
+    sourceUrl: "https://visitcocoavillage.com/discover/derby-street-chapel"
   },
   {
     slug: "sf-travis-company",
@@ -161,6 +188,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "S.F. Travis Company",
     category: "Historic Landmark",
     summary: "Long-running local hardware business tied to Cocoa's commerce history.",
+    description: [
+      "S.F. Travis Company is one of the strongest commerce stories in Cocoa Village. Founded in 1885, it is described locally as Cocoa's oldest continuously operating business and one of Florida's oldest hardware stores.",
+      "The building connects early river trade, practical supplies, construction, and later Space Coast growth. For a visitor, it is a reminder that historic districts were working places before they became leisure destinations."
+    ],
     priority: "featured",
     sourceUrl: "https://visitcocoavillage.com/discover/s-f-travis-company"
   },
@@ -170,6 +201,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "Masonic Temple / Village Tower",
     category: "Historic Landmark",
     summary: "Three-story brick downtown landmark and strong visual history stop.",
+    description: [
+      "The Village Tower gives the walking route vertical drama. In a mostly low-rise downtown, a three-story brick landmark changes the scale of the street and becomes an easy visual reference point.",
+      "Use this stop to look upward and compare the building with nearby storefronts. The contrast helps visitors understand how civic, fraternal, and commercial buildings shaped the village skyline."
+    ],
     priority: "featured",
     address: "315 Brevard Avenue, Cocoa, FL 32922"
   },
@@ -179,6 +214,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "Blair Building",
     category: "Historic Landmark",
     summary: "Historic commercial building in the downtown walking-tour cluster.",
+    description: [
+      "The Blair Building is part of the dense commercial fabric that makes Cocoa Village rewarding on foot. It sits best in the visitor story as one more storefront-era layer rather than as a standalone attraction.",
+      "Look for facade rhythm, window placement, and how adjacent businesses reuse older buildings. This is the kind of landmark that teaches visitors to read the block, not only the sign."
+    ],
     priority: "standard"
   },
   {
@@ -187,7 +226,12 @@ export const destinationPois: DestinationPoi[] = [
     name: "Brevard County State Bank Building",
     category: "Historic Landmark",
     summary: "Historic bank building and commercial anchor near the village core.",
-    priority: "featured"
+    description: [
+      "The Brevard County State Bank Building marks a major early finance story for Cocoa. Completed in 1893, the building housed a bank that helped fund growth across the young community.",
+      "Even after banking activity ended, the structure stayed part of downtown life through shops, restaurants, and other uses. Visitors can still use the corner to understand how money, trade, and architecture clustered near the village core."
+    ],
+    priority: "featured",
+    sourceUrl: "https://visitcocoavillage.com/discover/brevard-county-state-bank"
   },
   {
     slug: "historic-cocoa-village-playhouse",
@@ -195,6 +239,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "Historic Cocoa Village Playhouse",
     category: "Entertainment",
     summary: "Major theatre anchor that opened as the Aladdin Theatre in 1924.",
+    description: [
+      "The Historic Cocoa Village Playhouse adds entertainment history to the route. It opened in 1924 as the Aladdin Theatre and later became a community theatre anchor known locally as Broadway on Brevard.",
+      "For visitors, the building connects architecture, performing arts, youth programming, restoration, and downtown nightlife. It also pairs naturally with nearby street art and restaurant stops."
+    ],
     priority: "featured",
     address: "300 Brevard Avenue, Cocoa, FL 32922",
     sourceUrl: "https://cocoavillageplayhouse.com/about/history"
@@ -265,6 +313,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "Library of Florida History",
     category: "Historic Landmark",
     summary: "Florida Historical Society research library in a historic former post office.",
+    description: [
+      "The Library of Florida History gives the village a research-and-memory layer. Instead of being only a pretty historic building, it points visitors toward archives, records, and the work of preserving Florida stories.",
+      "Its presence also helps the platform explain a larger idea: local tourism gets stronger when landmarks are backed by evidence, public history, and careful interpretation."
+    ],
     priority: "standard"
   },
   {
@@ -297,6 +349,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "Historic Walking Tour Route",
     category: "Historic Landmark",
     summary: "Official 11-landmark route, less than one mile, starting at Porcher House.",
+    description: [
+      "The official Historic Cocoa Village walking tour ties the landmark cluster together. It is designed as a self-guided route of 11 historic buildings within walking distance and begins at Porcher House.",
+      "For Space Coast Explorer, this route is the pilot spine: a compact path that can combine map guidance, story cards, QR-style context, completion tracking, and later audio without forcing visitors into a rigid schedule."
+    ],
     priority: "featured",
     sourceUrl: "https://visitcocoavillage.com/discover/historic-walking-tour"
   },
@@ -314,6 +370,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "Delannoy Avenue",
     category: "Historic Landmark",
     summary: "Historic street connecting Porcher House, civic spaces, and restored architecture.",
+    description: [
+      "Delannoy Avenue is best understood as a connector landmark. It links Porcher House, civic spaces, lodging, commercial corners, and the route toward the heart of the village.",
+      "Walking this street helps visitors feel how close the historic district really is: homes, public buildings, businesses, and riverfront access sit within a short downtown grid."
+    ],
     priority: "featured"
   },
   {
@@ -330,6 +390,10 @@ export const destinationPois: DestinationPoi[] = [
     name: "Derby Street Historic Area",
     category: "Historic Landmark",
     summary: "Architecture and walking area around Derby Street Chapel.",
+    description: [
+      "The Derby Street Historic Area widens the story beyond the busiest retail blocks. It gives the route a calmer architectural moment around the preserved chapel and nearby older streetscape.",
+      "This area is useful for pacing: visitors can step away from restaurant and shop energy, notice the neighborhood fabric, then return toward the main village core."
+    ],
     priority: "standard"
   },
   {
