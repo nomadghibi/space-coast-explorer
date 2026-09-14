@@ -69,13 +69,19 @@ img {
 }
 
 .tour-map-marker {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   background: #0f766e;
   color: white;
-  font-size: 12px;
+  cursor: pointer;
+  font-size: 14px;
   font-weight: 900;
+}
+
+.tour-map-marker:focus-visible {
+  outline: 4px solid rgba(245, 158, 11, 0.45);
+  outline-offset: 3px;
 }
 
 .visitor-map-marker {

@@ -65,6 +65,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const [permissionChoiceMade, setPermissionChoiceMade] = useState(false);
   const [mapError, setMapError] = useState<string | undefined>();
   const [activeTab, setActiveTab] = useState<"map" | "stops" | "info">("map");
+  const [selectedMapStopSlug, setSelectedMapStopSlug] = useState<string | undefined>();
   const [stopStates, setStopStates] = useState<Record<string, StopProximityState>>({});
   const location = useForegroundLocation();
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -80,6 +81,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const currentStopIndex = currentStop ? tour.stops.findIndex((stop) => stop.slug === currentStop.slug) : -1;
   const previousStop = currentStopIndex > 0 ? tour.stops[currentStopIndex - 1] : undefined;
   const nextStop = currentStopIndex >= 0 && currentStopIndex < tour.stops.length - 1 ? tour.stops[currentStopIndex + 1] : undefined;
+  const selectedMapStop = tour.stops.find((stop) => stop.slug === selectedMapStopSlug) ?? currentStop;
   const simulatedWalkActiveReading = simulatedWalk.active || simulatedWalk.permissionUnavailable
     ? simulatedWalkReading(simulatedWalkStops, simulatedWalk)
     : undefined;
@@ -203,10 +205,23 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
             element.className = "tour-map-marker";
             element.setAttribute("aria-label", `Stop ${stop.sequence}: ${stopDetails?.title ?? stop.slug}`);
             element.setAttribute("title", `Stop ${stop.sequence}: ${stopDetails?.title ?? stop.slug}`);
+            element.setAttribute("role", "button");
+            element.setAttribute("tabindex", "0");
             element.textContent = String(stop.sequence);
-            const popup = new maplibregl.Popup({ closeButton: false, offset: 28 }).setText(
+            const popup = new maplibregl.Popup({ closeButton: true, offset: 28 }).setText(
               `Stop ${stop.sequence}: ${stopDetails?.title ?? stop.slug}`
             );
+            const selectStop = () => {
+              setSelectedMapStopSlug(stop.slug);
+              popup.setLngLat(mapCoordinates(stop.location)).addTo(map);
+            };
+            element.addEventListener("click", selectStop);
+            element.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                selectStop();
+              }
+            });
             new maplibregl.Marker({ element })
               .setLngLat(mapCoordinates(stop.location))
               .setPopup(popup)
@@ -620,14 +635,43 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
                 </div>
                 <p className="text-sm font-bold text-slate-600">{mappableStops.length} mapped locations</p>
               </div>
+              {selectedMapStop ? (
+                <div className="mt-4 rounded-lg border border-teal-200 bg-teal-50 p-4">
+                  <p className="text-xs font-black uppercase text-teal-800">Map Selection</p>
+                  <div className="mt-2 flex items-start gap-3">
+                    <span className="grid size-11 shrink-0 place-items-center rounded-full bg-teal-700 text-base font-black text-white">
+                      {selectedMapStop.sequence}
+                    </span>
+                    <div>
+                      <p className="text-sm font-black text-slate-600">Stop {selectedMapStop.sequence} of {tour.stopCount}</p>
+                      <h3 className="mt-1 text-lg font-black text-slate-950">{selectedMapStop.title}</h3>
+                      <p className="mt-1 text-sm leading-6 text-slate-700">{selectedMapStop.summary}</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Link className="inline-flex min-h-11 items-center rounded-md bg-teal-700 px-4 text-sm font-black text-white hover:bg-teal-800" href={`/tours/${tour.slug}/stops/${selectedMapStop.slug}`}>
+                      Read More
+                    </Link>
+                    <a
+                      className="inline-flex min-h-11 items-center rounded-md border border-teal-300 bg-white px-4 text-sm font-black text-teal-900"
+                      href={googleMapsDirectionsUrl(selectedMapStop.location ?? selectedMapStop.title)}
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      Directions
+                    </a>
+                  </div>
+                </div>
+              ) : null}
               <ol className="mt-4 grid gap-2 sm:grid-cols-2">
                 {tour.stops.map((stop) => {
                   const completed = session.completedStopSlugs.includes(stop.slug);
                   const current = currentStop?.slug === stop.slug;
+                  const selected = selectedMapStop?.slug === stop.slug;
                   return (
                     <li
                       className={`flex items-start gap-3 rounded-md border p-3 ${
-                        current ? "border-teal-300 bg-teal-50" : completed ? "border-emerald-200 bg-emerald-50" : "border-slate-200 bg-white"
+                        selected ? "border-orange-300 bg-orange-50" : current ? "border-teal-300 bg-teal-50" : completed ? "border-emerald-200 bg-emerald-50" : "border-slate-200 bg-white"
                       }`}
                       key={stop.slug}
                     >
@@ -637,9 +681,16 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
                       <span>
                         <span className="block text-sm font-black text-slate-950">{stop.title}</span>
                         <span className="mt-1 block text-xs font-bold text-slate-600">
-                          {current ? "Current stop" : completed ? "Completed" : "Mapped route stop"}
+                          {selected ? "Selected on map" : current ? "Current stop" : completed ? "Completed" : stop.location ? "Mapped route stop" : "Needs field coordinates"}
                         </span>
                       </span>
+                      <button
+                        className="ml-auto min-h-11 rounded-md border border-slate-300 bg-white px-3 text-xs font-black text-slate-800"
+                        onClick={() => setSelectedMapStopSlug(stop.slug)}
+                        type="button"
+                      >
+                        Info
+                      </button>
                     </li>
                   );
                 })}

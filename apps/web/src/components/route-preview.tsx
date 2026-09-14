@@ -1,4 +1,8 @@
+"use client";
+
 import type { TourDetail } from "@space-coast-explorer/types";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 
 type PreviewPoint = {
   latitude: number;
@@ -25,9 +29,14 @@ function projectPoint(
 }
 
 export function RoutePreview({ tour }: { tour: TourDetail }) {
-  const mappedStops = tour.stops.filter((stop) => Boolean(stop.location));
+  const mappedStops = useMemo(() => tour.stops.filter((stop) => Boolean(stop.location)), [tour.stops]);
   const routeCoordinates = tour.routeGeometry?.coordinates ?? mappedStops.flatMap((stop) => (stop.location ? [stop.location] : []));
   const allPoints = [...routeCoordinates, ...mappedStops.flatMap((stop) => (stop.location ? [stop.location] : []))];
+  const [selectedStopSlug, setSelectedStopSlug] = useState(mappedStops[0]?.slug);
+  const selectedStop = useMemo(
+    () => tour.stops.find((stop) => stop.slug === selectedStopSlug) ?? mappedStops[0],
+    [mappedStops, selectedStopSlug, tour.stops]
+  );
   const bounds = allPoints.length
     ? {
         minLatitude: Math.min(...allPoints.map((point) => point.latitude)),
@@ -53,16 +62,22 @@ export function RoutePreview({ tour }: { tour: TourDetail }) {
         ) : null}
         {mappedStops.map((stop) => {
           const point = stop.location ? projectPoint(stop.location, bounds) : { x: 50, y: 50 };
+          const selected = selectedStop?.slug === stop.slug;
           return (
-            <div
+            <button
               aria-label={`Stop ${stop.sequence}: ${stop.title}`}
-              className="absolute grid size-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-teal-700 text-xs font-black text-white shadow-lg"
+              aria-pressed={selected}
+              className={`absolute grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white text-sm font-black text-white shadow-lg transition ${
+                selected ? "bg-orange-600 ring-4 ring-orange-200" : "bg-teal-700 hover:bg-teal-800"
+              }`}
               key={stop.slug}
+              onClick={() => setSelectedStopSlug(stop.slug)}
               style={{ left: `${point.x}%`, top: `${point.y}%` }}
               title={`Stop ${stop.sequence}: ${stop.title}`}
+              type="button"
             >
               {stop.sequence}
-            </div>
+            </button>
           );
         })}
       </div>
@@ -77,13 +92,41 @@ export function RoutePreview({ tour }: { tour: TourDetail }) {
           <p className="text-sm font-bold text-slate-600">{tour.durationMinutes} min</p>
         </div>
         <p className="mt-1 text-sm text-slate-700">{tour.staticRouteSummary}</p>
+        {selectedStop ? (
+          <div className="mt-4 rounded-lg border border-teal-200 bg-teal-50 p-4">
+            <p className="text-xs font-black uppercase text-teal-800">Selected Stop</p>
+            <div className="mt-2 flex items-start gap-3">
+              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-teal-700 text-sm font-black text-white">
+                {selectedStop.sequence}
+              </span>
+              <div>
+                <h3 className="font-black text-slate-950">{selectedStop.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-slate-700">{selectedStop.summary}</p>
+              </div>
+            </div>
+            <Link
+              className="mt-3 inline-flex min-h-11 items-center rounded-md bg-teal-700 px-4 text-sm font-black text-white hover:bg-teal-800"
+              href={`/tours/${tour.slug}/stops/${selectedStop.slug}`}
+            >
+              Read More
+            </Link>
+          </div>
+        ) : null}
         <ol className="mt-4 grid gap-2 sm:grid-cols-2">
           {mappedStops.map((stop) => (
-            <li className="flex items-center gap-2 text-sm font-bold text-slate-800" key={stop.slug}>
-              <span className="grid size-6 shrink-0 place-items-center rounded-full bg-teal-700 text-[11px] font-black text-white">
+            <li key={stop.slug}>
+              <button
+                className={`flex w-full items-center gap-2 rounded-md p-2 text-left text-sm font-bold text-slate-800 ${
+                  selectedStop?.slug === stop.slug ? "bg-teal-50" : "hover:bg-slate-50"
+                }`}
+                onClick={() => setSelectedStopSlug(stop.slug)}
+                type="button"
+              >
+                <span className="grid size-6 shrink-0 place-items-center rounded-full bg-teal-700 text-[11px] font-black text-white">
                 {stop.sequence}
-              </span>
-              <span>{stop.title}</span>
+                </span>
+                <span>{stop.title}</span>
+              </button>
             </li>
           ))}
         </ol>
