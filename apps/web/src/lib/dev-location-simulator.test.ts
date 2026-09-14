@@ -13,7 +13,7 @@ describe("development location simulator", () => {
     const tour = getTour("cocoa-village-historic-explorer");
 
     expect(tour).toBeDefined();
-    expect(mappableTourStops(tour!)).toHaveLength(10);
+    expect(mappableTourStops(tour!)).toHaveLength(8);
   });
 
   it("interpolates a walking reading between stops", () => {

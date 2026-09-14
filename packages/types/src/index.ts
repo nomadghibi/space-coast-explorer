@@ -72,6 +72,7 @@ export type TourStop = {
   visitorStory?: string;
   imageAlt?: string;
   internalEditorialState?: "needs_fact_check" | "ready";
+  coordinateVerificationStatus?: "map_verified_provisional" | "needs_field_verification" | "field_verified";
   location?: GeoPoint;
   triggerRadiusMeters?: number;
   exitRadiusMeters?: number;

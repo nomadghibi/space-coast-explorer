@@ -500,25 +500,25 @@ export const tours: TourDetail[] = [
     title: "Cocoa Village Historic Explorer",
     destinationSlug: "cocoa-village",
     destinationName: "Cocoa Village",
-    summary: "A compact walking introduction to Cocoa Village's official historic-tour anchor, storefronts, civic spaces, art, and riverfront edges.",
-    description: "Start at Porcher House, follow a short historic village loop, and leave room for shops, food, public art, and the Indian River waterfront.",
+    summary: "A compact historical landmark walk through Cocoa Village's Delannoy Avenue and Brevard Avenue core.",
+    description: "Start at Parrish Grove Inn / Pette House, follow the historic landmark sequence through Porcher House, churches, commercial buildings, and the Playhouse, then leave room for shops and food nearby.",
     categories: ["History", "Food", "Arts & Culture", "Family"],
     transportMode: "Walking",
     durationMinutes: 60,
-    distanceMiles: 1.2,
-    stopCount: 10,
+    distanceMiles: 0.9,
+    stopCount: 11,
     priceLabel: "Free",
     difficulty: "Easy",
-    startLocation: "Porcher House, 434 Delannoy Avenue",
+    startLocation: "Parrish Grove Inn / Pette House, 536 Delannoy Avenue",
     accessibilitySummary: "Sidewalk-focused route; curb cuts, construction, and surface conditions must be verified before pilot publication.",
-    imageUrl: "/images/cocoa-village/landmarks/porcher-house.jpg",
-    imageAlt: "Porcher House, the Cocoa Village Historic Explorer start point",
-    highlights: ["Official walking-tour anchor", "Historic downtown", "Local shops", "Riverfront finish"],
+    imageUrl: "/images/cocoa-village/landmarks/historic-walking-tour-route-secondary.jpg",
+    imageAlt: "Shaded historic Cocoa Village street scene near the walking-tour route",
+    highlights: ["Historic lodging", "Porcher House", "Historic churches", "Downtown commercial landmarks"],
     safetyNotes: ["Use marked crossings where available.", "Check sidewalk, curb, weather, and traffic conditions before starting."],
     startPoint: {
-      title: "Porcher House",
-      address: "434 Delannoy Avenue, Cocoa, FL 32922",
-      landmark: "Begin outside Porcher House, the official start of Cocoa Village's self-guided historic walking tour.",
+      title: "Parrish Grove Inn / Pette House",
+      address: "536 Delannoy Avenue, Cocoa, FL 32922",
+      landmark: "Begin outside Parrish Grove Inn / Pette House, then continue south through Cocoa Village's historic landmark cluster.",
       arrivalTips: [
         "Arrive with a charged phone and check weather before leaving your vehicle.",
         "Look for the historic walking-tour markers and follow each stop in order.",
@@ -534,33 +534,32 @@ export const tours: TourDetail[] = [
         "Manual stop completion is always available if GPS signal is weak or the route needs an accessibility detour."
       ]
     },
-    staticRouteSummary: "A compact historic village loop beginning at Porcher House and finishing near the Indian River waterfront.",
+    staticRouteSummary: "A provisional 11-stop historic landmark route using map-verified reference coordinates where available; three stops still need field coordinate verification.",
     routeGeometry: {
       type: "LineString",
       coordinates: [
-        { latitude: 28.3625, longitude: -80.72556 },
-        { latitude: 28.36314, longitude: -80.72555 },
-        { latitude: 28.36282, longitude: -80.7244 },
-        { latitude: 28.36214, longitude: -80.72414 },
-        { latitude: 28.36143, longitude: -80.72472 },
-        { latitude: 28.36072, longitude: -80.72483 },
-        { latitude: 28.36013, longitude: -80.72543 },
-        { latitude: 28.36003, longitude: -80.72631 },
-        { latitude: 28.3606, longitude: -80.72725 },
-        { latitude: 28.36145, longitude: -80.7272 }
+        { latitude: 28.351836, longitude: -80.724905 },
+        { latitude: 28.353867, longitude: -80.725233 },
+        { latitude: 28.353367, longitude: -80.724667 },
+        { latitude: 28.3509, longitude: -80.726083 },
+        { latitude: 28.355783, longitude: -80.7253 },
+        { latitude: 28.354928, longitude: -80.726233 },
+        { latitude: 28.354893, longitude: -80.725525 },
+        { latitude: 28.355283, longitude: -80.726133 }
       ]
     },
     stops: [
-      { sequence: 1, slug: "porcher-house", title: "Porcher House", summary: "Start at the official historic walking-tour anchor on Delannoy Avenue.", visitorStory: "Take a minute to get oriented outside Porcher House. This is the right mental starting point for Cocoa Village: civic history, preserved architecture, and a compact walkable downtown all meeting in one place.", location: { latitude: 28.3625, longitude: -80.72556 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 2, slug: "parrish-grove-inn", title: "Parrish Grove Inn", summary: "Notice restored historic lodging and the village's residential scale.", visitorStory: "Look at how the quieter Delannoy Avenue fabric differs from the busier storefront streets. Cocoa Village works because it still has these smaller historic layers tucked into the walk.", internalEditorialState: "needs_fact_check", location: { latitude: 28.36314, longitude: -80.72555 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 3, slug: "sf-travis-company", title: "S.F. Travis Company", summary: "Pause near a long-running local business tied to Cocoa's commerce history.", visitorStory: "This stop connects the village to practical trade: hardware, supplies, repairs, and the everyday work that helped build a river town before the Space Coast boom.", internalEditorialState: "needs_fact_check", location: { latitude: 28.36282, longitude: -80.7244 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 4, slug: "historic-bank-corner", title: "Historic Bank Corner", summary: "Read the commercial core through older downtown architecture.", visitorStory: "Slow down and scan upper stories, brickwork, signs, and corner entries. Commercial buildings often tell the village story as clearly as plaques do.", internalEditorialState: "needs_fact_check", location: { latitude: 28.36214, longitude: -80.72414 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 5, slug: "village-tower", title: "Village Tower", summary: "Use the former Masonic Temple area as a visual history stop.", visitorStory: "This is a good place to look upward. A three-story brick landmark changes the scale of the street and gives the village one of its memorable historic silhouettes.", internalEditorialState: "needs_fact_check", location: { latitude: 28.36143, longitude: -80.72472 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 6, slug: "playhouse-and-street-art", title: "Playhouse and Street Art", summary: "Connect theatre history with Cocoa Village's public art layer.", visitorStory: "The Playhouse is one of the village's strongest anchors, and the nearby street art makes this a natural photo pause. Notice how old entertainment architecture and present-day public art share the same street.", location: { latitude: 28.36072, longitude: -80.72483 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 7, slug: "myrt-tharpe-square", title: "Myrt Tharpe Square", summary: "Step into a central gathering space for markets and events.", visitorStory: "This stop is about Cocoa Village as a living calendar, not a museum. Markets, concerts, fairs, and seasonal events can change the feel of the same blocks from week to week.", location: { latitude: 28.36013, longitude: -80.72543 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 8, slug: "brevard-avenue-storefronts", title: "Brevard Avenue Storefronts", summary: "Browse the main pedestrian corridor for shops, restaurants, and galleries.", visitorStory: "Let the storefronts do some of the guiding. Menus, gallery windows, shop displays, and sidewalk activity are part of the experience, and they are exactly why business data should stay dynamic.", location: { latitude: 28.36003, longitude: -80.72631 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 9, slug: "riverfront-park-and-boardwalk", title: "Riverfront Park and Boardwalk", summary: "Move toward Indian River views, amphitheater space, and waterfront air.", visitorStory: "The route opens up here. After the tight downtown blocks, the riverfront gives you space, breeze, playground energy, event lawns, and a stronger sense of why Cocoa grew along this edge.", location: { latitude: 28.3606, longitude: -80.72725 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
-      { sequence: 10, slug: "indian-river-finish", title: "Indian River Finish", summary: "End with a scenic pause and decide what to do next.", visitorStory: "Finish with the water in view. From here, the best next move might be lunch, a shop loop, an event, a museum extension, or simply a slower walk back through the village.", location: { latitude: 28.36145, longitude: -80.7272 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 }
+      { sequence: 1, slug: "parrish-grove-inn", title: "Parrish Grove Inn / Pette House", summary: "Begin with restored historic lodging and the village's residential scale.", visitorStory: "Look at how the quieter Delannoy Avenue fabric differs from the busier storefront streets. Cocoa Village works because it still has these smaller historic layers tucked into the walk.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "map_verified_provisional", location: { latitude: 28.351836, longitude: -80.724905 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
+      { sequence: 2, slug: "porcher-house", title: "Porcher House", summary: "Pause at the official historic walking-tour anchor on Delannoy Avenue.", visitorStory: "Take a minute to get oriented outside Porcher House. This is the right mental starting point for Cocoa Village: civic history, preserved architecture, and a compact walkable downtown all meeting in one place.", coordinateVerificationStatus: "map_verified_provisional", location: { latitude: 28.353867, longitude: -80.725233 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
+      { sequence: 3, slug: "sur-le-parc", title: "Sur Le Parc", summary: "Use this small historic structure as an architectural pause.", visitorStory: "Sur Le Parc helps the route slow down. Look for materials, proportions, entries, and the way smaller historic structures frame the walking streets around them.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "needs_field_verification" },
+      { sequence: 4, slug: "st-marks-episcopal-church", title: "St. Mark's Episcopal Church", summary: "Notice a historic church and community landmark within the village district.", visitorStory: "St. Mark's gives the route a community anchor. Its civic and faith history helps explain why Cocoa Village still feels layered rather than newly manufactured.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "map_verified_provisional", location: { latitude: 28.353367, longitude: -80.724667 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
+      { sequence: 5, slug: "hindle-building", title: "Hindle Building", summary: "Read another layer of downtown commercial architecture.", visitorStory: "The Hindle Building adds a useful commercial-history layer to the walk. Pause here to read the building like a timeline of everyday downtown business.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "needs_field_verification" },
+      { sequence: 6, slug: "derby-street-chapel", title: "Derby Street Chapel", summary: "Step toward a preserved chapel in the Derby Street historic area.", visitorStory: "Derby Street Chapel brings a quieter neighborhood texture into the visitor route and shows preservation at a human scale.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "map_verified_provisional", location: { latitude: 28.3509, longitude: -80.726083 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
+      { sequence: 7, slug: "sf-travis-company", title: "S.F. Travis & Company", summary: "Pause near a long-running local business tied to Cocoa's commerce history.", visitorStory: "This stop connects the village to practical trade: hardware, supplies, repairs, and the everyday work that helped build a river town before the Space Coast boom.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "map_verified_provisional", location: { latitude: 28.355783, longitude: -80.7253 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
+      { sequence: 8, slug: "village-tower-masonic-temple", title: "Masonic Temple / Village Tower", summary: "Use the former Masonic Temple as a visual history stop.", visitorStory: "This is a good place to look upward. A three-story brick landmark changes the scale of the street and gives the village one of its memorable historic silhouettes.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "map_verified_provisional", location: { latitude: 28.354928, longitude: -80.726233 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
+      { sequence: 9, slug: "blair-building", title: "Blair Building", summary: "Notice another historic commercial building in the downtown cluster.", visitorStory: "The Blair Building sits best in the visitor story as one more storefront-era layer rather than as a standalone attraction. It teaches visitors to read the block, not only the sign.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "needs_field_verification" },
+      { sequence: 10, slug: "brevard-county-state-bank", title: "Brevard County State Bank", summary: "Read the commercial core through a historic finance landmark.", visitorStory: "Slow down and scan the corner. Commercial buildings often tell the village story as clearly as plaques do, especially where money, trade, and architecture clustered near the village core.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "map_verified_provisional", location: { latitude: 28.354893, longitude: -80.725525 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 },
+      { sequence: 11, slug: "historic-cocoa-village-playhouse", title: "Cocoa Village Playhouse", summary: "Connect theatre history with Cocoa Village's public life.", visitorStory: "The Playhouse is one of the village's strongest anchors. Notice how old entertainment architecture and present-day downtown activity share the same street.", internalEditorialState: "needs_fact_check", coordinateVerificationStatus: "map_verified_provisional", location: { latitude: 28.355283, longitude: -80.726133 }, triggerRadiusMeters: 35, exitRadiusMeters: 60 }
     ]
   },
   {
@@ -643,12 +642,9 @@ export function getTourStop(tourSlug: string, stopSlug: string) {
 }
 
 const tourStopImagePoiSlugs: Record<string, string> = {
-  "brevard-avenue-storefronts": "delannoy-avenue",
-  "historic-bank-corner": "brevard-county-state-bank",
-  "indian-river-finish": "cocoa-village-marina",
-  "playhouse-and-street-art": "historic-cocoa-village-playhouse",
-  "riverfront-park-and-boardwalk": "cocoa-riverfront-park",
-  "village-tower": "village-tower-masonic-temple"
+  "brevard-county-state-bank": "brevard-county-state-bank",
+  "historic-cocoa-village-playhouse": "historic-cocoa-village-playhouse",
+  "village-tower-masonic-temple": "village-tower-masonic-temple"
 };
 
 export function getTourStopImage(tour: TourDetail, stop: TourDetail["stops"][number]) {

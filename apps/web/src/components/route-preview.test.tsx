@@ -10,8 +10,8 @@ describe("RoutePreview", () => {
     expect(tour).toBeDefined();
     render(<RoutePreview tour={tour!} />);
 
-    expect(screen.getByText("10 Cocoa Village locations")).toBeInTheDocument();
-    expect(screen.getByText("Porcher House")).toBeInTheDocument();
-    expect(screen.getByText("Indian River Finish")).toBeInTheDocument();
+    expect(screen.getByText("8 Cocoa Village locations")).toBeInTheDocument();
+    expect(screen.getByText("Parrish Grove Inn / Pette House")).toBeInTheDocument();
+    expect(screen.getByText("Cocoa Village Playhouse")).toBeInTheDocument();
   });
 });

@@ -20,26 +20,32 @@ const referenceStops = [
 ];
 
 const titleAliases = new Map([
-  ["Parrish Grove Inn / Pette House", "Parrish Grove Inn"],
-  ["S.F. Travis & Company", "S.F. Travis Company"],
-  ["Masonic Temple / Village Tower", "Village Tower"],
-  ["Brevard County State Bank", "Historic Bank Corner"],
-  ["Cocoa Village Playhouse", "Playhouse and Street Art"]
+  ["S.F. Travis & Company", "S.F. Travis & Company"]
 ]);
 
 const tourBlock = content.match(/slug: "cocoa-village-historic-explorer"[\s\S]*?stops: \[([\s\S]*?)\n    \]\n  \}/)?.[1] ?? "";
-const stopPattern =
-  /\{ sequence: (\d+), slug: "([^"]+)", title: "([^"]+)"[\s\S]*?location: \{ latitude: ([\d.-]+), longitude: ([\d.-]+) \}[\s\S]*?triggerRadiusMeters: (\d+), exitRadiusMeters: (\d+)/g;
+const stopLines = tourBlock.split("\n").filter((line) => line.includes("sequence:"));
 
-const repoStops = [...tourBlock.matchAll(stopPattern)].map((match) => ({
-  sequence: Number(match[1]),
-  slug: match[2],
-  name: match[3],
-  latitude: Number(match[4]),
-  longitude: Number(match[5]),
-  triggerRadiusMeters: Number(match[6]),
-  exitRadiusMeters: Number(match[7])
-}));
+const repoStops = stopLines.map((line) => {
+  const sequence = Number(line.match(/sequence: (\d+)/)?.[1]);
+  const slug = line.match(/slug: "([^"]+)"/)?.[1] ?? "";
+  const name = line.match(/title: "([^"]+)"/)?.[1] ?? "";
+  const locationMatch = line.match(/location: \{ latitude: ([\d.-]+), longitude: ([\d.-]+) \}/);
+  const triggerMatch = line.match(/triggerRadiusMeters: (\d+)/);
+  const exitMatch = line.match(/exitRadiusMeters: (\d+)/);
+  const verificationStatus = line.match(/coordinateVerificationStatus: "([^"]+)"/)?.[1] ?? "unknown";
+
+  return {
+    sequence,
+    slug,
+    name,
+    latitude: locationMatch ? Number(locationMatch[1]) : undefined,
+    longitude: locationMatch ? Number(locationMatch[2]) : undefined,
+    triggerRadiusMeters: triggerMatch ? Number(triggerMatch[1]) : undefined,
+    exitRadiusMeters: exitMatch ? Number(exitMatch[1]) : undefined,
+    verificationStatus
+  };
+});
 
 function radians(degrees) {
   return (degrees * Math.PI) / 180;
@@ -75,14 +81,15 @@ console.log("| --- | --- | --- | --- | --- | --- | --- | --- |");
 for (const referenceStop of referenceStops) {
   const repoStop = findRepoStop(referenceStop);
   const hasReferenceCoords = referenceStop.latitude !== undefined && referenceStop.longitude !== undefined;
+  const hasRepoCoords = repoStop?.latitude !== undefined && repoStop.longitude !== undefined;
   const referenceCoords = hasReferenceCoords ? `${referenceStop.latitude}, ${referenceStop.longitude}` : "MISSING_COORDINATES";
-  const repoCoords = repoStop ? `${repoStop.latitude}, ${repoStop.longitude}` : "MISSING_REPO_STOP";
-  const delta = repoStop && hasReferenceCoords
+  const repoCoords = hasRepoCoords ? `${repoStop.latitude}, ${repoStop.longitude}` : repoStop ? "MISSING_COORDINATES" : "MISSING_REPO_STOP";
+  const delta = repoStop && hasReferenceCoords && hasRepoCoords
     ? `${Math.round(distanceMeters(referenceStop, repoStop))}m`
     : "n/a";
   const status = !repoStop
     ? "MISSING_REPO_STOP"
-    : !hasReferenceCoords
+    : !hasReferenceCoords || !hasRepoCoords
       ? "NEEDS_FIELD_VERIFICATION"
       : distanceMeters(referenceStop, repoStop) > 75
         ? "SUSPICIOUS_DISTANCE"
@@ -93,8 +100,9 @@ for (const referenceStop of referenceStops) {
   );
 }
 
-const duplicates = repoStops.flatMap((stop, index) =>
-  repoStops.slice(index + 1).flatMap((otherStop) => {
+const repoStopsWithCoordinates = repoStops.filter((stop) => stop.latitude !== undefined && stop.longitude !== undefined);
+const duplicates = repoStopsWithCoordinates.flatMap((stop, index) =>
+  repoStopsWithCoordinates.slice(index + 1).flatMap((otherStop) => {
     const distance = distanceMeters(stop, otherStop);
     return distance < 10 ? [`${stop.name} and ${otherStop.name}: ${Math.round(distance)}m`] : [];
   })

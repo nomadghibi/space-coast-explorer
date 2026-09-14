@@ -17,14 +17,14 @@ describe("public content", () => {
   });
 
   it("finds the pilot tour", () => {
-    expect(getTour("cocoa-village-historic-explorer")?.stopCount).toBe(10);
+    expect(getTour("cocoa-village-historic-explorer")?.stopCount).toBe(11);
   });
 
   it("gives the pilot tour a concrete start point", () => {
     const pilot = getTour("cocoa-village-historic-explorer");
 
-    expect(pilot?.startPoint?.title).toBe("Porcher House");
-    expect(pilot?.startPoint?.address).toContain("434 Delannoy Avenue");
+    expect(pilot?.startPoint?.title).toBe("Parrish Grove Inn / Pette House");
+    expect(pilot?.startPoint?.address).toContain("536 Delannoy Avenue");
     expect(pilot?.startPoint?.parkingNotes.length).toBeGreaterThan(0);
   });
 
@@ -120,10 +120,28 @@ describe("public content", () => {
     expect(images.get("sf-travis-company")).toBe(
       "/images/cocoa-village/landmarks/sf-travis-company.jpg"
     );
-    expect(images.get("historic-bank-corner")).toBe(
+    expect(images.get("brevard-county-state-bank")).toBe(
       "/images/cocoa-village/landmarks/brevard-county-state-bank.jpg"
     );
     expect(new Set(images.values()).size).toBeGreaterThan(6);
+  });
+
+  it("keeps unverified Cocoa Village stop coordinates out of automatic arrival testing", () => {
+    const tour = getTour("cocoa-village-historic-explorer");
+
+    expect(tour).toBeDefined();
+
+    const unverifiedStops = tour!.stops.filter(
+      (stop) => stop.coordinateVerificationStatus === "needs_field_verification"
+    );
+
+    expect(unverifiedStops.map((stop) => stop.slug)).toEqual([
+      "sur-le-parc",
+      "hindle-building",
+      "blair-building"
+    ]);
+    expect(unverifiedStops.every((stop) => !stop.location)).toBe(true);
+    expect(tour!.stops.filter((stop) => stop.location).length).toBe(8);
   });
 
   it("keeps internal editorial markers out of visitor-facing content", () => {
