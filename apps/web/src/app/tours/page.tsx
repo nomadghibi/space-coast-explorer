@@ -6,23 +6,78 @@ type PageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-const filters = {
-  destination: ["all", "cocoa-village", "cocoa-beach", "port-canaveral"],
-  category: ["all", "History", "Beach", "Space", "Food", "Family", "Cruise"],
-  duration: ["all", "under-1-hour", "1-2-hours", "2-plus-hours"],
-  mode: ["all", "Walking", "Driving", "Mixed"],
-  price: ["all", "free", "premium"]
-};
+const filterGroups = [
+  {
+    key: "destination",
+    label: "Where are you going?",
+    options: [
+      { value: "all", label: "Any place" },
+      { value: "cocoa-village", label: "Cocoa Village" },
+      { value: "cocoa-beach", label: "Cocoa Beach" },
+      { value: "port-canaveral", label: "Port Canaveral" }
+    ]
+  },
+  {
+    key: "category",
+    label: "What do you want?",
+    options: [
+      { value: "all", label: "Anything" },
+      { value: "History", label: "History" },
+      { value: "Beach", label: "Beach" },
+      { value: "Space", label: "Space" },
+      { value: "Food", label: "Food" },
+      { value: "Family", label: "Family" },
+      { value: "Cruise", label: "Cruise day" }
+    ]
+  },
+  {
+    key: "duration",
+    label: "How much time?",
+    options: [
+      { value: "all", label: "Any length" },
+      { value: "under-1-hour", label: "Under 1 hour" },
+      { value: "1-2-hours", label: "1-2 hours" },
+      { value: "2-plus-hours", label: "2+ hours" }
+    ]
+  },
+  {
+    key: "mode",
+    label: "How are you moving?",
+    options: [
+      { value: "all", label: "Any mode" },
+      { value: "Walking", label: "Walking" },
+      { value: "Driving", label: "Driving" },
+      { value: "Mixed", label: "Mixed" }
+    ]
+  },
+  {
+    key: "price",
+    label: "Price",
+    options: [
+      { value: "all", label: "Any price" },
+      { value: "free", label: "Free" },
+      { value: "premium", label: "Premium" }
+    ]
+  }
+] as const;
 
 function valueOf(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
 
-function filterHref(key: string, value: string) {
-  const params = new URLSearchParams();
-  if (value !== "all") {
+function filterHref(activeFilters: Record<string, string | undefined>, key: string, value: string) {
+  const params = new URLSearchParams(
+    Object.entries(activeFilters).flatMap(([filterKey, filterValue]) =>
+      filterValue && filterValue !== "all" ? [[filterKey, filterValue]] : []
+    )
+  );
+
+  if (value === "all") {
+    params.delete(key);
+  } else {
     params.set(key, value);
   }
+
   const query = params.toString();
   return query ? `/tours?${query}` : "/tours";
 }
@@ -67,24 +122,24 @@ export default async function ToursPage({ searchParams }: PageProps) {
           </div>
         </div>
       </section>
-      <div className="mt-8 grid gap-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        {Object.entries(filters).map(([key, values]) => (
-          <div key={key}>
-            <p className="text-sm font-bold capitalize text-slate-900">{key}</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {values.map((value) => {
-                const active = isActiveFilter(activeFilters[key as keyof typeof activeFilters], value);
+      <div className="mt-8 grid gap-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        {filterGroups.map((group) => (
+          <div key={group.key}>
+            <p className="text-sm font-black text-slate-950">{group.label}</p>
+            <div className="mt-2 flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
+              {group.options.map((option) => {
+                const active = isActiveFilter(activeFilters[group.key], option.value);
                 return (
                   <Link
-                    className={`rounded-md border px-3 py-2 text-sm font-semibold capitalize ${
+                    className={`inline-flex min-h-11 shrink-0 items-center rounded-md border px-4 text-sm font-bold ${
                       active
                         ? "border-teal-700 bg-teal-700 text-white"
                         : "border-slate-300 bg-white text-slate-800 hover:border-teal-700 hover:text-teal-800"
                     }`}
-                    href={filterHref(key, value)}
-                    key={value}
+                    href={filterHref(activeFilters, group.key, option.value)}
+                    key={option.value}
                   >
-                    {value.replaceAll("-", " ")}
+                    {option.label}
                   </Link>
                 );
               })}
