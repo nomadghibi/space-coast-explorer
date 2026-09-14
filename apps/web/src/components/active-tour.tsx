@@ -5,6 +5,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import {
   createTourSession,
   defaultProximityOptions,
+  distanceMeters,
   evaluateStopProximity,
   formatDistance,
   progressPercent,
@@ -55,6 +56,29 @@ function mapCoordinates(point: { latitude: number; longitude: number }): [number
   return [point.longitude, point.latitude];
 }
 
+function completedMappedDistanceMeters(tour: TourDetail, completedStopSlugs: string[]) {
+  const completed = new Set(completedStopSlugs);
+  const mappedStops = tour.stops.filter((stop) => stop.location);
+  const furthestCompletedMappedIndex = mappedStops.reduce(
+    (furthestIndex, stop, index) => (completed.has(stop.slug) ? index : furthestIndex),
+    -1
+  );
+
+  if (furthestCompletedMappedIndex <= 0) {
+    return 0;
+  }
+
+  return mappedStops.slice(1, furthestCompletedMappedIndex + 1).reduce((total, stop, index) => {
+    const previousStop = mappedStops[index];
+
+    if (!previousStop?.location || !stop.location) {
+      return total;
+    }
+
+    return total + distanceMeters(previousStop.location, stop.location);
+  }, 0);
+}
+
 export function ActiveTour({ tour }: { tour: TourDetail }) {
   const orderedStopSlugs = useMemo(() => tour.stops.map((stop) => stop.slug), [tour.stops]);
   const firstStopSlug = orderedStopSlugs[0] ?? "";
@@ -93,6 +117,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const currentDistance = currentStop?.location && activeReading ? formatDistance(evaluateStopProximity(stopToProximity(currentStop)!, activeReading).distanceMeters) : undefined;
   const completedCount = session.completedStopSlugs.length;
   const percent = progressPercent(completedCount, tour.stopCount);
+  const traveledDistance = formatDistance(completedMappedDistanceMeters(tour, session.completedStopSlugs));
   const accuracyWeak = activeReading ? activeReading.accuracy > defaultProximityOptions.maximumUsefulAccuracyMeters : false;
   const mapReady = Boolean(tour.routeGeometry && mappableStops.length && !mapError);
   const currentStopArrived = currentStop ? session.arrivedStopSlugs.includes(currentStop.slug) : false;
@@ -419,6 +444,9 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
               {completedCount} of {tour.stopCount} stops complete
             </p>
             <p>{percent}% complete</p>
+            <p>
+              <span className="text-teal-800">{traveledDistance}</span> traveled
+            </p>
           </div>
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200 md:col-span-2">
             <div className="h-full rounded-full bg-teal-700" style={{ width: `${percent}%` }} />
