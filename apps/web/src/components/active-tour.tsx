@@ -16,7 +16,18 @@ import {
 import type { TourDetail } from "@space-coast-explorer/types";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { canUseDevLocationSimulator, simulatedReadingForScenario, type SimulatedLocationScenario } from "../lib/dev-location-simulator";
+import {
+  advanceSimulatedWalk,
+  canUseDevLocationSimulator,
+  initialSimulatedWalkState,
+  mappableTourStops,
+  simulatedDistanceToTarget,
+  simulatedReadingForScenario,
+  simulatedWalkModes,
+  simulatedWalkReading,
+  type SimulatedLocationScenario,
+  type SimulatedWalkMode
+} from "../lib/dev-location-simulator";
 import { googleMapsDirectionsUrl } from "../lib/map-links";
 import { arriveAtStop, clearTourSession, completeStop, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
 import { useForegroundLocation } from "../lib/use-foreground-location";
@@ -50,6 +61,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   );
   const [showResume, setShowResume] = useState(false);
   const [simulatedReading, setSimulatedReading] = useState<LocationReading | undefined>();
+  const [simulatedWalk, setSimulatedWalk] = useState(initialSimulatedWalkState);
   const [permissionChoiceMade, setPermissionChoiceMade] = useState(false);
   const [mapError, setMapError] = useState<string | undefined>();
   const [activeTab, setActiveTab] = useState<"map" | "stops" | "info">("map");
@@ -62,12 +74,17 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const completionTrackedRef = useRef(false);
   const styleUrl = process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? defaultMapStyleUrl;
   const mappableStops = useMemo(() => tour.stops.map(stopToProximity).filter((stop): stop is ProximityStop => Boolean(stop)), [tour.stops]);
+  const simulatedWalkStops = useMemo(() => mappableTourStops(tour), [tour]);
   const stopDetailsBySlug = useMemo(() => new Map(tour.stops.map((stop) => [stop.slug, stop])), [tour.stops]);
   const currentStop = tour.stops.find((stop) => stop.slug === session.currentStopSlug) ?? tour.stops[0];
   const currentStopIndex = currentStop ? tour.stops.findIndex((stop) => stop.slug === currentStop.slug) : -1;
   const previousStop = currentStopIndex > 0 ? tour.stops[currentStopIndex - 1] : undefined;
   const nextStop = currentStopIndex >= 0 && currentStopIndex < tour.stops.length - 1 ? tour.stops[currentStopIndex + 1] : undefined;
-  const activeReading = simulatedReading ?? location.reading;
+  const simulatedWalkActiveReading = simulatedWalk.active || simulatedWalk.permissionUnavailable
+    ? simulatedWalkReading(simulatedWalkStops, simulatedWalk)
+    : undefined;
+  const activeReading = simulatedWalkActiveReading ?? simulatedReading ?? location.reading;
+  const simulatedTargetDistance = simulatedDistanceToTarget(simulatedWalkStops, simulatedWalk);
   const currentDistance = currentStop?.location && activeReading ? formatDistance(evaluateStopProximity(stopToProximity(currentStop)!, activeReading).distanceMeters) : undefined;
   const completedCount = session.completedStopSlugs.length;
   const percent = progressPercent(completedCount, tour.stopCount);
@@ -119,6 +136,18 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
       queueMicrotask(() => setSession(next));
     }
   }, [activeReading, currentStop, session, stopStates]);
+
+  useEffect(() => {
+    if (!canUseDevLocationSimulator() || !simulatedWalk.active || simulatedWalk.paused) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setSimulatedWalk((state) => advanceSimulatedWalk(simulatedWalkStops, state));
+    }, 1_000);
+
+    return () => window.clearInterval(intervalId);
+  }, [simulatedWalk.active, simulatedWalk.paused, simulatedWalkStops]);
 
   useEffect(() => {
     if (session.tourCompleted || !mapRef.current || !tour.routeGeometry || mapInstanceRef.current || !styleUrl) {
@@ -266,7 +295,38 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
     const simulated = simulatedReadingForScenario(tour, scenario);
     if (simulated) {
       setSimulatedReading(simulated);
+      setSimulatedWalk((state) => ({ ...state, active: false, paused: false, permissionUnavailable: false }));
     }
+  }
+
+  function startSimulatedWalk() {
+    setPermissionChoiceMade(true);
+    setSimulatedReading(undefined);
+    setSimulatedWalk((state) => ({ ...state, active: true, paused: false, permissionUnavailable: false }));
+  }
+
+  function restartSimulatedWalk() {
+    setPermissionChoiceMade(true);
+    setSimulatedReading(undefined);
+    setSimulatedWalk({ ...initialSimulatedWalkState(), active: true });
+  }
+
+  function jumpToSimulatedStop(index: number) {
+    setPermissionChoiceMade(true);
+    setSimulatedReading(undefined);
+    setSimulatedWalk((state) => ({
+      ...state,
+      active: true,
+      paused: true,
+      currentIndex: index,
+      targetIndex: Math.min(index + 1, simulatedWalkStops.length - 1),
+      progressOnSegment: 0,
+      permissionUnavailable: false
+    }));
+  }
+
+  function setSimulatedMode(mode: SimulatedWalkMode) {
+    setSimulatedWalk((state) => ({ ...state, mode }));
   }
 
   function openMap() {
@@ -409,8 +469,121 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
       {canUseDevLocationSimulator() ? (
         <section className="mx-auto max-w-6xl px-5 pt-5">
           <div className="rounded-lg border border-dashed border-slate-300 bg-white p-4">
-            <h2 className="text-sm font-black uppercase text-slate-700">Development GPS Simulator</h2>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 className="text-sm font-black uppercase text-slate-700">Development GPS Walking Simulator</h2>
+                <p className="mt-1 text-sm font-semibold text-amber-800">
+                  Uses current repo coordinates only. Straight-line simulated GPS, not pedestrian routing.
+                </p>
+              </div>
+              <p className="rounded-md bg-slate-100 px-3 py-2 text-xs font-black text-slate-700">
+                {simulatedWalkStops.length} mapped stops
+              </p>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-md bg-slate-50 p-3">
+                <p className="text-xs font-black uppercase text-slate-500">Current</p>
+                <p className="mt-1 text-sm font-black text-slate-950">
+                  {simulatedWalkStops[simulatedWalk.currentIndex]?.title ?? "n/a"}
+                </p>
+              </div>
+              <div className="rounded-md bg-slate-50 p-3">
+                <p className="text-xs font-black uppercase text-slate-500">Target</p>
+                <p className="mt-1 text-sm font-black text-slate-950">
+                  {simulatedWalkStops[simulatedWalk.targetIndex]?.title ?? "n/a"}
+                </p>
+              </div>
+              <div className="rounded-md bg-slate-50 p-3">
+                <p className="text-xs font-black uppercase text-slate-500">Reading</p>
+                <p className="mt-1 text-xs font-bold text-slate-800">
+                  {activeReading
+                    ? `${activeReading.latitude.toFixed(6)}, ${activeReading.longitude.toFixed(6)}`
+                    : "unavailable"}
+                </p>
+              </div>
+              <div className="rounded-md bg-slate-50 p-3">
+                <p className="text-xs font-black uppercase text-slate-500">Distance</p>
+                <p className="mt-1 text-sm font-black text-slate-950">
+                  {simulatedTargetDistance === undefined ? "n/a" : formatDistance(simulatedTargetDistance)}
+                </p>
+              </div>
+            </div>
             <div className="mt-3 flex flex-wrap gap-2">
+              <button className="rounded-md bg-teal-700 px-3 py-2 text-xs font-black text-white" onClick={startSimulatedWalk}>
+                Start simulation
+              </button>
+              <button className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800" onClick={() => setSimulatedWalk((state) => ({ ...state, paused: true }))}>
+                Pause
+              </button>
+              <button className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800" onClick={() => setSimulatedWalk((state) => ({ ...state, active: true, paused: false, permissionUnavailable: false }))}>
+                Resume
+              </button>
+              <button className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800" onClick={() => setSimulatedWalk((state) => ({ ...state, active: false, paused: false }))}>
+                Stop
+              </button>
+              <button className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800" onClick={restartSimulatedWalk}>
+                Restart
+              </button>
+              <button className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800" onClick={() => setSimulatedWalk((state) => advanceSimulatedWalk(simulatedWalkStops, state, 60))}>
+                Walk to next stop
+              </button>
+              <button className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800" onClick={() => jumpToSimulatedStop(Math.max(simulatedWalk.currentIndex - 1, 0))}>
+                Previous stop
+              </button>
+              <button
+                className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800"
+                onClick={() => setSimulatedWalk((state) => ({ ...state, permissionUnavailable: !state.permissionUnavailable, active: false, paused: false }))}
+              >
+                Permission unavailable
+              </button>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(Object.keys(simulatedWalkModes) as SimulatedWalkMode[]).map((mode) => (
+                <button
+                  className={`rounded-md border px-3 py-2 text-xs font-bold ${
+                    simulatedWalk.mode === mode ? "border-teal-700 bg-teal-700 text-white" : "border-slate-300 text-slate-800"
+                  }`}
+                  key={mode}
+                  onClick={() => setSimulatedMode(mode)}
+                >
+                  {simulatedWalkModes[mode].label}
+                </button>
+              ))}
+              {[12, 35, 80, 120].map((accuracy) => (
+                <button
+                  className={`rounded-md border px-3 py-2 text-xs font-bold ${
+                    simulatedWalk.accuracy === accuracy ? "border-teal-700 bg-teal-700 text-white" : "border-slate-300 text-slate-800"
+                  }`}
+                  key={accuracy}
+                  onClick={() => setSimulatedWalk((state) => ({ ...state, accuracy }))}
+                >
+                  {accuracy}m accuracy
+                </button>
+              ))}
+              {[0, 8, 20, 45].map((driftMeters) => (
+                <button
+                  className={`rounded-md border px-3 py-2 text-xs font-bold ${
+                    simulatedWalk.driftMeters === driftMeters ? "border-teal-700 bg-teal-700 text-white" : "border-slate-300 text-slate-800"
+                  }`}
+                  key={driftMeters}
+                  onClick={() => setSimulatedWalk((state) => ({ ...state, driftMeters }))}
+                >
+                  {driftMeters}m drift
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {simulatedWalkStops.map((stop, index) => (
+                <button
+                  className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800"
+                  key={stop.slug}
+                  onClick={() => jumpToSimulatedStop(index)}
+                >
+                  Jump {stop.sequence}
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-200 pt-3">
               {(["far", "approach", "arrive", "jitter", "exit", "poor-accuracy"] as const).map((scenario) => (
                 <button className="rounded-md border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800" key={scenario} onClick={() => simulate(scenario)}>
                   {scenario}
