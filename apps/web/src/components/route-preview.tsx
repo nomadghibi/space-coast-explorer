@@ -1,8 +1,10 @@
 "use client";
 
 import type { TourDetail } from "@space-coast-explorer/types";
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { getTourStopImage } from "../lib/content";
 
 type PreviewPoint = {
   latitude: number;
@@ -37,6 +39,7 @@ export function RoutePreview({ tour }: { tour: TourDetail }) {
     () => tour.stops.find((stop) => stop.slug === selectedStopSlug) ?? mappedStops[0],
     [mappedStops, selectedStopSlug, tour.stops]
   );
+  const selectedStopImage = selectedStop ? getTourStopImage(tour, selectedStop) : undefined;
   const bounds = allPoints.length
     ? {
         minLatitude: Math.min(...allPoints.map((point) => point.latitude)),
@@ -95,7 +98,16 @@ export function RoutePreview({ tour }: { tour: TourDetail }) {
         {selectedStop ? (
           <div className="mt-4 rounded-lg border border-teal-200 bg-teal-50 p-4">
             <p className="text-xs font-black uppercase text-teal-800">Selected Stop</p>
-            <div className="mt-2 flex items-start gap-3">
+            {selectedStopImage ? (
+              <Image
+                alt={selectedStopImage.imageAlt}
+                className="mt-3 aspect-[16/9] w-full rounded-md object-cover"
+                height={360}
+                src={selectedStopImage.imageUrl}
+                width={640}
+              />
+            ) : null}
+            <div className="mt-3 flex items-start gap-3">
               <span className="grid size-9 shrink-0 place-items-center rounded-full bg-teal-700 text-sm font-black text-white">
                 {selectedStop.sequence}
               </span>

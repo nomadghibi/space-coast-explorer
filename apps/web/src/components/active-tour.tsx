@@ -14,6 +14,7 @@ import {
   type TourSessionState
 } from "@space-coast-explorer/maps";
 import type { TourDetail } from "@space-coast-explorer/types";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -28,6 +29,7 @@ import {
   type SimulatedLocationScenario,
   type SimulatedWalkMode
 } from "../lib/dev-location-simulator";
+import { getTourStopImage } from "../lib/content";
 import { googleMapsDirectionsUrl } from "../lib/map-links";
 import { arriveAtStop, clearTourSession, completeStop, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
 import { useForegroundLocation } from "../lib/use-foreground-location";
@@ -82,6 +84,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const previousStop = currentStopIndex > 0 ? tour.stops[currentStopIndex - 1] : undefined;
   const nextStop = currentStopIndex >= 0 && currentStopIndex < tour.stops.length - 1 ? tour.stops[currentStopIndex + 1] : undefined;
   const selectedMapStop = tour.stops.find((stop) => stop.slug === selectedMapStopSlug) ?? currentStop;
+  const selectedMapStopImage = selectedMapStop ? getTourStopImage(tour, selectedMapStop) : undefined;
   const simulatedWalkActiveReading = simulatedWalk.active || simulatedWalk.permissionUnavailable
     ? simulatedWalkReading(simulatedWalkStops, simulatedWalk)
     : undefined;
@@ -638,7 +641,16 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
               {selectedMapStop ? (
                 <div className="mt-4 rounded-lg border border-teal-200 bg-teal-50 p-4">
                   <p className="text-xs font-black uppercase text-teal-800">Map Selection</p>
-                  <div className="mt-2 flex items-start gap-3">
+                  {selectedMapStopImage ? (
+                    <Image
+                      alt={selectedMapStopImage.imageAlt}
+                      className="mt-3 aspect-[16/9] w-full rounded-md object-cover sm:max-h-56"
+                      height={360}
+                      src={selectedMapStopImage.imageUrl}
+                      width={640}
+                    />
+                  ) : null}
+                  <div className="mt-3 flex items-start gap-3">
                     <span className="grid size-11 shrink-0 place-items-center rounded-full bg-teal-700 text-base font-black text-white">
                       {selectedMapStop.sequence}
                     </span>

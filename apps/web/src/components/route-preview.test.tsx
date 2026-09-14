@@ -28,6 +28,9 @@ describe("RoutePreview", () => {
     expect(
       screen.getByText("Pause near a long-running local business tied to Cocoa's commerce history.")
     ).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /S\.F\. Travis Company/i }).getAttribute("src")).toContain(
+      "sf-travis-company.jpg"
+    );
     expect(screen.getByRole("link", { name: "Read More" })).toHaveAttribute(
       "href",
       "/tours/cocoa-village-historic-explorer/stops/sf-travis-company"
