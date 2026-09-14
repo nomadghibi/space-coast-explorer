@@ -97,6 +97,18 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const mapReady = Boolean(tour.routeGeometry && mappableStops.length && !mapError);
   const currentStopArrived = currentStop ? session.arrivedStopSlugs.includes(currentStop.slug) : false;
   const currentDirectionsUrl = googleMapsDirectionsUrl(currentStop?.location ?? tour.startPoint?.address ?? tour.startLocation);
+  const selectMapStop = (stop: TourDetail["stops"][number]) => {
+    setSelectedMapStopSlug(stop.slug);
+
+    if (stop.location && mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo({
+        center: mapCoordinates(stop.location),
+        duration: 700,
+        essential: true,
+        zoom: 17
+      });
+    }
+  };
 
   useEffect(() => {
     const existing = loadTourSession(tour.slug);
@@ -661,6 +673,19 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
                     </div>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
+                    {selectedMapStop.location ? (
+                      <button
+                        className="min-h-11 rounded-md border border-teal-300 bg-white px-4 text-sm font-black text-teal-900"
+                        onClick={() => selectMapStop(selectedMapStop)}
+                        type="button"
+                      >
+                        Show on Map
+                      </button>
+                    ) : (
+                      <p className="rounded-md bg-white px-3 py-2 text-xs font-bold text-slate-700">
+                        Map pin pending field verification.
+                      </p>
+                    )}
                     <Link className="inline-flex min-h-11 items-center rounded-md bg-teal-700 px-4 text-sm font-black text-white hover:bg-teal-800" href={`/tours/${tour.slug}/stops/${selectedMapStop.slug}`}>
                       Read More
                     </Link>
@@ -698,7 +723,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
                       </span>
                       <button
                         className="ml-auto min-h-11 rounded-md border border-slate-300 bg-white px-3 text-xs font-black text-slate-800"
-                        onClick={() => setSelectedMapStopSlug(stop.slug)}
+                        onClick={() => selectMapStop(stop)}
                         type="button"
                       >
                         Info
