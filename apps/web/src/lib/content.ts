@@ -508,6 +508,19 @@ export const tours: TourDetail[] = [
     distanceMiles: 0.9,
     stopCount: 11,
     priceLabel: "Free",
+    premiumUpsell: {
+      freeIncludes: [
+        "Complete the full Cocoa Village walking route",
+        "Interactive map with clickable verified stops",
+        "Short landmark stories, directions, progress, distance, and elapsed time"
+      ],
+      premiumUnlocks: [
+        "Full landmark story",
+        "Audio narration",
+        "Offline access",
+        "Food and shop pairings"
+      ]
+    },
     difficulty: "Easy",
     startLocation: "Parrish Grove Inn / Pette House, 536 Delannoy Avenue",
     accessibilitySummary: "Sidewalk-focused route; curb cuts, construction, and surface conditions must be verified before pilot publication.",

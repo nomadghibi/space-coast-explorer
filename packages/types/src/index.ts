@@ -44,6 +44,14 @@ export type TourCategory =
 
 export type TransportMode = "Walking" | "Driving" | "Mixed";
 
+export type PremiumFeature =
+  | "Full landmark story"
+  | "Audio narration"
+  | "Offline access"
+  | "Custom itinerary"
+  | "Food and shop pairings"
+  | "Cruise timing helper";
+
 export type TourSummary = {
   slug: TourSlug;
   title: string;
@@ -57,6 +65,10 @@ export type TourSummary = {
   distanceMiles: number;
   stopCount: number;
   priceLabel: "Free" | "Premium";
+  premiumUpsell?: {
+    freeIncludes: string[];
+    premiumUnlocks: PremiumFeature[];
+  };
   difficulty: "Easy" | "Moderate";
   startLocation: string;
   accessibilitySummary: string;
@@ -70,6 +82,7 @@ export type TourStop = {
   title: string;
   summary: string;
   visitorStory?: string;
+  premiumStoryTeaser?: string;
   imageAlt?: string;
   internalEditorialState?: "needs_fact_check" | "ready";
   coordinateVerificationStatus?: "map_verified_provisional" | "needs_field_verification" | "field_verified";

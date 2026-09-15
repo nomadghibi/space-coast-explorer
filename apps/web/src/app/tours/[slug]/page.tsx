@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PersistentTourCta } from "../../../components/persistent-tour-cta";
+import { PremiumUpgradeCard } from "../../../components/premium-upgrade-card";
 import { RoutePreview } from "../../../components/route-preview";
 import { getTour, tours } from "../../../lib/content";
 import { googleMapsDirectionsUrl } from "../../../lib/map-links";
@@ -124,6 +125,7 @@ export default async function TourDetailPage({ params }: PageProps) {
           </div>
           <div className="grid gap-6">
             <RoutePreview tour={tour} />
+            <PremiumUpgradeCard tour={tour} />
             {tour.startPoint ? (
               <div className="rounded-lg border border-slate-200 bg-white p-5">
                 <h2 className="text-xl font-black text-slate-950">Arrival Checklist</h2>

@@ -17,5 +17,6 @@ describe("TourCard", () => {
       "href",
       `/tours/${tour.slug}`
     );
+    expect(screen.getByText(/Free route with Premium audio/i)).toBeInTheDocument();
   });
 });

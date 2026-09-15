@@ -27,6 +27,11 @@ export function TourCard({ tour }: { tour: TourSummary }) {
           <span className="rounded-md bg-cyan-50 px-2.5 py-1">{tour.distanceMiles} mi</span>
           <span className="rounded-md bg-cyan-50 px-2.5 py-1">{tour.stopCount} stops</span>
         </div>
+        {tour.premiumUpsell ? (
+          <p className="rounded-md bg-teal-50 px-3 py-2 text-xs font-black text-teal-900">
+            Free route with Premium audio, offline access, and deeper stories.
+          </p>
+        ) : null}
         <div className="mt-2 flex flex-wrap gap-2">
           <Link
             className="inline-flex min-h-11 items-center rounded-md bg-teal-700 px-4 text-sm font-bold text-white hover:bg-teal-800"

@@ -20,6 +20,21 @@ describe("public content", () => {
     expect(getTour("cocoa-village-historic-explorer")?.stopCount).toBe(11);
   });
 
+  it("positions the pilot tour as useful free access with premium upgrades", () => {
+    const pilot = getTour("cocoa-village-historic-explorer");
+
+    expect(pilot?.priceLabel).toBe("Free");
+    expect(pilot?.premiumUpsell?.freeIncludes).toEqual(
+      expect.arrayContaining([
+        "Complete the full Cocoa Village walking route",
+        "Interactive map with clickable verified stops"
+      ])
+    );
+    expect(pilot?.premiumUpsell?.premiumUnlocks).toEqual(
+      expect.arrayContaining(["Audio narration", "Offline access", "Food and shop pairings"])
+    );
+  });
+
   it("gives the pilot tour a concrete start point", () => {
     const pilot = getTour("cocoa-village-historic-explorer");
 

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PremiumUpgradeCard } from "../../../../../components/premium-upgrade-card";
 import { StopCompletionControls } from "../../../../../components/stop-completion-controls";
 import { getTour, getTourStopImage, tours } from "../../../../../lib/content";
 import { googleMapsDirectionsUrl } from "../../../../../lib/map-links";
@@ -149,6 +150,7 @@ export default async function TourStopPage({ params }: PageProps) {
             <h2 className="mt-2 text-xl font-black text-slate-950">{tour.title}</h2>
             <p className="mt-2 text-sm leading-6 text-slate-700">{tour.destinationName}</p>
           </div>
+          <PremiumUpgradeCard tour={tour} />
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
             {previousStop ? (
               <Link
