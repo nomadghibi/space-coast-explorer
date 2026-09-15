@@ -87,6 +87,25 @@ function nextMappedLegDistanceMeters(currentStop: TourDetail["stops"][number] | 
   return distanceMeters(currentStop.location, nextStop.location);
 }
 
+function formatElapsedTourTime(startedAt: string, now: number) {
+  const startedAtMs = Date.parse(startedAt);
+
+  if (!Number.isFinite(startedAtMs)) {
+    return "0 min";
+  }
+
+  const elapsedMinutes = Math.max(0, Math.floor((now - startedAtMs) / 60_000));
+
+  if (elapsedMinutes < 60) {
+    return `${elapsedMinutes} min`;
+  }
+
+  const hours = Math.floor(elapsedMinutes / 60);
+  const minutes = elapsedMinutes % 60;
+
+  return minutes ? `${hours} hr ${minutes} min` : `${hours} hr`;
+}
+
 export function ActiveTour({ tour }: { tour: TourDetail }) {
   const orderedStopSlugs = useMemo(() => tour.stops.map((stop) => stop.slug), [tour.stops]);
   const firstStopSlug = orderedStopSlugs[0] ?? "";
@@ -101,6 +120,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const [activeTab, setActiveTab] = useState<"map" | "stops" | "info">("map");
   const [selectedMapStopSlug, setSelectedMapStopSlug] = useState<string | undefined>();
   const [stopStates, setStopStates] = useState<Record<string, StopProximityState>>({});
+  const [now, setNow] = useState(() => Date.now());
   const location = useForegroundLocation();
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<import("maplibre-gl").Map | undefined>(undefined);
@@ -128,6 +148,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const traveledDistance = formatDistance(completedMappedDistanceMeters(tour, session.completedStopSlugs));
   const nextLegDistance = nextMappedLegDistanceMeters(currentStop, nextStop);
   const nextLegDistanceLabel = nextLegDistance === undefined ? "pending map pin" : formatDistance(nextLegDistance);
+  const elapsedTourTime = formatElapsedTourTime(session.startedAt, now);
   const accuracyWeak = activeReading ? activeReading.accuracy > defaultProximityOptions.maximumUsefulAccuracyMeters : false;
   const mapReady = Boolean(tour.routeGeometry && mappableStops.length && !mapError);
   const currentStopArrived = currentStop ? session.arrivedStopSlugs.includes(currentStop.slug) : false;
@@ -200,6 +221,12 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
 
     return () => window.clearInterval(intervalId);
   }, [simulatedWalk.active, simulatedWalk.paused, simulatedWalkStops]);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => setNow(Date.now()), 60_000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     if (session.tourCompleted || !mapRef.current || !tour.routeGeometry || mapInstanceRef.current || !styleUrl) {
@@ -456,6 +483,9 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
             <p>{percent}% complete</p>
             <p>
               <span className="text-teal-800">{traveledDistance}</span> traveled
+            </p>
+            <p>
+              <span className="text-teal-800">{elapsedTourTime}</span> elapsed
             </p>
             {nextStop ? (
               <p>
