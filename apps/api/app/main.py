@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.api.analytics import router as analytics_router
 from app.api.cms import router as cms_router
 from app.api.health import router as health_router
+from app.api.launches import router as launches_router
 from app.api.public import router as public_router
 from app.core.logging import configure_logging
 from app.core.request_id import RequestIdMiddleware
@@ -15,6 +16,7 @@ def create_app() -> FastAPI:
     app.include_router(health_router)
     app.include_router(analytics_router)
     app.include_router(public_router)
+    app.include_router(launches_router)
     app.include_router(cms_router)
     return app
 
