@@ -79,6 +79,14 @@ function completedMappedDistanceMeters(tour: TourDetail, completedStopSlugs: str
   }, 0);
 }
 
+function nextMappedLegDistanceMeters(currentStop: TourDetail["stops"][number] | undefined, nextStop: TourDetail["stops"][number] | undefined) {
+  if (!currentStop?.location || !nextStop?.location) {
+    return undefined;
+  }
+
+  return distanceMeters(currentStop.location, nextStop.location);
+}
+
 export function ActiveTour({ tour }: { tour: TourDetail }) {
   const orderedStopSlugs = useMemo(() => tour.stops.map((stop) => stop.slug), [tour.stops]);
   const firstStopSlug = orderedStopSlugs[0] ?? "";
@@ -118,6 +126,8 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   const completedCount = session.completedStopSlugs.length;
   const percent = progressPercent(completedCount, tour.stopCount);
   const traveledDistance = formatDistance(completedMappedDistanceMeters(tour, session.completedStopSlugs));
+  const nextLegDistance = nextMappedLegDistanceMeters(currentStop, nextStop);
+  const nextLegDistanceLabel = nextLegDistance === undefined ? "pending map pin" : formatDistance(nextLegDistance);
   const accuracyWeak = activeReading ? activeReading.accuracy > defaultProximityOptions.maximumUsefulAccuracyMeters : false;
   const mapReady = Boolean(tour.routeGeometry && mappableStops.length && !mapError);
   const currentStopArrived = currentStop ? session.arrivedStopSlugs.includes(currentStop.slug) : false;
@@ -447,6 +457,11 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
             <p>
               <span className="text-teal-800">{traveledDistance}</span> traveled
             </p>
+            {nextStop ? (
+              <p>
+                <span className="text-teal-800">{nextLegDistanceLabel}</span> to next stop
+              </p>
+            ) : null}
           </div>
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200 md:col-span-2">
             <div className="h-full rounded-full bg-teal-700" style={{ width: `${percent}%` }} />
