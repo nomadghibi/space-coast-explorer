@@ -35,6 +35,7 @@ import { googleMapsDirectionsUrl } from "../lib/map-links";
 import { arriveAtStop, clearTourSession, completeStop, finishTourSession, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
 import { useForegroundLocation } from "../lib/use-foreground-location";
 import { recordVisitorAnalyticsEvent } from "../lib/visitor-analytics";
+import { EngagementUpgradePrompt } from "./engagement-upgrade-prompt";
 import { PremiumUpgradeCard } from "./premium-upgrade-card";
 
 const defaultMapStyleUrl = "https://demotiles.maplibre.org/style.json";
@@ -363,6 +364,11 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
   function markCurrentStopCompleted(stopSlug: string) {
     const next = completeStop(session, orderedStopSlugs, stopSlug);
     setSession(next);
+    void recordVisitorAnalyticsEvent(tour, "tour_stop.completed", {
+      plan: "free",
+      stopSlug,
+      totalStops: tour.stopCount
+    });
     if (next.tourCompleted && !completionTrackedRef.current) {
       completionTrackedRef.current = true;
       void recordVisitorAnalyticsEvent(tour, "visitor_experience.completed", {
@@ -912,6 +918,8 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
         </aside>
       </section>
       {currentStop ? (
+        <>
+        <EngagementUpgradePrompt completedCount={completedCount} tour={tour} />
         <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-12px_34px_rgba(15,23,42,0.16)] backdrop-blur md:hidden">
           <div className="mx-auto grid max-w-lg gap-3">
             <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3">
@@ -973,6 +981,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
             </button>
           </div>
         </nav>
+        </>
       ) : null}
     </main>
   );

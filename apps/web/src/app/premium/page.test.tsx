@@ -8,7 +8,8 @@ describe("PremiumPage", () => {
 
     expect(screen.getByRole("heading", { name: "Keep the basics free. Unlock the richer trip." })).toBeInTheDocument();
     expect(screen.getByText("Worth using on its own")).toBeInTheDocument();
-    expect(screen.getByText("The guided layer")).toBeInTheDocument();
+    expect(screen.getByText("Explorer Pass")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "$5.99 / 24 hours" })).toBeInTheDocument();
     expect(screen.getByText("Audio Narration")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Use Free Tour" })).toHaveAttribute(
       "href",

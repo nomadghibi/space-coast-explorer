@@ -16,6 +16,11 @@ type VisitorAnalyticsEvent = {
     completionMethod?: CompletionMethod;
     completedStops?: number;
     totalStops?: number;
+    stopSlug?: string;
+    feature?: string;
+    plan?: "free" | "explorer_pass";
+    source?: string;
+    upgradeTrigger?: string;
   };
   delivered: boolean;
 };

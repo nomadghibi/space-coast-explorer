@@ -8,11 +8,24 @@ const defaultFreeIncludes = [
 ];
 
 const defaultPremiumUnlocks = [
-  "Full landmark story",
-  "Audio narration",
-  "Offline access",
-  "Custom itinerary"
+  "full_stories",
+  "audio_guides",
+  "offline_access",
+  "custom_itineraries"
 ] as const;
+
+const premiumFeatureLabels = {
+  ai_local_guide: "AI Local Guide",
+  audio_guides: "Audio narration",
+  bonus_stops: "Bonus stops",
+  cruise_planner: "Cruise planning",
+  custom_itineraries: "Custom itinerary",
+  full_stories: "Full landmark story",
+  multiple_saved_tours: "Multiple saved tours",
+  offline_access: "Offline access",
+  smart_nearby: "Smart nearby ideas",
+  then_and_now: "Then & Now history"
+} as const;
 
 export function PremiumUpgradeCard({ tour }: { tour: TourDetail }) {
   const freeIncludes = tour.premiumUpsell?.freeIncludes ?? defaultFreeIncludes;
@@ -42,7 +55,7 @@ export function PremiumUpgradeCard({ tour }: { tour: TourDetail }) {
           <p className="text-sm font-black text-teal-950">Premium unlocks</p>
           <ul className="mt-3 grid gap-2 text-sm leading-6 text-teal-950">
             {premiumUnlocks.map((item) => (
-              <li key={item}>{item}</li>
+              <li key={item}>{premiumFeatureLabels[item]}</li>
             ))}
           </ul>
         </div>

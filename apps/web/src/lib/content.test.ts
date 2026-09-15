@@ -31,7 +31,7 @@ describe("public content", () => {
       ])
     );
     expect(pilot?.premiumUpsell?.premiumUnlocks).toEqual(
-      expect.arrayContaining(["Audio narration", "Offline access", "Food and shop pairings"])
+      expect.arrayContaining(["audio_guides", "offline_access", "smart_nearby"])
     );
   });
 

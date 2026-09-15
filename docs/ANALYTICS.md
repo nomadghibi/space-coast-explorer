@@ -15,6 +15,23 @@ Core event names:
 - `tour_stop.completed`
 - `pilot_feedback.submitted`
 
+Freemium funnel event names:
+
+- `premium_feature_viewed`
+- `premium_gate_opened`
+- `premium_gate_dismissed`
+- `premium_upgrade_clicked`
+- `checkout_started`
+- `purchase_completed`
+- `purchase_failed`
+- `explorer_pass_activated`
+- `explorer_pass_expired`
+- `full_story_opened`
+- `audio_guide_opened`
+- `then_and_now_opened`
+- `bonus_stop_opened`
+- `ai_guide_opened`
+
 The backend stores analytics events with first-class `destination_id`, optional `tour_id`,
 `visitor_session_id`, `event_name`, UTC `occurred_at`, and a provider-neutral JSON payload.
 The JSON payload may hold details such as completion method, stop slug, feedback rating, or
@@ -42,6 +59,9 @@ the required analytics destination and tour UUIDs.
 Local events include destination slug, tour slug, visitor session ID, event time, completion
 method, and stop counts. They do not include raw latitude, longitude, accuracy, or continuous
 movement history.
+
+Freemium events may include feature, plan, source, stop slug, and upgrade trigger. They must not
+include precise GPS data or full payment details.
 
 ## Privacy Rules
 

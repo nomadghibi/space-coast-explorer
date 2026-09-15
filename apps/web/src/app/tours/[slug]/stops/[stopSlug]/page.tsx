@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PremiumUpgradeCard } from "../../../../../components/premium-upgrade-card";
 import { StopCompletionControls } from "../../../../../components/stop-completion-controls";
+import { StopPremiumActions } from "../../../../../components/stop-premium-actions";
 import { getTour, getTourStopImage, tours } from "../../../../../lib/content";
 import { googleMapsDirectionsUrl } from "../../../../../lib/map-links";
 
@@ -128,12 +129,7 @@ export default async function TourStopPage({ params }: PageProps) {
         <article className="rounded-lg border border-slate-200 bg-white p-5 sm:p-6">
           <h2 className="text-2xl font-black text-slate-950">At This Stop</h2>
           <p className="mt-3 text-base leading-7 text-slate-700">{stop.summary}</p>
-          {stop.visitorStory ? (
-            <details className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-4">
-              <summary className="cursor-pointer text-sm font-black text-teal-800">Read more</summary>
-              <p className="mt-3 text-sm leading-6 text-slate-700">{stop.visitorStory}</p>
-            </details>
-          ) : null}
+          <StopPremiumActions stop={stop} tour={tour} />
           <div className="mt-6">
             <StopCompletionControls
               firstStopSlug={firstStopSlug}

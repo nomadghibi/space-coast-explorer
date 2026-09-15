@@ -45,12 +45,28 @@ export type TourCategory =
 export type TransportMode = "Walking" | "Driving" | "Mixed";
 
 export type PremiumFeature =
-  | "Full landmark story"
-  | "Audio narration"
-  | "Offline access"
-  | "Custom itinerary"
-  | "Food and shop pairings"
-  | "Cruise timing helper";
+  | "full_stories"
+  | "audio_guides"
+  | "then_and_now"
+  | "bonus_stops"
+  | "multiple_saved_tours"
+  | "smart_nearby"
+  | "ai_local_guide"
+  | "offline_access"
+  | "custom_itineraries"
+  | "cruise_planner";
+
+export type EntitlementPlan = "free" | "explorer_pass";
+
+export type ExplorerPassStatus = "inactive" | "active" | "expired" | "refunded" | "cancelled";
+
+export type UserEntitlements = {
+  plan: EntitlementPlan;
+  entitlements: PremiumFeature[];
+  startsAt?: string;
+  expiresAt?: string;
+  status: ExplorerPassStatus;
+};
 
 export type TourSummary = {
   slug: TourSlug;
@@ -82,7 +98,18 @@ export type TourStop = {
   title: string;
   summary: string;
   visitorStory?: string;
+  fullStory?: string;
   premiumStoryTeaser?: string;
+  premiumContentAvailable?: boolean;
+  audioUrl?: string;
+  thenAndNow?: {
+    historicImageUrl: string;
+    currentImageUrl: string;
+    caption: string;
+    dateKnown?: string;
+    sourceAttribution: string;
+    licenseInfo: string;
+  };
   imageAlt?: string;
   internalEditorialState?: "needs_fact_check" | "ready";
   coordinateVerificationStatus?: "map_verified_provisional" | "needs_field_verification" | "field_verified";

@@ -515,10 +515,10 @@ export const tours: TourDetail[] = [
         "Short landmark stories, directions, progress, distance, and elapsed time"
       ],
       premiumUnlocks: [
-        "Full landmark story",
-        "Audio narration",
-        "Offline access",
-        "Food and shop pairings"
+        "full_stories",
+        "audio_guides",
+        "offline_access",
+        "smart_nearby"
       ]
     },
     difficulty: "Easy",
