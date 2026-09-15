@@ -35,6 +35,7 @@ import { googleMapsDirectionsUrl } from "../lib/map-links";
 import { arriveAtStop, clearTourSession, completeStop, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
 import { useForegroundLocation } from "../lib/use-foreground-location";
 import { recordVisitorAnalyticsEvent } from "../lib/visitor-analytics";
+import { PremiumUpgradeCard } from "./premium-upgrade-card";
 
 const defaultMapStyleUrl = "https://demotiles.maplibre.org/style.json";
 
@@ -891,6 +892,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
               {tour.safetyNotes.map((note) => <li key={note}>{note}</li>)}
             </ul>
           </div>
+          <PremiumUpgradeCard tour={tour} />
         </aside>
       </section>
       {currentStop ? (
