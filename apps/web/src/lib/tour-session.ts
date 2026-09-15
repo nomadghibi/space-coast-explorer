@@ -64,6 +64,12 @@ export function completeStop(session: TourSessionState, orderedStopSlugs: string
   return next;
 }
 
+export function finishTourSession(session: TourSessionState) {
+  const next = { ...session, tourCompleted: true };
+  saveTourSession(next);
+  return next;
+}
+
 export function clearTourSession(tourSlug: string) {
   window.localStorage.removeItem(sessionStorageKey(tourSlug));
 }

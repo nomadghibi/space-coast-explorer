@@ -32,7 +32,7 @@ import {
 } from "../lib/dev-location-simulator";
 import { getTourStopImage } from "../lib/content";
 import { googleMapsDirectionsUrl } from "../lib/map-links";
-import { arriveAtStop, clearTourSession, completeStop, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
+import { arriveAtStop, clearTourSession, completeStop, finishTourSession, loadTourSession, setLocationEnabled, startTourSession } from "../lib/tour-session";
 import { useForegroundLocation } from "../lib/use-foreground-location";
 import { recordVisitorAnalyticsEvent } from "../lib/visitor-analytics";
 import { PremiumUpgradeCard } from "./premium-upgrade-card";
@@ -373,6 +373,19 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
     }
   }
 
+  function finishTourNow() {
+    const next = finishTourSession(session);
+    setSession(next);
+    if (!completionTrackedRef.current) {
+      completionTrackedRef.current = true;
+      void recordVisitorAnalyticsEvent(tour, "visitor_experience.completed", {
+        completionMethod: "manual",
+        completedStops: next.completedStopSlugs.length,
+        totalStops: tour.stopCount
+      });
+    }
+  }
+
   function restartTour() {
     clearTourSession(tour.slug);
     const restarted = startTourSession(tour.slug, firstStopSlug);
@@ -435,7 +448,7 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
         <p className="text-sm font-black uppercase text-teal-700">{tour.destinationName}</p>
         <h1 className="mt-3 text-4xl font-black text-slate-950">You Completed the {tour.title}</h1>
         <p className="mt-4 text-lg leading-8 text-slate-700">
-          You completed {tour.stopCount} stops across an approximately {tour.durationMinutes}-minute experience.
+          You finished with {completedCount} of {tour.stopCount} stops completed across an approximately {tour.durationMinutes}-minute experience.
         </p>
         <p className="mt-3 rounded-lg bg-teal-50 p-4 text-sm font-bold text-teal-900">
           This completion is saved on this device and will sync to pilot analytics when the
@@ -882,6 +895,9 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
                 <button className="min-h-11 rounded-md bg-teal-700 px-4 text-sm font-black text-white" onClick={() => markCurrentStopCompleted(currentStop.slug)}>
                   Mark Completed
                 </button>
+                <button className="min-h-11 rounded-md border border-teal-300 bg-white px-4 text-sm font-black text-teal-900" onClick={finishTourNow}>
+                  Finish Tour
+                </button>
               </div>
             </div>
           ) : null}
@@ -952,6 +968,9 @@ export function ActiveTour({ tour }: { tour: TourDetail }) {
                 Directions
               </a>
             </div>
+            <button className="min-h-11 rounded-md border border-teal-300 bg-white px-3 text-sm font-black text-teal-900" onClick={finishTourNow}>
+              Finish Tour
+            </button>
           </div>
         </nav>
       ) : null}
