@@ -59,6 +59,14 @@ https://space-coast-explorer-api.onrender.com
 
 Do not include a trailing slash or `/api`.
 
+If creating the service manually instead of using Blueprint:
+
+- Environment: `Docker`
+- Dockerfile Path: `./apps/api/Dockerfile`
+- Docker Build Context Directory: `.`
+- Start Command: leave blank, or use `python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- Do not put `render.yaml` in Build Command or Start Command. It is a Blueprint file, not an executable command.
+
 Container start command:
 
 ```bash

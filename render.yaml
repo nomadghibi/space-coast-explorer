@@ -2,10 +2,12 @@ services:
   - type: web
     name: space-coast-explorer-api
     runtime: docker
+    plan: free
     repo: https://github.com/nomadghibi/space-coast-explorer
     branch: main
     dockerfilePath: ./apps/api/Dockerfile
     dockerContext: .
+    dockerCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     autoDeploy: true
     envVars:
