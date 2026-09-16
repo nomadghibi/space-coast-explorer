@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type { LaunchFeedState } from "../../lib/launches";
 import { LaunchesView } from "./launches-view";
@@ -44,15 +44,13 @@ describe("LaunchesPage", () => {
     render(<LaunchesView feed={readyFeed} />);
 
     expect(screen.getByRole("heading", { name: "Space Coast Launches" })).toBeInTheDocument();
-    expect(screen.getAllByText("Falcon 9 | Space Coast Explorer Fixture Mission")).toHaveLength(2);
-    expect(screen.getAllByText("Space Launch Complex 40")).toHaveLength(2);
-    expect(screen.getByRole("link", { name: "Explore Tours Nearby" })).toHaveAttribute(
-      "href",
-      "/tours"
-    );
+    expect(screen.getByRole("heading", { name: "Falcon 9" })).toBeInTheDocument();
+    expect(screen.getAllByText("Space Coast Explorer Fixture Mission").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("Space Launch Complex 40").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole("link", { name: "Find Viewing Spots" })).toHaveAttribute("href", "#viewing-spots");
   });
 
-  it("shows a clear unavailable state when the API is not connected", () => {
+  it("shows a clear unavailable state when launch data is unavailable", () => {
     render(
       <LaunchesView
         feed={{
@@ -65,7 +63,7 @@ describe("LaunchesPage", () => {
       />
     );
 
-    expect(screen.getByText(/Launch API hosting is not connected/)).toBeInTheDocument();
+    expect(screen.getByText(/Launch data is temporarily unavailable/)).toBeInTheDocument();
     expect(screen.getAllByText("No Space Coast launches available")).toHaveLength(2);
   });
 
@@ -73,5 +71,22 @@ describe("LaunchesPage", () => {
     render(<LaunchesView feed={{ ...readyFeed, dataFreshness: "stale" }} />);
 
     expect(screen.getByText(/Launch data is temporarily stale/)).toBeInTheDocument();
+  });
+
+  it("opens and closes the viewing spot drawer", () => {
+    render(<LaunchesView feed={readyFeed} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Select viewing spot Space View Park" }));
+    expect(screen.getByRole("dialog", { name: /Space View Park viewing spot details/ })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Close viewing spot details" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("selects viewing spots from map markers", () => {
+    render(<LaunchesView feed={readyFeed} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Select viewing spot Cocoa Riverfront Park" }));
+    expect(screen.getByRole("dialog", { name: /Cocoa Riverfront Park viewing spot details/ })).toBeInTheDocument();
   });
 });

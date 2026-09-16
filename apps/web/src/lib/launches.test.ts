@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { formatLaunchDate, formatLaunchWindow, launchStatusLabel } from "./launches";
+import {
+  countdownState,
+  formatLaunchDate,
+  formatLaunchWindow,
+  launchMissionName,
+  launchStatusLabel,
+  launchVehicleName
+} from "./launches";
 
 describe("launch formatting", () => {
   it("formats launch times in Eastern time", () => {
@@ -22,5 +29,30 @@ describe("launch formatting", () => {
   it("uses visitor-friendly status labels", () => {
     expect(launchStatusLabel("go")).toBe("Go");
     expect(launchStatusLabel("unknown")).toBe("Status pending");
+  });
+
+  it("formats countdowns from launch timestamps without layout-shifting strings", () => {
+    expect(countdownState("2030-01-01T03:04:05Z", Date.parse("2030-01-01T01:00:00Z"))).toMatchObject({
+      label: "T-02:04:05",
+      expired: false
+    });
+  });
+
+  it("handles unknown and expired countdowns safely", () => {
+    expect(countdownState(null).label).toBe("T pending");
+    expect(countdownState("2030-01-01T00:00:00Z", Date.parse("2030-01-01T00:00:01Z"))).toMatchObject({
+      label: "T+00:00:00",
+      expired: true
+    });
+  });
+
+  it("derives vehicle and mission labels from normalized launch data", () => {
+    const launch = {
+      name: "Falcon 9 | Starlink Group XX",
+      rocket: null,
+      mission: null
+    };
+    expect(launchVehicleName(launch as never)).toBe("Falcon 9");
+    expect(launchMissionName(launch as never)).toBe("Starlink Group XX");
   });
 });

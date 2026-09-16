@@ -45,6 +45,27 @@ export type Launch = {
   last_updated_at: string | null;
 };
 
+export type ViewingSpotQuality = "excellent" | "good" | "limited";
+
+export type ViewingSpot = {
+  id: string;
+  name: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  distanceFromPadMiles?: number;
+  distanceFromVisitorMiles?: number;
+  quality: ViewingSpotQuality;
+  lineOfSightNotes?: string;
+  parking?: string;
+  accessibility?: string;
+  hours?: string;
+  expectedCrowdLevel?: "low" | "moderate" | "high";
+  directionsUrl: string;
+  latitude: number;
+  longitude: number;
+  developmentFixture?: boolean;
+};
+
 export type LaunchesResponse = {
   data: Launch[];
   data_freshness: "fresh" | "stale";
@@ -66,6 +87,145 @@ export type LaunchFeedState =
       reason: "api_not_configured" | "api_error";
     };
 
+export const developmentViewingSpots: ViewingSpot[] = [
+  {
+    id: "space-view-park-dev",
+    name: "Space View Park",
+    imageUrl: "/images/cocoa-village/landmarks/cocoa-riverfront-park.jpg",
+    imageAlt: "Riverfront promenade along the Indian River",
+    distanceFromPadMiles: 13.4,
+    distanceFromVisitorMiles: 0.8,
+    quality: "excellent",
+    lineOfSightNotes: "Open riverfront view toward launch azimuths when conditions are clear.",
+    parking: "Limited public parking nearby; confirm local restrictions before launch day.",
+    accessibility: "Paved waterfront paths with nearby seating areas.",
+    hours: "Public park hours vary by event and city guidance.",
+    expectedCrowdLevel: "high",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=Space+View+Park+Titusville+FL",
+    latitude: 28.614,
+    longitude: -80.807,
+    developmentFixture: true
+  },
+  {
+    id: "cocoa-riverfront-dev",
+    name: "Cocoa Riverfront Park",
+    imageUrl: "/images/cocoa-village/landmarks/cocoa-riverfront-park.jpg",
+    imageAlt: "Cocoa Riverfront Park promenade and water view",
+    distanceFromPadMiles: 20.1,
+    quality: "good",
+    lineOfSightNotes: "Longer-range viewing with riverfront atmosphere; visibility depends on trajectory.",
+    parking: "Use posted public parking rules in Cocoa Village.",
+    accessibility: "Paved promenade and nearby public amenities.",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=Cocoa+Riverfront+Park+Cocoa+FL",
+    latitude: 28.354,
+    longitude: -80.722,
+    developmentFixture: true
+  },
+  {
+    id: "jetty-park-dev",
+    name: "Jetty Park",
+    distanceFromPadMiles: 11.6,
+    quality: "good",
+    lineOfSightNotes: "Coastal viewing area; confirm access, fees, and launch-day closures.",
+    parking: "Parking may require reservation or fee.",
+    accessibility: "Verify accessible parking and beach access before travel.",
+    expectedCrowdLevel: "moderate",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=Jetty+Park+Cape+Canaveral+FL",
+    latitude: 28.406,
+    longitude: -80.593,
+    developmentFixture: true
+  },
+  {
+    id: "minimal-spot-dev",
+    name: "Viewing Spot Under Review",
+    quality: "limited",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=Cape+Canaveral+FL",
+    latitude: 28.51,
+    longitude: -80.62,
+    developmentFixture: true
+  }
+];
+
+export const developmentLaunches: Launch[] = [
+  {
+    id: "development:go",
+    provider_source: "development_fixture",
+    provider_launch_id: "development-go",
+    name: "Falcon 9 | Development GO Mission",
+    slug: "development-go-mission",
+    launch_provider: { name: "SpaceX", abbreviation: "SpX" },
+    rocket: { name: "Falcon 9", full_name: "Falcon 9 Block 5", image_url: null },
+    mission: {
+      name: "Development GO Mission",
+      description: "Development fixture for Launch Mode countdown and viewing UX.",
+      type: "Development fixture",
+      orbit: "Low Earth Orbit"
+    },
+    pad: { name: "LC-39A", location_name: "Kennedy Space Center, FL", latitude: 28.608, longitude: -80.604 },
+    status: "go",
+    net: new Date(Date.now() + 2 * 60 * 60 * 1000 + 14 * 60 * 1000).toISOString(),
+    window_start: null,
+    window_end: null,
+    image_url: null,
+    webcast_url: null,
+    last_updated_at: new Date().toISOString()
+  },
+  {
+    id: "development:delayed",
+    provider_source: "development_fixture",
+    provider_launch_id: "development-delayed",
+    name: "Atlas V | Development Delayed Mission",
+    slug: "development-delayed-mission",
+    launch_provider: { name: "United Launch Alliance", abbreviation: "ULA" },
+    rocket: { name: "Atlas V", full_name: "Atlas V", image_url: null },
+    mission: null,
+    pad: { name: "SLC-41", location_name: "Cape Canaveral SFS, FL", latitude: 28.583, longitude: -80.583 },
+    status: "delayed",
+    net: new Date(Date.now() + 5 * 60 * 60 * 1000).toISOString(),
+    window_start: null,
+    window_end: null,
+    image_url: null,
+    webcast_url: null,
+    last_updated_at: new Date().toISOString()
+  },
+  {
+    id: "development:scrubbed",
+    provider_source: "development_fixture",
+    provider_launch_id: "development-scrubbed",
+    name: "New Glenn | Development Scrubbed Mission",
+    slug: "development-scrubbed-mission",
+    launch_provider: { name: "Blue Origin", abbreviation: "BO" },
+    rocket: { name: "New Glenn", full_name: "New Glenn", image_url: null },
+    mission: null,
+    pad: { name: "LC-36", location_name: "Cape Canaveral SFS, FL", latitude: 28.47, longitude: -80.54 },
+    status: "scrubbed",
+    net: new Date(Date.now() + 26 * 60 * 60 * 1000).toISOString(),
+    window_start: null,
+    window_end: null,
+    image_url: null,
+    webcast_url: null,
+    last_updated_at: new Date().toISOString()
+  },
+  {
+    id: "development:unknown-time",
+    provider_source: "development_fixture",
+    provider_launch_id: "development-unknown-time",
+    name: "Mission With Pending Launch Time",
+    slug: "development-unknown-time",
+    launch_provider: { name: null, abbreviation: null },
+    rocket: null,
+    mission: null,
+    pad: { name: "SLC-40", location_name: "Cape Canaveral SFS, FL", latitude: 28.562, longitude: -80.577 },
+    status: "unknown",
+    net: null,
+    window_start: null,
+    window_end: null,
+    image_url: null,
+    webcast_url: null,
+    last_updated_at: new Date().toISOString()
+  }
+];
+
 const statusLabels: Record<LaunchStatus, string> = {
   scheduled: "Scheduled",
   go: "Go",
@@ -79,15 +239,15 @@ const statusLabels: Record<LaunchStatus, string> = {
 };
 
 const statusClasses: Record<LaunchStatus, string> = {
-  scheduled: "bg-sky-100 text-sky-950",
-  go: "bg-emerald-100 text-emerald-950",
-  hold: "bg-amber-100 text-amber-950",
-  delayed: "bg-orange-100 text-orange-950",
-  scrubbed: "bg-rose-100 text-rose-950",
-  launched: "bg-indigo-100 text-indigo-950",
-  success: "bg-emerald-100 text-emerald-950",
-  failure: "bg-rose-100 text-rose-950",
-  unknown: "bg-slate-100 text-slate-800"
+  scheduled: "border-sky-300/70 bg-sky-400/15 text-sky-100",
+  go: "border-emerald-300/70 bg-emerald-400/15 text-emerald-100",
+  hold: "border-amber-300/70 bg-amber-400/15 text-amber-100",
+  delayed: "border-amber-300/70 bg-amber-400/15 text-amber-100",
+  scrubbed: "border-red-300/70 bg-red-400/15 text-red-100",
+  launched: "border-cyan-300/70 bg-cyan-400/15 text-cyan-100",
+  success: "border-emerald-300/70 bg-emerald-400/15 text-emerald-100",
+  failure: "border-red-300/70 bg-red-400/15 text-red-100",
+  unknown: "border-slate-500 bg-slate-800 text-slate-100"
 };
 
 export function launchStatusLabel(status: LaunchStatus) {
@@ -129,6 +289,67 @@ export function formatLaunchWindow(launch: Pick<Launch, "window_start" | "window
   return `${formatter.format(new Date(launch.window_start))} - ${formatter.format(new Date(launch.window_end))}`;
 }
 
+export type CountdownState = {
+  label: string;
+  expired: boolean;
+  accessibleLabel: string;
+};
+
+export function countdownState(launchAt: string | null, nowMs = Date.now()): CountdownState {
+  if (!launchAt) {
+    return {
+      label: "T pending",
+      expired: false,
+      accessibleLabel: "Launch time pending"
+    };
+  }
+
+  const targetMs = Date.parse(launchAt);
+  if (!Number.isFinite(targetMs)) {
+    return {
+      label: "T pending",
+      expired: false,
+      accessibleLabel: "Launch time pending"
+    };
+  }
+
+  const totalSeconds = Math.max(0, Math.floor((targetMs - nowMs) / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const label = `T-${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+  if (totalSeconds === 0) {
+    return {
+      label: "T+00:00:00",
+      expired: true,
+      accessibleLabel: "Launch time has arrived or passed"
+    };
+  }
+
+  const accessibleParts = [];
+  if (hours > 0) {
+    accessibleParts.push(`${hours} hour${hours === 1 ? "" : "s"}`);
+  }
+  if (minutes > 0) {
+    accessibleParts.push(`${minutes} minute${minutes === 1 ? "" : "s"}`);
+  }
+
+  return {
+    label,
+    expired: false,
+    accessibleLabel: `Launch scheduled in approximately ${accessibleParts.join(" ") || "less than 1 minute"}`
+  };
+}
+
+export function launchVehicleName(launch: Launch) {
+  return launch.rocket?.name ?? launch.rocket?.full_name ?? launch.name.split("|")[0]?.trim() ?? "Launch";
+}
+
+export function launchMissionName(launch: Launch) {
+  return launch.mission?.name ?? launch.name.split("|")[1]?.trim() ?? launch.name;
+}
+
 export function apiBaseUrl() {
   return process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "";
 }
@@ -138,11 +359,10 @@ export async function getLaunchFeed(): Promise<LaunchFeedState> {
 
   if (!baseUrl) {
     return {
-      status: "unavailable",
-      launches: [],
-      dataFreshness: "unavailable",
-      lastUpdatedAt: null,
-      reason: "api_not_configured"
+      status: "ready",
+      launches: developmentLaunches,
+      dataFreshness: "stale",
+      lastUpdatedAt: developmentLaunches[0]?.last_updated_at ?? null
     };
   }
 
