@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -13,6 +13,7 @@ from app.analytics import (
 )
 from app.db.models import AnalyticsEvent
 from app.db.session import get_session
+from app.core.limiter import limiter
 
 router = APIRouter(prefix="/api/v1/analytics", tags=["analytics"])
 SessionDependency = Depends(get_session)
@@ -23,8 +24,9 @@ class AnalyticsEventResponse(BaseModel):
 
 
 @router.post("/events", response_model=AnalyticsEventResponse, status_code=201)
+@limiter.limit("30/minute")
 def record_event(
-    event_in: AnalyticsEventIn, session: Session = SessionDependency
+    request: Request, event_in: AnalyticsEventIn, session: Session = SessionDependency
 ) -> AnalyticsEventResponse:
     event = normalize_analytics_event(event_in)
     record = AnalyticsEvent(
