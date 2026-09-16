@@ -15,13 +15,7 @@ def main() -> None:
     if not database_url:
         raise SystemExit("DATABASE_URL not set")
 
-    # psycopg3 async driver doesn't work with sync engine — use psycopg2-style URL for seeding
-    sync_url = database_url.replace("postgresql+psycopg://", "postgresql+psycopg2://", 1)
-    if sync_url == database_url:
-        # already plain postgresql:// or postgresql+psycopg2://
-        sync_url = database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
-
-    engine = create_engine(sync_url, echo=False)
+    engine = create_engine(database_url, echo=False)
 
     with Session(engine) as session:
         # Organization

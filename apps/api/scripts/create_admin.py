@@ -12,10 +12,6 @@ from app.core.auth import hash_password
 from app.db.models import CmsUser
 
 
-def sync_url(database_url: str) -> str:
-    return database_url.replace("postgresql+psycopg://", "postgresql+psycopg2://", 1)
-
-
 def main() -> None:
     database_url = os.environ.get("DATABASE_URL")
     if not database_url:
@@ -30,7 +26,7 @@ def main() -> None:
     if len(password) < 12:
         raise SystemExit("ADMIN_PASSWORD must be at least 12 characters")
 
-    engine = create_engine(sync_url(database_url), echo=False)
+    engine = create_engine(database_url, echo=False)
 
     with Session(engine) as session:
         existing = session.scalar(select(CmsUser).where(CmsUser.email == email))
