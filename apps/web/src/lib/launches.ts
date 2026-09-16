@@ -354,15 +354,29 @@ export function apiBaseUrl() {
   return process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "";
 }
 
+export function launchFixturesEnabled() {
+  return process.env.NEXT_PUBLIC_ENABLE_LAUNCH_FIXTURES === "true";
+}
+
 export async function getLaunchFeed(): Promise<LaunchFeedState> {
   const baseUrl = apiBaseUrl();
 
   if (!baseUrl) {
+    if (launchFixturesEnabled()) {
+      return {
+        status: "ready",
+        launches: developmentLaunches,
+        dataFreshness: "stale",
+        lastUpdatedAt: developmentLaunches[0]?.last_updated_at ?? null
+      };
+    }
+
     return {
-      status: "ready",
-      launches: developmentLaunches,
-      dataFreshness: "stale",
-      lastUpdatedAt: developmentLaunches[0]?.last_updated_at ?? null
+      status: "unavailable",
+      launches: [],
+      dataFreshness: "unavailable",
+      lastUpdatedAt: null,
+      reason: "api_not_configured"
     };
   }
 

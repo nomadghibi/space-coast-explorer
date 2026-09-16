@@ -3,6 +3,7 @@ import {
   countdownState,
   formatLaunchDate,
   formatLaunchWindow,
+  getLaunchFeed,
   launchMissionName,
   launchStatusLabel,
   launchVehicleName
@@ -54,5 +55,35 @@ describe("launch formatting", () => {
     };
     expect(launchVehicleName(launch as never)).toBe("Falcon 9");
     expect(launchMissionName(launch as never)).toBe("Starlink Group XX");
+  });
+
+  it("does not show development launch fixtures unless explicitly enabled", async () => {
+    const previousApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const previousFixtureFlag = process.env.NEXT_PUBLIC_ENABLE_LAUNCH_FIXTURES;
+    delete process.env.NEXT_PUBLIC_API_BASE_URL;
+    delete process.env.NEXT_PUBLIC_ENABLE_LAUNCH_FIXTURES;
+
+    await expect(getLaunchFeed()).resolves.toMatchObject({
+      status: "unavailable",
+      reason: "api_not_configured"
+    });
+
+    process.env.NEXT_PUBLIC_ENABLE_LAUNCH_FIXTURES = "true";
+    await expect(getLaunchFeed()).resolves.toMatchObject({
+      status: "ready",
+      dataFreshness: "stale"
+    });
+
+    if (previousApiBaseUrl === undefined) {
+      delete process.env.NEXT_PUBLIC_API_BASE_URL;
+    } else {
+      process.env.NEXT_PUBLIC_API_BASE_URL = previousApiBaseUrl;
+    }
+
+    if (previousFixtureFlag === undefined) {
+      delete process.env.NEXT_PUBLIC_ENABLE_LAUNCH_FIXTURES;
+    } else {
+      process.env.NEXT_PUBLIC_ENABLE_LAUNCH_FIXTURES = previousFixtureFlag;
+    }
   });
 });
