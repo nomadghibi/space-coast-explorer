@@ -13,8 +13,8 @@ Responses contain normalized launch data plus `data_freshness` and `last_updated
 
 ## Configuration
 
-`LAUNCH_DATA_MODE=fixture|development-provider|production` is reserved for the rollout modes. The current adapter is provider-backed when called; fixture support should be selected before enabling launch UI in local development. Configure `LAUNCH_LIBRARY_BASE_URL`, `LAUNCH_PROVIDER`, `LAUNCH_CACHE_TTL_SECONDS`, and `LAUNCH_SPACE_COAST_PADS` through environment settings.
+`LAUNCH_DATA_MODE=fixture|development-provider|production` controls the source used by the internal API. `fixture` is the default local-safe mode and returns deterministic Space Coast sample launches without contacting Launch Library 2. `development-provider` and `production` use the provider adapter. Configure `LAUNCH_LIBRARY_BASE_URL`, `LAUNCH_PROVIDER`, `LAUNCH_CACHE_TTL_SECONDS`, and `LAUNCH_SPACE_COAST_PADS` through environment settings.
 
-Default Space Coast filtering accepts pad/location names containing `LC-39A`, `LC-39B`, `SLC-40`, or `SLC-41`. This is configurable and should be reviewed as pads change. Missing provider fields remain null; status values outside the explicit mapping become `unknown`.
+Default Space Coast filtering accepts pad/location names containing `LC-39A`, `LC-39B`, `SLC-40`, `SLC-41`, `Launch Complex 39A`, `Launch Complex 39B`, `Space Launch Complex 40`, or `Space Launch Complex 41`. This is configurable and should be reviewed as pads change. Missing provider fields remain null; status values outside the explicit mapping become `unknown`.
 
-The current implementation intentionally does not claim real-time status, weather, probability, or livestream availability. It provides current provider-backed launch schedule data and requires a scheduled worker/database cache for production refresh intervals.
+The current implementation intentionally does not claim real-time status, weather, probability, or livestream availability. It provides normalized launch schedule data and requires a scheduled worker/database cache for production refresh intervals before horizontal scaling.

@@ -19,7 +19,12 @@ class Settings(BaseSettings):
     launch_data_mode: str = Field(default="fixture", alias="LAUNCH_DATA_MODE")
     launch_cache_ttl_seconds: int = Field(default=1800, alias="LAUNCH_CACHE_TTL_SECONDS")
     launch_space_coast_pads: str = Field(
-        default="LC-39A,LC-39B,SLC-40,SLC-41", alias="LAUNCH_SPACE_COAST_PADS"
+        default=(
+            "LC-39A,LC-39B,SLC-40,SLC-41,"
+            "Launch Complex 39A,Launch Complex 39B,"
+            "Space Launch Complex 40,Space Launch Complex 41"
+        ),
+        alias="LAUNCH_SPACE_COAST_PADS",
     )
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
