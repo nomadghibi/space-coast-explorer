@@ -1,22 +1,31 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
+import jwt
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.core.config import get_settings
+from app.core.auth import decode_access_token
 from app.db.models import Tour
 from app.db.session import get_session
 
 router = APIRouter(prefix="/api/v1/cms", tags=["cms"])
 
 
-def require_admin(x_cms_token: str | None = Header(default=None)) -> None:
-    expected = get_settings().cms_admin_token
-    if not expected or x_cms_token != expected:
+def require_admin(authorization: str | None = Header(default=None)) -> None:
+    if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="CMS authentication required")
+    token = authorization.removeprefix("Bearer ")
+    try:
+        claims = decode_access_token(token)
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    if claims.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin role required")
 
 
 class TourUpdate(BaseModel):

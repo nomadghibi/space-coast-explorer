@@ -12,6 +12,9 @@ class Settings(BaseSettings):
         alias="DATABASE_URL",
     )
     cms_admin_token: str = Field(default="", alias="CMS_ADMIN_TOKEN")
+    jwt_secret_key: str = Field(default="dev-secret-change-in-production", alias="JWT_SECRET_KEY")
+    jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
+    jwt_expiry_hours: int = Field(default=24, alias="JWT_EXPIRY_HOURS")
     cors_allowed_origins: str = Field(default="", alias="CORS_ALLOWED_ORIGINS")
     launch_provider: str = Field(default="launch_library_2", alias="LAUNCH_PROVIDER")
     launch_library_base_url: str = Field(

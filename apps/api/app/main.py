@@ -6,6 +6,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.analytics import router as analytics_router
+from app.api.auth import router as auth_router
 from app.api.cms import router as cms_router
 from app.api.health import router as health_router
 from app.api.launches import router as launches_router
@@ -36,6 +37,7 @@ def create_app() -> FastAPI:
     app.add_middleware(SlowAPIMiddleware)
     app.add_middleware(RequestIdMiddleware)
     app.include_router(health_router)
+    app.include_router(auth_router)
     app.include_router(analytics_router)
     app.include_router(public_router)
     app.include_router(launches_router)

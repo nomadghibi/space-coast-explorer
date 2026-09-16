@@ -149,6 +149,15 @@ class PilotDailyMetric(TimestampedUuidMixin, Base):
     gps_completions: Mapped[int] = mapped_column(nullable=False, default=0)
 
 
+class CmsUser(TimestampedUuidMixin, Base):
+    __tablename__ = "cms_users"
+
+    email: Mapped[str] = mapped_column(String(320), nullable=False, unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
+    role: Mapped[str] = mapped_column(String(32), nullable=False, default="editor")
+    is_active: Mapped[bool] = mapped_column(nullable=False, default=True)
+
+
 class Job(TimestampedUuidMixin, Base):
     __tablename__ = "jobs"
 
