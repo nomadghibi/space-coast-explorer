@@ -67,6 +67,14 @@ If creating the service manually instead of using Blueprint:
 - Start Command: leave blank, or use `python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 - Do not put `render.yaml` in Build Command or Start Command. It is a Blueprint file, not an executable command.
 
+If the Render service was already created as a Python/native web service instead of Docker:
+
+- Root Directory: leave blank
+- Build Command: `pip install -r requirements.txt`
+- Start Command: `python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+
+The root `requirements.txt` installs the API package from `apps/api`, including `uvicorn`.
+
 Container start command:
 
 ```bash
