@@ -20,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: baseUrl, lastModified: new Date("2026-09-12") },
     { url: `${baseUrl}/tours`, lastModified: new Date("2026-09-12") },
+    { url: `${baseUrl}/launches`, lastModified: new Date("2026-09-16") },
     { url: `${baseUrl}/premium`, lastModified: new Date("2026-09-15") },
     { url: `${baseUrl}/about`, lastModified: new Date("2026-09-12") },
     { url: `${baseUrl}/privacy`, lastModified: new Date("2026-09-12") },

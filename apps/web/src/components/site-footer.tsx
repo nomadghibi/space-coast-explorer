@@ -13,6 +13,7 @@ export function SiteFooter() {
         <div className="grid gap-2 text-sm text-slate-200">
           <Link href="/tours">Tours</Link>
           <Link href="/space-coast">Destinations</Link>
+          <Link href="/launches">Launches</Link>
           <Link href="/about">About</Link>
         </div>
         <div className="grid gap-2 text-sm text-slate-200">
