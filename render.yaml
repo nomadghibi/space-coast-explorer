@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: space-coast-explorer-api
+    runtime: docker
+    repo: https://github.com/nomadghibi/space-coast-explorer
+    branch: main
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://space-coast-explorer.vercel.app
+      - key: LAUNCH_DATA_MODE
+        value: production
+      - key: LAUNCH_LIBRARY_BASE_URL
+        value: https://ll.thespacedevs.com
+      - key: LAUNCH_PROVIDER
+        value: launch_library_2
+      - key: LAUNCH_CACHE_TTL_SECONDS
+        value: "1800"
+      - key: LAUNCH_SPACE_COAST_PADS
+        value: LC-39A,LC-39B,SLC-40,SLC-41,Launch Complex 39A,Launch Complex 39B,Space Launch Complex 40,Space Launch Complex 41
+      - key: DATABASE_URL
+        sync: false
+      - key: CMS_ADMIN_TOKEN
+        sync: false

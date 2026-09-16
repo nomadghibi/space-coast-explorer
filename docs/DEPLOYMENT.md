@@ -19,6 +19,46 @@ Do not enable `NEXT_PUBLIC_ENABLE_LAUNCH_FIXTURES` in production unless the depl
 
 The FastAPI app has a container entrypoint at `apps/api/Dockerfile`.
 
+### Render
+
+The repository includes a Render blueprint at `render.yaml` for the FastAPI service.
+
+Recommended setup:
+
+1. In Render, create a new Blueprint from the GitHub repository.
+2. Select `render.yaml`.
+3. Create the `space-coast-explorer-api` web service.
+4. Add these secret environment variables in Render:
+
+```text
+DATABASE_URL=postgresql+psycopg://...
+CMS_ADMIN_TOKEN=...
+```
+
+5. Deploy the service.
+6. Verify the deployed Render URL:
+
+```bash
+curl -sS https://YOUR_RENDER_SERVICE.onrender.com/health
+curl -sS https://YOUR_RENDER_SERVICE.onrender.com/api/v1/public/launches/next
+```
+
+7. Set Vercel to call the Render API:
+
+```bash
+vercel env add NEXT_PUBLIC_API_BASE_URL production
+vercel env add NEXT_PUBLIC_ENABLE_LAUNCH_FIXTURES production
+vercel --prod
+```
+
+Use the Render service origin only for `NEXT_PUBLIC_API_BASE_URL`, for example:
+
+```text
+https://space-coast-explorer-api.onrender.com
+```
+
+Do not include a trailing slash or `/api`.
+
 Container start command:
 
 ```bash
@@ -38,7 +78,7 @@ Production API variables:
 - `LAUNCH_CACHE_TTL_SECONDS=1800`
 - `LAUNCH_SPACE_COAST_PADS=LC-39A,LC-39B,SLC-40,SLC-41,Launch Complex 39A,Launch Complex 39B,Space Launch Complex 40,Space Launch Complex 41`
 
-After deploy, verify:
+For non-Render container hosts, after deploy verify:
 
 ```bash
 curl -sS https://YOUR_API_HOST/health
