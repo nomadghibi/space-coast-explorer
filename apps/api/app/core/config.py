@@ -12,6 +12,7 @@ class Settings(BaseSettings):
         alias="DATABASE_URL",
     )
     cms_admin_token: str = Field(default="", alias="CMS_ADMIN_TOKEN")
+    cors_allowed_origins: str = Field(default="", alias="CORS_ALLOWED_ORIGINS")
     launch_provider: str = Field(default="launch_library_2", alias="LAUNCH_PROVIDER")
     launch_library_base_url: str = Field(
         default="https://ll.thespacedevs.com", alias="LAUNCH_LIBRARY_BASE_URL"
